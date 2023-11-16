@@ -41,7 +41,7 @@ We appreciate all contributors who have helped make this project a reality. If y
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE.md).
+This project is licensed under the [MIT License](LICENSE).
 
 Feel free to explore, contribute, and learn with us as we build the future of computer network education together.
 
