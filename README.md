@@ -1,13 +1,48 @@
-Bem-vindo ao repositório do NetLearnHub!
+# NetLearnHub
 
-O NetLearnHub é um projeto inovador que visa disponibilizar uma plataforma educacional gratuita dedicada ao aprendizado em redes de computadores. Este repositório contém o código-fonte e recursos relacionados ao desenvolvimento do site, onde oferecemos cursos abrangentes, materiais didáticos interativos e ferramentas de aprendizado prático.
+Welcome to NetLearnHub, a free education platform dedicated to learning about computer networks.
 
-Nossa missão é promover a democratização do conhecimento em redes, fornecendo acesso igualitário a informações e habilidades relevantes para estudantes, profissionais e entusiastas de tecnologia. Esteja você começando do zero ou buscando aprimorar seus conhecimentos, o NetLearnHub é o lugar ideal para explorar conceitos, técnicas avançadas e tendências atuais em redes de computadores.
+## About the Project
 
-Neste repositório, você encontrará o código-fonte do site, documentação, recursos multimídia e contribuições da comunidade. Seja bem-vindo para explorar, contribuir e aprender conosco enquanto construímos um ambiente educacional dinâmico e inclusivo para o mundo das redes de computadores.
+NetLearnHub is an open-source project designed to offer a comprehensive educational experience in computer networks. We utilize technologies such as HTML, CSS, JavaScript, and PHP, including package management with Composer.
 
-Estamos empolgados com o seu interesse e esperamos que este repositório seja útil para sua jornada de aprendizado e contribuição para a área de tecnologia da informação. Junte-se a nós e vamos construir juntos o futuro da educação em redes!
+## Objective
 
-Sua colaboração é valorizada e apreciada.
+Our goal is to democratize knowledge in computer networks by providing courses, educational materials, and interactive tools for students, professionals, and enthusiasts looking to explore and enhance their knowledge in computer networks.
 
-#NetLearnHub #EducaçãoEmRedes #Tecnologia #OpenSource
+## Features
+
+- Comprehensive courses in computer networks.
+- Interactive educational materials.
+- Practical exercises and virtual labs.
+- Discussion forums and collaborative support.
+- Regular updates and quality content.
+
+## How to Contribute
+
+We welcome contributions from anyone interested in improving this educational platform. If you wish to contribute, follow these steps:
+
+1. Fork the repository.
+2. Clone the fork to your local environment.
+3. Implement desired improvements or fixes.
+4. Submit a pull request explaining your changes.
+
+## Installation
+
+To run this project locally, make sure you have Composer installed. After cloning the repository, execute the `composer install` command to install project dependencies.
+
+## How to Run
+
+You can run the project locally using a PHP server. For example, using the command `php -S localhost:8000` and accessing `http://localhost:8000` in your browser.
+
+## Contributors
+
+We appreciate all contributors who have helped make this project a reality. If you have contributed, your name could be added here!
+
+## License
+
+This project is licensed under the [MIT License](LICENSE.md).
+
+Feel free to explore, contribute, and learn with us as we build the future of computer network education together.
+
+#NetLearnHub #NetworkingEducation #OpenSource #Technology
