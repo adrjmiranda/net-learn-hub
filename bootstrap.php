@@ -20,6 +20,7 @@ $twig = new \Twig\Environment($loader);
 $app = AppFactory::create();
 
 return [
+  'baseURL' => $baseURL,
   'dotenv' => $dotenv,
   'twig' => $twig,
   'slim_app' => $app
