@@ -2,24 +2,31 @@
 
 namespace app\traits;
 
-require_once __DIR__ . '/../utils/global.php';
+use app\classes\Load;
+
+use \Twig\Loader\FilesystemLoader;
+use \Twig\Environment;
 
 trait View
 {
-  protected $twig;
-  protected $baseURL;
+  protected Environment $twig;
 
-  protected function twig()
+  protected function twig(): void
   {
-    $loader = new \Twig\Loader\FilesystemLoader(dirname(__FILE__) . '/../Views');
-    $this->twig = new \Twig\Environment($loader);
+    $loader = new FilesystemLoader(dirname(__FILE__) . '/../Views');
+    $this->twig = new Environment($loader);
   }
 
-  protected function functions()
+  protected function functions(): void
   {
+    $functions = Load::file('/app/functions/twig.php');
+
+    foreach ($functions as $function) {
+      $this->twig->addFunction($function);
+    }
   }
 
-  protected function load()
+  protected function load(): void
   {
     $this->twig();
     $this->functions();
@@ -28,10 +35,8 @@ trait View
   protected function view(
     string $view,
     array $data
-  ) {
+  ): void {
     $this->load();
-
-    $data['baseURL'] = $this->baseURL;
     echo $this->twig->render($view, $data);
   }
 }
