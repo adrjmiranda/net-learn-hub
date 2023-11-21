@@ -15,6 +15,5 @@ $dotenv->load();
 $app = AppFactory::create();
 
 return [
-  'dotenv' => $dotenv,
   'slim_app' => $app
 ];

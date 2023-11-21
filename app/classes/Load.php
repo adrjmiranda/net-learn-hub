@@ -6,7 +6,7 @@ class Load
 {
   public static function file(string $file): mixed
   {
-    $file = path() . $file;
+    $file = getPath() . $file;
 
     if (!file_exists($file)) {
       throw new \Exception('Esse arquivo não existe: ' . $file);
