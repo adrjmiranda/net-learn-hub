@@ -3,9 +3,14 @@
 <div id="course-home">
   <img src="{{ baseURL }}/public/images/NetLearnHubLogo.png" alt="Logo">
   {% if courses %}
-  {% for course in courses %}
-  <p>{{ course.title }}</p>
-  {% endfor %}
+  <div>
+    {% for course in courses %}
+    <span>{{ course.title }}</span>
+    <span>{{ course.description }}</span>
+    <span>{{ course.image }}</span>
+    <br>
+    {% endfor %}
+  </div>
   {% endif %}
 </div>
 {% endblock %}

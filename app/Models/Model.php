@@ -3,6 +3,7 @@
 namespace app\Models;
 
 use PDO;
+use PDOException;
 use app\classes\Connection;
 
 class Model
@@ -15,12 +16,26 @@ class Model
     $this->connect = Connection::connect();
   }
 
-  public function all()
+  public function all(int|null $limit = null)
   {
-    $sql = 'SELECT * FROM ' . $this->table;
-    $all = $this->connect->prepare($sql);
-    $all->execute();
+    $all = [];
+    $stmt = null;
 
-    return $all->fetchAll();
+    if ($limit > 0 && $limit) {
+      $query = 'SELECT * FROM' . ' ' . $this->table . ' ' . 'ORDER BY id DESC' . ' ' . 'LIMIT :limit';
+      $stmt = $this->connect->prepare($query);
+      $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+    } else {
+      $stmt = $this->connect->prepare('SELECT * FROM' . ' ' . $this->table . ' ' . 'ORDER BY id DESC');
+    }
+
+    try {
+      $stmt->execute();
+      $all = $stmt->fetchAll();
+    } catch (PDOException $pDOException) {
+      echo $pDOException->getMessage();
+    }
+
+    return $all;
   }
 }
