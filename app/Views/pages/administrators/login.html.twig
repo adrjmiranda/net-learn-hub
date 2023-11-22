@@ -1,0 +1,16 @@
+{% extends '/components/base.html.twig' %}
+{% block content %}
+<div id="admin-login-form">
+  <form action="{{ baseURL }}/admin/login" method="post">
+    <div class="input-field">
+      <label for="email">E-mail:</label>
+      <input type="email" name="email" id="email">
+    </div>
+    <div class="input-field">
+      <label for="password">Senha:</label>
+      <input type="password" name="password" id="password">
+    </div>
+    <button type="submit">Entrar</button>
+  </form>
+</div>
+{% endblock %}

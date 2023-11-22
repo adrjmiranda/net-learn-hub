@@ -10,6 +10,7 @@ use \Twig\Environment;
 trait View
 {
   protected Environment $twig;
+  private string $baseURL;
 
   protected function twig(): void
   {
@@ -30,6 +31,9 @@ trait View
   {
     $this->twig();
     $this->functions();
+
+    $dependencies = require __DIR__ . '/../../bootstrap.php';
+    $this->baseURL = $dependencies['baseURL'];
   }
 
   protected function view(
@@ -37,6 +41,8 @@ trait View
     array $data
   ): void {
     $this->load();
+
+    $data['baseURL'] = $this->baseURL;
     echo $this->twig->render($view, $data);
   }
 }
