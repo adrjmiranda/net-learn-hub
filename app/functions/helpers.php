@@ -30,3 +30,16 @@ function getContentType(string $type): string
 
   return $contentType;
 }
+
+function areValidColumns(array $columns): bool
+{
+  $pattern = '/^[a-zA-Z_][a-zA-Z0-9_]*$/';
+
+  foreach ($columns as $column) {
+    if (!preg_match($pattern, $column)) {
+      return false;
+    }
+  }
+
+  return true;
+}
