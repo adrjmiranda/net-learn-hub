@@ -4,26 +4,43 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 use Slim\Routing\RouteCollectorProxy;
+use Slim\Psr7\Response as SlimResponse;
 
-// Middleware para verificar o token na sessão
-$verifyTokenMiddleware = function (Request $request, RequestHandler $handler) {
-  // Verifique se o token está presente na sessão ou não
+$checkIfYouAreLoggedIn = function (Request $request, RequestHandler $handler) {
+  $response = $handler->handle($request);
   $session = $_SESSION ?? [];
-  if (!isset($session['adminToken'])) {
-    // Token não está presente na sessão, redirecione ou realize outras ações necessárias
-    $response = $handler->handle($request);
-    return $response->withHeader('Location', '/login')->withStatus(302);
+
+  if (isset($session['adminToken'])) {
+    return $response->withHeader('Location', '/admin/dashboard')->withStatus(302);
   }
 
-  // Token está presente na sessão, continue com a requisição
   return $handler->handle($request);
 };
 
-$app->get('/admin', 'app\Controllers\AdministratorController:index');
-$app->post('/admin/login', 'app\Controllers\AdministratorController:login');
+$verifyTokenMiddleware = function (Request $request, RequestHandler $handler) {
+  $response = $handler->handle($request);
+  $session = $_SESSION ?? [];
+
+  if (!isset($session['adminToken'])) {
+    return $response->withHeader('Location', '/admin/login')->withStatus(302);
+  }
+
+  return $handler->handle($request);
+};
 
 $app->group('/admin', function (RouteCollectorProxy $group) {
-  $group->get('/dashboard', function (Request $request, Response $response, array $args) {
-    return $response;
-  });
+  $group->get('/login', 'app\Controllers\AdministratorController:index');
+  $group->post('/login', 'app\Controllers\AdministratorController:login');
+})->add(function (Request $request, RequestHandler $handler) {
+  if (isset($_SESSION['adminToken'])) {
+    return (new SlimResponse())
+      ->withHeader('Location', '/admin/dashboard')
+      ->withStatus(302);
+  }
+
+  return $handler->handle($request);
+});
+
+$app->group('/admin', function (RouteCollectorProxy $group) {
+  $group->get('/dashboard', 'app\Controllers\AdministratorController:dashboard');
 });

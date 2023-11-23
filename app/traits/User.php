@@ -10,7 +10,7 @@ use stdClass;
 
 trait User
 {
-  public function getUserByEmail(string $email): object
+  public function getUserByEmail(string $email): mixed
   {
     try {
       $searchQueryOptions = new SearchQueryOptions();

@@ -12,6 +12,6 @@ class Load
       throw new \Exception('Esse arquivo não existe: ' . $file);
     }
 
-    return require_once $file;
+    return require $file;
   }
 }

@@ -12,7 +12,6 @@ class AdministratorController extends Controller
   public function index(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
   {
     $this->view('/pages/administrators/login.html.twig', []);
-
     return $response;
   }
 
@@ -31,5 +30,11 @@ class AdministratorController extends Controller
     }
 
     return $response->withHeader('Location', '/admin/dashboard')->withStatus(302);
+  }
+
+  public function dashboard(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
+  {
+    $this->view('/pages/administrators/dashboard.html.twig', []);
+    return $response;
   }
 }
