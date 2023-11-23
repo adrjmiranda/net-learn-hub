@@ -1,5 +1,18 @@
 <?php
 
+// session config
+if (!isset($_SESSION)) {
+  session_set_cookie_params([
+    'lifetime' => 7200,
+    'path' => '/',
+    'domain' => 'seusite.com',
+    'secure' => true,
+    'httponly' => true
+  ]);
+
+  session_start();
+}
+
 require_once __DIR__ . '/vendor/autoload.php';
 
 use Dotenv\Dotenv;
@@ -18,19 +31,6 @@ $baseURL = 'http://' . $_SERVER['SERVER_NAME'];
 $path = dirname(__FILE__, 1);
 $dotenv = Dotenv::createImmutable($path);
 $dotenv->load();
-
-// session config
-if (!isset($_SESSION)) {
-  session_set_cookie_params([
-    'lifetime' => $_ENV['SESSION_EXPIRATION_TIME'],
-    'path' => '/',
-    'domain' => 'seusite.com',
-    'secure' => true,
-    'httponly' => true
-  ]);
-
-  session_start();
-}
 
 // slim config
 $app = AppFactory::create();
