@@ -27,12 +27,9 @@ class AdministratorController extends Controller
     $administratorByEmail = $administrator->getUserByEmail($email);
 
     if (!empty($administratorByEmail)) {
-      $this->view('/pages/administrators/login.html.twig', [
-        'email' => $administratorByEmail->email,
-        'password' => $administratorByEmail->password
-      ]);
+      $administrator->authUser($password, $administratorByEmail->password);
     }
 
-    return $response;
+    return $response->withHeader('Location', '/admin/dashboard')->withStatus(302);
   }
 }
