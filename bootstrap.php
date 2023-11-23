@@ -1,11 +1,12 @@
 <?php
 
 require_once __DIR__ . '/vendor/autoload.php';
-require_once __DIR__ . '/app/functions/helpers.php';
 
 use Dotenv\Dotenv;
 use Slim\Factory\AppFactory;
 
+$csrf_token = bin2hex(random_bytes(32));
+$_SESSION['csrf_token'] = $csrf_token;
 
 // TODO: define the environment
 // in development environment
@@ -17,6 +18,19 @@ $baseURL = 'http://' . $_SERVER['SERVER_NAME'];
 $path = dirname(__FILE__, 1);
 $dotenv = Dotenv::createImmutable($path);
 $dotenv->load();
+
+// session config
+if (!isset($_SESSION)) {
+  session_set_cookie_params([
+    'lifetime' => $_ENV['SESSION_EXPIRATION_TIME'],
+    'path' => '/',
+    'domain' => 'seusite.com',
+    'secure' => true,
+    'httponly' => true
+  ]);
+
+  session_start();
+}
 
 // slim config
 $app = AppFactory::create();

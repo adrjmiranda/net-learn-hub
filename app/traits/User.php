@@ -1,20 +1,41 @@
 <?php
 
-use PDO;
+namespace app\traits;
+
+require_once __DIR__ . '/../functions/helpers.php';
+
 use PDOException;
+use app\classes\SearchQueryOptions;
+use stdClass;
 
 trait User
 {
   public function getUserByEmail(string $email): object
   {
-    $stmt = $this->connect->prepare('SELECT * FROM ' . $this->table . ' WHERE email = :email LIMIT 1');
-    $stmt->bindParam(':email', $email, PDO::PARAM_STR);
-
     try {
+      $searchQueryOptions = new SearchQueryOptions();
+
+      $searchQueryOptions->limit = 1;
+      $searchQueryOptions->type = SearchQueryOptions::SPECIFIC;
+      $searchQueryOptions->conditions = [
+        'columnName' => 'email',
+        'operator' => SearchQueryOptions::EQUAL_OPERATOR,
+        'values' => $email
+      ];
+      ;
+
+      $stmt = prepareSearchStatement($this->connect, $this->table, $searchQueryOptions);
       $stmt->execute();
       return $stmt->fetch();
     } catch (PDOException $pDOException) {
+      echo $pDOException->getMessage();
       return new stdClass();
+    }
+  }
+
+  public function authUser(string $password, string $hash): void
+  {
+    if (password_verify($password, $hash)) {
     }
   }
 }
