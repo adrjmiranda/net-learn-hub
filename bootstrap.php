@@ -1,14 +1,15 @@
 <?php
 
 // session config
+// TODO: define in the production enviroment
 if (!isset($_SESSION)) {
-  // session_set_cookie_params([
-  //   'lifetime' => 7200,
-  //   'path' => '/',
-  //   'domain' => 'seusite.com',
-  //   'secure' => true,
-  //   'httponly' => true
-  // ]);
+  session_set_cookie_params([
+    'lifetime' => 7200,
+    'path' => '/',
+    'domain' => 'seusite.com',
+    'secure' => true,
+    'httponly' => true
+  ]);
 
   session_start();
 }
