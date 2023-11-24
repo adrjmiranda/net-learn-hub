@@ -33,7 +33,7 @@ trait View
     $this->functions();
 
     $dependencies = require __DIR__ . '/../../bootstrap.php';
-    $this->baseURL = $dependencies['baseURL'];
+    $this->baseURL = $dependencies['base_url'];
   }
 
   protected function view(
@@ -42,7 +42,7 @@ trait View
   ): void {
     $this->load();
 
-    $data['baseURL'] = $this->baseURL;
+    $data['base_url'] = $this->baseURL;
     echo $this->twig->render($view, $data);
   }
 }

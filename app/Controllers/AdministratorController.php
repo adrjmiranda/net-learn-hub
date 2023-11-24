@@ -11,7 +11,9 @@ class AdministratorController extends Controller
 
   public function index(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
   {
-    $this->view('/pages/administrators/login.html.twig', []);
+    $this->view('/pages/administrators/login.html.twig', [
+      'page_title' => 'NetLearnHub | Aprenda de graça TI'
+    ]);
     return $response;
   }
 
@@ -34,7 +36,9 @@ class AdministratorController extends Controller
 
   public function dashboard(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
   {
-    $this->view('/pages/administrators/dashboard.html.twig', []);
+    $this->view('/pages/administrators/dashboard.html.twig', [
+      'page_title' => 'NetLearnHub | Aprenda de graça TI'
+    ]);
     return $response;
   }
 }

@@ -1,6 +1,9 @@
 <?php
 
 use app\classes\SearchQueryOptions;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
+use Slim\Psr7\Response as SlimResponse;
 
 function getPath(): string
 {
@@ -52,7 +55,7 @@ function prepareSearchStatement(PDO $connect, string $table, SearchQueryOptions 
 
   if (
     $options->type === SearchQueryOptions::SPECIFIC &&
-    !empty($options->conditions['columnName']) &&
+    !empty($options->conditions['column_name']) &&
     !empty($options->conditions['operator']) &&
     !empty($options->conditions['values'])
   ) {
@@ -61,15 +64,15 @@ function prepareSearchStatement(PDO $connect, string $table, SearchQueryOptions 
     if ($validOperator) {
       switch ($options->conditions['operator']) {
         case SearchQueryOptions::BETWEEN_OPERATOR:
-          $query .= ' WHERE ' . $options->conditions['columnName'] . ' BETWEEN :value1 AND :value2';
+          $query .= ' WHERE ' . $options->conditions['column_name'] . ' BETWEEN :value1 AND :value2';
           break;
 
         case SearchQueryOptions::LIKE_OPERATOR:
-          $query .= ' WHERE ' . $options->conditions['columnName'] . ' LIKE :value';
+          $query .= ' WHERE ' . $options->conditions['column_name'] . ' LIKE :value';
           break;
 
         default:
-          $query .= ' WHERE ' . $options->conditions['columnName'] . ' ' . $options->conditions['operator'] . ' :value';
+          $query .= ' WHERE ' . $options->conditions['column_name'] . ' ' . $options->conditions['operator'] . ' :value';
           break;
       }
     }
@@ -91,7 +94,7 @@ function prepareSearchStatement(PDO $connect, string $table, SearchQueryOptions 
 
   if (
     $options->type === SearchQueryOptions::SPECIFIC &&
-    !empty($options->conditions['columnName']) &&
+    !empty($options->conditions['column_name']) &&
     !empty($options->conditions['operator']) &&
     !empty($options->conditions['values'])
   ) {
@@ -118,4 +121,37 @@ function prepareSearchStatement(PDO $connect, string $table, SearchQueryOptions 
   }
 
   return $stmt;
+}
+
+function verifyTokenMiddleware(Request $request, RequestHandler $handler, string $tableName)
+{
+  $session = $_SESSION ?? [];
+  $response = new SlimResponse();
+  $currentPath = $request->getUri()->getPath();
+
+  $tokenType = null;
+
+  switch ($tableName) {
+    case 'administrators':
+      $tokenType = 'admin_token';
+      break;
+
+    case 'users':
+      $tokenType = 'user_token';
+      break;
+
+    default:
+      $tokenType = '';
+      break;
+  }
+
+  if (!isset($session[$tokenType]) && $currentPath !== '/admin/login') {
+    return $response->withHeader('Location', '/admin/login')->withStatus(302);
+  }
+
+  if (isset($session[$tokenType]) && $currentPath === '/admin/login') {
+    return $response->withHeader('Location', '/admin/dashboard')->withStatus(302);
+  }
+
+  return $handler->handle($request);
 }

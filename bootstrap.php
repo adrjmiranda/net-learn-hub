@@ -36,6 +36,6 @@ $dotenv->load();
 $app = AppFactory::create();
 
 return [
-  'baseURL' => $baseURL,
+  'base_url' => $baseURL,
   'slim_app' => $app
 ];

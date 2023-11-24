@@ -2,6 +2,8 @@
 
 namespace app\classes;
 
+use Exception;
+
 class Load
 {
   public static function file(string $file): mixed
@@ -9,7 +11,7 @@ class Load
     $file = getPath() . $file;
 
     if (!file_exists($file)) {
-      throw new \Exception('Esse arquivo não existe: ' . $file);
+      throw new Exception('Esse arquivo não existe: ' . $file);
     }
 
     return require $file;

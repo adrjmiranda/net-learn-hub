@@ -18,7 +18,7 @@ trait User
       $searchQueryOptions->limit = 1;
       $searchQueryOptions->type = SearchQueryOptions::SPECIFIC;
       $searchQueryOptions->conditions = [
-        'columnName' => 'email',
+        'column_name' => 'email',
         'operator' => SearchQueryOptions::EQUAL_OPERATOR,
         'values' => $email
       ];
@@ -40,11 +40,11 @@ trait User
 
       switch ($this->table) {
         case 'administrators':
-          $_SESSION['adminToken'] = $token;
+          $_SESSION['admin_token'] = $token;
           break;
 
         case 'users':
-          $_SESSION['userToken'] = $token;
+          $_SESSION['user_token'] = $token;
           break;
 
         default:

@@ -12,7 +12,7 @@ class SearchQueryOptions
   public string $type = self::ALL;
   public array $columns = [];
   public array $conditions = [
-    'columnName' => null,
+    'column_name' => null,
     'operator' => null,
     'values' => []
   ];
