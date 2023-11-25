@@ -25,17 +25,23 @@ class Model
     return $this->table;
   }
 
-  public function all(?int $limit = null): array
+  public function all(?int $limit = null): ?array
   {
+    $data = null;
+
     try {
       $searchQueryOptions = new SearchQueryOptions();
 
       $stmt = prepareSearchStatement($this->connect, $this->table, $searchQueryOptions);
       $stmt->execute();
-      return $stmt->fetchAll();
+
+      if ($stmt->rowCount() > 0) {
+        $data = $stmt->fetchAll();
+      }
     } catch (PDOException $pDOException) {
       echo $pDOException->getMessage();
-      return [];
     }
+
+    return $data;
   }
 }
