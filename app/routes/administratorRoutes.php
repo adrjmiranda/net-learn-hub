@@ -3,8 +3,9 @@
 require_once __DIR__ . '/../functions/authentication.php';
 
 use Slim\Routing\RouteCollectorProxy;
+use app\classes\GlobalValues;
 
-$table = 'administrators';
+$table = GlobalValues::ADMINISTRATORS_TABLE;
 
 $app->group('/admin', function (RouteCollectorProxy $group) {
   $group->get('/login', 'app\Controllers\AdministratorController:index');

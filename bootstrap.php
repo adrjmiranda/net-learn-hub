@@ -1,8 +1,12 @@
 <?php
 
+require_once __DIR__ . '/vendor/autoload.php';
+
+use app\classes\GlobalValues;
+
 // session config
-// TODO: define in the production enviroment
 if (!isset($_SESSION)) {
+  // TODO: define in the production enviroment
   // session_set_cookie_params([
   //   'lifetime' => 7200,
   //   'path' => '/',
@@ -14,14 +18,13 @@ if (!isset($_SESSION)) {
   session_start();
 }
 
-require_once __DIR__ . '/vendor/autoload.php';
 
 use Dotenv\Dotenv;
 use Slim\Factory\AppFactory;
 
-if (!isset($_SESSION['csrf_token'])) {
+if (!isset($_SESSION[GlobalValues::CSRF_TOKEN])) {
   $csrf_token = bin2hex(random_bytes(32));
-  $_SESSION['csrf_token'] = $csrf_token;
+  $_SESSION[GlobalValues::CSRF_TOKEN] = $csrf_token;
 }
 
 // TODO: define the environment
