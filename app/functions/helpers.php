@@ -1,9 +1,6 @@
 <?php
 
 use app\classes\SearchQueryOptions;
-use Psr\Http\Message\ServerRequestInterface as Request;
-use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
-use Slim\Psr7\Response as SlimResponse;
 
 function getPath(): string
 {
@@ -121,37 +118,4 @@ function prepareSearchStatement(PDO $connect, string $table, SearchQueryOptions 
   }
 
   return $stmt;
-}
-
-function verifyTokenMiddleware(Request $request, RequestHandler $handler, string $tableName)
-{
-  $session = $_SESSION ?? [];
-  $response = new SlimResponse();
-  $currentPath = $request->getUri()->getPath();
-
-  $tokenType = null;
-
-  switch ($tableName) {
-    case 'administrators':
-      $tokenType = 'admin_token';
-      break;
-
-    case 'users':
-      $tokenType = 'user_token';
-      break;
-
-    default:
-      $tokenType = '';
-      break;
-  }
-
-  if (!isset($session[$tokenType]) && $currentPath !== '/admin/login') {
-    return $response->withHeader('Location', '/admin/login')->withStatus(302);
-  }
-
-  if (isset($session[$tokenType]) && $currentPath === '/admin/login') {
-    return $response->withHeader('Location', '/admin/dashboard')->withStatus(302);
-  }
-
-  return $handler->handle($request);
 }

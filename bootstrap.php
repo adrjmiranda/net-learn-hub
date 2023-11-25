@@ -19,8 +19,10 @@ require_once __DIR__ . '/vendor/autoload.php';
 use Dotenv\Dotenv;
 use Slim\Factory\AppFactory;
 
-$csrf_token = bin2hex(random_bytes(32));
-$_SESSION['csrf_token'] = $csrf_token;
+if (!isset($_SESSION['csrf_token'])) {
+  $csrf_token = bin2hex(random_bytes(32));
+  $_SESSION['csrf_token'] = $csrf_token;
+}
 
 // TODO: define the environment
 // in development environment

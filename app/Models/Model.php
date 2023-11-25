@@ -20,6 +20,11 @@ class Model
     $this->connect = Connection::connect();
   }
 
+  public function getTable(): string
+  {
+    return $this->table;
+  }
+
   public function all(?int $limit = null): array
   {
     try {

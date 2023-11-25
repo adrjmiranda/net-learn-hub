@@ -32,24 +32,4 @@ trait User
       return new stdClass();
     }
   }
-
-  public function authUser(string $password, string $hash): void
-  {
-    if (password_verify($password, $hash)) {
-      $token = bin2hex(random_bytes(32));
-
-      switch ($this->table) {
-        case 'administrators':
-          $_SESSION['admin_token'] = $token;
-          break;
-
-        case 'users':
-          $_SESSION['user_token'] = $token;
-          break;
-
-        default:
-          return;
-      }
-    }
-  }
 }

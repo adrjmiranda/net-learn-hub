@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/../functions/helpers.php';
+require_once __DIR__ . '/../functions/authentication.php';
 
 use Slim\Routing\RouteCollectorProxy;
 

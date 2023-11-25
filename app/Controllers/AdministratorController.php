@@ -2,6 +2,8 @@
 
 namespace app\Controllers;
 
+require_once __DIR__ . '/../functions/authentication.php';
+
 use app\Models\AdministratorModel;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -28,7 +30,7 @@ class AdministratorController extends Controller
     $administratorByEmail = $administrator->getUserByEmail($email);
 
     if (!empty($administratorByEmail)) {
-      $administrator->authUser($password, $administratorByEmail->password);
+      authentication($password, $administratorByEmail->password, $administrator->getTable());
     }
 
     return $response->withHeader('Location', '/admin/dashboard')->withStatus(302);
