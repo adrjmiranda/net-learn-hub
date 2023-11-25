@@ -1,3 +1,5 @@
+@import url('animations.css');
+
 :root {
 	--primary-color: #040404;
 	--secondary-color: #1590f9;
@@ -7,6 +9,7 @@
 	--bg-dark-color: #252627;
 }
 
+/* general */
 * {
 	padding: 0;
 	margin: 0;
@@ -14,6 +17,143 @@
 	font-family: 'Poppins', sans-serif;
 }
 
+* .dark {
+	background-color: var(--bg-dark-color);
+	color: var(--bg-light-color);
+}
+
+* .dark input,
+* .dark textarea {
+	border: 1px solid var(--bg-light-color);
+	color: var(--bg-light-color);
+}
+
+* .light {
+	background-color: var(--bg-light-color);
+	color: var(--bg-dark-color);
+}
+
+* .light input,
+* .light textarea {
+	border: 1px solid var(--bg-dark-color);
+	color: var(--bg-dark-color);
+}
+
+body {
+	overflow-x: hidden;
+}
+
 a {
 	text-decoration: none;
+}
+
+button {
+	border: none;
+}
+
+.btn {
+	background-image: linear-gradient(
+		45deg,
+		var(--secondary-color),
+		var(--tertiary-color)
+	);
+	cursor: pointer;
+	color: var(--quaternary-color);
+	text-transform: uppercase;
+	font-size: 1.1rem;
+	font-weight: 500;
+	padding: 0.5rem;
+	border-radius: 3px;
+	transition: 0.3s ease-in-out;
+}
+
+.btn:hover {
+	background-image: linear-gradient(
+		-45deg,
+		var(--secondary-color),
+		var(--tertiary-color)
+	);
+}
+
+.animate-logo {
+	position: relative;
+	width: 100%;
+	max-width: 220px;
+	align-self: center;
+	flex: 1 1 220px;
+}
+
+.animate-logo img {
+	position: absolute;
+	left: 0;
+	top: 0;
+	transform-origin: 50% 50%;
+	width: 100%;
+}
+
+.animate-logo .logo-icon {
+	z-index: 1;
+	animation: rotation-animation 20s linear infinite forwards;
+	animation-delay: -2s;
+}
+
+.animate-logo .logo-name {
+	z-index: 2;
+}
+
+input,
+textarea {
+	width: 100%;
+	background-color: transparent;
+	border-radius: 3px;
+	font-size: 1rem;
+	padding: 0.4rem;
+}
+
+input:focus,
+textarea:focus {
+	outline: none;
+	border-color: var(--secondary-color);
+}
+
+form .input-field {
+	display: flex;
+	flex-direction: column;
+	gap: 0.3rem;
+}
+
+form .input-field label {
+	font-size: 1rem;
+	font-weight: 600;
+}
+
+.container {
+	max-width: 1140px;
+	padding: 0 0.8rem;
+	margin: 0 auto;
+}
+
+.content {
+	min-height: 100vh;
+}
+
+.row {
+	display: flex;
+}
+
+/* login and register form */
+#login,
+#register {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+#login form,
+#register form {
+	display: flex;
+	flex-direction: column;
+	max-width: 320px;
+	flex: 1;
+	gap: 1rem;
 }
