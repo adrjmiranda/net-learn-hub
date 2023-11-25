@@ -29,7 +29,7 @@ class AdministratorController extends Controller
     $administrator = new AdministratorModel();
     $administratorByEmail = $administrator->getUserByEmail($email);
 
-    if (!empty($administratorByEmail)) {
+    if ($administratorByEmail) {
       authentication($password, $administratorByEmail->password, $administrator->getTable());
     }
 

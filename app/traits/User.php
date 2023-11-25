@@ -10,8 +10,10 @@ use stdClass;
 
 trait User
 {
-  public function getUserByEmail(string $email): object
+  public function getUserByEmail(string $email): ?object
   {
+    $user = null;
+
     try {
       $searchQueryOptions = new SearchQueryOptions();
 
@@ -26,10 +28,14 @@ trait User
 
       $stmt = prepareSearchStatement($this->connect, $this->table, $searchQueryOptions);
       $stmt->execute();
-      return $stmt->fetch();
+
+      if ($stmt->rowCount() > 0) {
+        $user = $stmt->fetch();
+      }
     } catch (PDOException $pDOException) {
       echo $pDOException->getMessage();
-      return new stdClass();
     }
+
+    return $user;
   }
 }

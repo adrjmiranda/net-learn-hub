@@ -93,7 +93,7 @@ button {
 
 .animate-logo .logo-icon {
 	z-index: 1;
-	animation: rotation-animation 20s linear infinite forwards;
+	animation: rotation-animation 25s linear infinite forwards;
 	animation-delay: -2s;
 }
 
