@@ -4,7 +4,6 @@ namespace app\Controllers;
 
 require_once __DIR__ . '/../functions/authentication.php';
 
-use app\classes\GlobalValues;
 use app\classes\UserMessage;
 use app\Models\AdministratorModel;
 use Psr\Http\Message\ResponseFactoryInterface;
@@ -14,14 +13,18 @@ use Slim\Views\Twig;
 
 class AdministratorController extends Controller
 {
-  protected $responseFactory;
-  protected $twig;
+  protected ResponseFactoryInterface $responseFactory;
+  protected Twig $twig;
+  private array $data;
+  private string $path;
 
   public function __construct(ResponseFactoryInterface $responseFactory, Twig $twig)
   {
     $this->responseFactory = $responseFactory;
     $this->twig = $twig;
     $this->model = new AdministratorModel();
+    $this->data = [];
+    $this->path = '/pages/administrators/';
   }
 
   public function index(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
@@ -36,40 +39,31 @@ class AdministratorController extends Controller
   public function login(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
   {
     $params = $request->getParsedBody();
-
     $email = $params['email'];
     $password = $params['password'];
 
-    $administratorByEmail = $this->model->getUserByEmail($email);
+    $this->path .= 'login.html.twig';
+    $this->data['page_title'] = 'NetLearnHub | Aprenda de graça TI';
+    $this->data['email'] = $email;
+    $this->data['password'] = $password;
 
-    $path = '/pages/administrators/login.html.twig';
-    $data = [
-      'page_title' => 'NetLearnHub | Aprenda de graça TI'
-    ];
+    $administratorByEmail = $this->model->getUserByEmail($email);
 
     if ($administratorByEmail) {
       $auth = authentication($password, $administratorByEmail->password, $this->model->getTable());
 
       if ($auth) {
-        $path = '/pages/administrators/dashboard.html.twig';
+        unset($this->data['email']);
+        unset($this->data['password']);
+        $this->path .= 'dashboard.html.twig';
       } else {
-        $data = [
-          'page_title' => 'NetLearnHub | Aprenda de graça TI',
-          'email' => $email,
-          'password' => $password,
-          'session_message' => UserMessage::ERR_LOGIN
-        ];
+        $this->data['session_message'] = UserMessage::ERR_LOGIN;
       }
     } else {
-      $data = [
-        'page_title' => 'NetLearnHub | Aprenda de graça TI',
-        'email' => $email,
-        'password' => $password,
-        'session_message' => UserMessage::ERR_EMAIL_NOT_FOUND
-      ];
+      $this->data['session_message'] = UserMessage::ERR_EMAIL_NOT_FOUND;
     }
 
-    return $this->twig->render($response, $path, $data);
+    return $this->twig->render($response, $this->path, $this->data);
   }
 
   // public function dashboard(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
