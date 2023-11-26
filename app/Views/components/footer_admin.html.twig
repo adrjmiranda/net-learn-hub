@@ -1,1 +1,30 @@
-<footer>Footer</footer>
+<footer id="footer">
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <a href="{{ base_url }}/admin/dashboard">
+          {% include '/components/logo_name.html.twig' %}
+        </a>
+        <p>O NetLearnHub é uma plataforma online dedicada a oferecer cursos gratuitos especializados na área de redes de
+          computadores. Nossa missão é proporcionar acesso gratuito a uma ampla variedade de recursos educacionais em
+          Tecnologia da Informação (TI), visando fornecer uma experiência de aprendizado abrangente para estudantes e
+          profissionais interessados no mundo das redes de computadores.</p>
+      </div>
+      <div class="col">
+        <h4>Fique por Dentro</h4>
+        {% include '/components/bar_admin.html.twig' %}
+      </div>
+      <div class="col">
+        <h4>Para Aprender</h4>
+        {% include '/components/courses_bar.html.twig' %}
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <p class="copy">2023 &copy; NetLearnHub</p>
+    <p class="terms">
+      <a href="{{ base_url }}/terms-and-conditions">Termos e condições</a>
+      <a href="{{ base_url }}/privacy-policy">Política de Privacidade</a>
+    </p>
+  </div>
+</footer>

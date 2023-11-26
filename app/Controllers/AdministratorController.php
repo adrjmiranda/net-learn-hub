@@ -89,7 +89,7 @@ class AdministratorController extends Controller
     return $this->twig->render($response, $this->path, $this->data);
   }
 
-  public function dashboard(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
+  public function dashboard(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
   {
     $this->path .= 'dashboard.html.twig';
     $this->data['page_title'] = 'NetLearnHub | Aprenda de graça TI';
