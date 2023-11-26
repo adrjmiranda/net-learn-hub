@@ -51,5 +51,6 @@ return [
   'base_url' => $baseURL,
   'slim_app' => $app,
   'twig' => $twig,
-  'response_factory' => $app->getResponseFactory()
+  'response_factory' => $app->getResponseFactory(),
+  'csrf_token' => $_SESSION[GlobalValues::CSRF_TOKEN]
 ];

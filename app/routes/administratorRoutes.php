@@ -7,8 +7,10 @@ use app\Controllers\AdministratorController;
 
 $responseFactory = $dependencies['response_factory'];
 $twig = $dependencies['twig'];
+$baseURL = $dependencies['base_url'];
+$csrfToken = $dependencies['csrf_token'];
 
-$controller = new AdministratorController($responseFactory, $twig);
+$controller = new AdministratorController($responseFactory, $twig, $baseURL, $csrfToken);
 $table = $controller->getTable();
 
 $app->group('/admin', function (RouteCollectorProxy $group) use ($controller) {
@@ -18,6 +20,8 @@ $app->group('/admin', function (RouteCollectorProxy $group) use ($controller) {
 
   $group->post('/login', function ($request, $response, $args) use ($controller) {
     return $controller->login($request, $response, $args);
+  })->add(function ($request, $handler) {
+    return verifyCSRFToken($request, $handler);
   });
 
   $group->get('/dashboard', function ($request, $response, $args) use ($controller) {

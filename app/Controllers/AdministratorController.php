@@ -18,13 +18,16 @@ class AdministratorController extends Controller
   private array $data;
   private string $path;
 
-  public function __construct(ResponseFactoryInterface $responseFactory, Twig $twig)
+  public function __construct(ResponseFactoryInterface $responseFactory, Twig $twig, string $baseURL, string $csrfToken)
   {
     $this->responseFactory = $responseFactory;
     $this->twig = $twig;
     $this->model = new AdministratorModel();
     $this->data = [];
     $this->path = '/pages/administrators/';
+    $this->data['base_url'] = $baseURL;
+    ;
+    $this->data['csrf_token'] = $csrfToken;
   }
 
   public function index(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
@@ -46,6 +49,7 @@ class AdministratorController extends Controller
     $email = $params['email'];
     $password = $params['password'];
 
+    $this->path .= 'login.html.twig';
     $this->data['page_title'] = 'NetLearnHub | Aprenda de graça TI';
     $this->data['email'] = $email;
     $this->data['password'] = $password;
@@ -54,11 +58,9 @@ class AdministratorController extends Controller
     $this->data['session_message'] = '';
 
     if (empty($email)) {
-      $this->path .= 'login.html.twig';
       $this->data['err_email'] = true;
       $this->data['session_message'] = UserMessage::ERR_EMPTY_EMAIL;
     } elseif (empty($password)) {
-      $this->path .= 'login.html.twig';
       $this->data['err_password'] = true;
       $this->data['session_message'] = UserMessage::ERR_EMPTY_PASS;
     } else {
@@ -68,19 +70,13 @@ class AdministratorController extends Controller
         $auth = authentication($password, $administratorByEmail->password, $this->model->getTable());
 
         if ($auth) {
-          unset($this->data['email']);
-          unset($this->data['password']);
-          unset($this->data['err_email']);
-          unset($this->data['err_password']);
-          $this->path .= 'dashboard.html.twig';
+          return $response->withHeader('Location', '/admin/dashboard')->withStatus(302);
         } else {
-          $this->path .= 'login.html.twig';
           $this->data['err_email'] = true;
           $this->data['err_pass'] = true;
           $this->data['session_message'] = UserMessage::ERR_LOGIN;
         }
       } else {
-        $this->path .= 'login.html.twig';
         $this->data['session_message'] = UserMessage::ERR_EMAIL_NOT_FOUND;
         $this->data['err_email'] = true;
       }
@@ -124,6 +120,6 @@ class AdministratorController extends Controller
 
     session_destroy();
 
-    return $this->twig->render($response, $this->path, $this->data);
+    return $response->withHeader('Location', '/admin/login')->withStatus(302);
   }
 }

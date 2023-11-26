@@ -53,12 +53,34 @@ function verifyTokenMiddleware(Request $request, RequestHandler $handler, string
   }
 
   if (!isset($session[$tokenName]) && $currentPath !== '/admin/login') {
-    return $response->withHeader('Location', '/admin/login')->withStatus(302);
+    return $response->withHeader('Location', '/admin/login')->withHeader('Allow', 'GET')->withStatus(302);
   }
 
   if (isset($session[$tokenName]) && $currentPath === '/admin/login') {
-    return $response->withHeader('Location', '/admin/dashboard')->withStatus(302);
+    return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
   }
 
   return $handler->handle($request);
+}
+
+function verifyCSRFToken(Request $request, RequestHandler $handler)
+{
+  $session = $_SESSION ?? [];
+  $params = $request->getParsedBody();
+
+  $currentPath = $request->getUri()->getPath();
+
+  $response = new SlimResponse();
+
+  if (isset($params['csrf_token'])) {
+    $csrfToken = $params['csrf_token'];
+
+    if ($csrfToken === $session[GlobalValues::CSRF_TOKEN]) {
+      return $handler->handle($request);
+    } else {
+      return $response->withHeader('Location', $currentPath)->withHeader('Allow', 'GET')->withStatus(302);
+    }
+  } else {
+    return $response->withHeader('Location', $currentPath)->withHeader('Allow', 'GET')->withStatus(302);
+  }
 }

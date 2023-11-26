@@ -11,6 +11,7 @@
       <img src="{{ base_url }}/public/images/logo_acronym.png" class="logo-name" alt="NLH Logo Acronym">
       <img src="{{ base_url }}/public/images/logo_icon.png" class="logo-icon" alt="NLH Logo Icon">
     </div>
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
     <div class="input-field">
       <label for="email">E-mail:</label>
       <input type="email" name="email" id="email" placeholder="Seu email" value="{{ email }}"

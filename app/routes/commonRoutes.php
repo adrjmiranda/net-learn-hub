@@ -1,7 +1,7 @@
 <?php
+
 use Slim\Routing\RouteCollectorProxy;
 
-$responseFactory = $dependencies['response_factory'];
 $twig = $dependencies['twig'];
 
 $app->group('/', function (RouteCollectorProxy $group) use ($twig) {
