@@ -190,6 +190,10 @@ input {
 	padding-left: 2.2rem;
 }
 
+textarea {
+	padding: 0.9rem;
+}
+
 input::placeholder {
 	font-weight: 300;
 }

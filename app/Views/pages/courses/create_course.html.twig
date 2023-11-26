@@ -1,0 +1,22 @@
+{% extends '/components/base_admin.html.twig' %}
+{% block content %}
+<div id="create-course" class="content">
+  <form action="#">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <div class="input-field">
+      <label for="image">Escolha uma imagem principal para o curso:</label>
+      <input type="file" name="image" id="image" class="{{ err_image ? 'input-error' : '' }}">
+    </div>
+    <div class="input-field">
+      <label for="title">Título do Curso:</label>
+      <input type="text" name="title" id="title" placeholder="Escolha um título para o curso" value="{{ title }}"
+        class="{{ err_title ? 'input-error' : '' }}">
+    </div>
+    <div class="input-field">
+      <label for="description">Descrição do Curso:</label>
+      <textarea name="description" id="description" rows="10" placeholder="Crie uma descrição para esse curso"
+        class="{{ err_description ? 'input-error' : '' }}">{{ description }}</textarea>
+    </div>
+  </form>
+</div>
+{% endblock %}
