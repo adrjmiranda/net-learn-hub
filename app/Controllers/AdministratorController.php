@@ -22,11 +22,13 @@ class AdministratorController extends Controller
   {
     $this->responseFactory = $responseFactory;
     $this->twig = $twig;
+
     $this->model = new AdministratorModel();
-    $this->data = [];
+
     $this->path = '/pages/administrators/';
+
+    $this->data = [];
     $this->data['base_url'] = $baseURL;
-    ;
     $this->data['csrf_token'] = $csrfToken;
   }
 
@@ -70,7 +72,7 @@ class AdministratorController extends Controller
         $auth = authentication($password, $administratorByEmail->password, $this->model->getTable());
 
         if ($auth) {
-          return $response->withHeader('Location', '/admin/dashboard')->withStatus(302);
+          return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
         } else {
           $this->data['err_email'] = true;
           $this->data['err_pass'] = true;
@@ -120,6 +122,6 @@ class AdministratorController extends Controller
 
     session_destroy();
 
-    return $response->withHeader('Location', '/admin/login')->withStatus(302);
+    return $response->withHeader('Location', '/admin/login')->withHeader('Allow', 'GET')->withStatus(302);
   }
 }

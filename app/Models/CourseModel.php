@@ -2,7 +2,9 @@
 
 namespace app\Models;
 
+use app\classes\GlobalValues;
+
 class CourseModel extends Model
 {
-  protected string $table = 'courses';
+  protected string $table = GlobalValues::COURSES_TABLE;
 }
