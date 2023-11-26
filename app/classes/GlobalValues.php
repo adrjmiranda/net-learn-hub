@@ -71,4 +71,33 @@ class GlobalValues
    * Name of the user token.
    */
   const USER_TOKEN = 'user_token';
+
+  /**
+   * Name of the session message.
+   */
+  const SESSION_MESSAGE = 'session_message';
+  const SESSION_MESSAGE_CONTENT = 'session_message_content';
+
+  /**
+   * Minimum  password size.
+   */
+  const MINIMUM_PASSWORD_SIZE = 8;
+  /**
+   * Maximum password size.
+   */
+  const MAXIMUM_PASSWORD_SIZE = 20;
+
+  /**
+   * Maximum size of the comment.
+   */
+  const MAXIMUM_SIZE_OF_THE_COMMENT = 200;
+  /**
+   * Maximum size of the description.
+   */
+  const MAXIMUM_SIZE_OF_THE_DESCRIPTION = 200;
+
+  /**
+   * Maximum image size in MB
+   */
+  const MAXIMUM_IMAGE_SIZE_IN_MB = 2;
 }

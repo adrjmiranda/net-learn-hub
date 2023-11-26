@@ -7,7 +7,6 @@ require_once __DIR__ . '/../functions/helpers.php';
 use PDO;
 use PDOException;
 use app\classes\Connection;
-
 use app\classes\SearchQueryOptions;
 
 class Model

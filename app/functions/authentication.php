@@ -5,8 +5,10 @@ use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 use Slim\Psr7\Response as SlimResponse;
 use app\classes\GlobalValues;
 
-function authentication(string $password, string $hash, string $table): void
+function authentication(string $password, string $hash, string $table): bool
 {
+  $auth = false;
+
   if (password_verify($password, $hash)) {
     $token = bin2hex(random_bytes(32));
 
@@ -22,11 +24,14 @@ function authentication(string $password, string $hash, string $table): void
           $_SESSION[GlobalValues::USER_TOKEN] = $token;
         }
         break;
+    }
 
-      default:
-        return;
+    if (isset($_SESSION[GlobalValues::ADMIN_TOKEN]) || isset($_SESSION[GlobalValues::USER_TOKEN])) {
+      $auth = true;
     }
   }
+
+  return $auth;
 }
 
 function verifyTokenMiddleware(Request $request, RequestHandler $handler, string $table)

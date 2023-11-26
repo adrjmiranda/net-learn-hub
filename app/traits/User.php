@@ -6,7 +6,6 @@ require_once __DIR__ . '/../functions/helpers.php';
 
 use PDOException;
 use app\classes\SearchQueryOptions;
-use stdClass;
 
 trait User
 {

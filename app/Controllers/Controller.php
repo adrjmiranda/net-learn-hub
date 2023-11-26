@@ -2,9 +2,12 @@
 
 namespace app\Controllers;
 
-use app\traits\View;
-
 class Controller
 {
-  use View;
+  protected object $model;
+
+  public function getTable(): string
+  {
+    return $this->model->getTable();
+  }
 }

@@ -2,17 +2,22 @@
 {% block inner %}
 <div id="login" class="container content">
   <form action="{{ base_url }}/admin/login" method="post">
+    {% if session_message %}
+    <div class="session-message">
+    </div>
+    {% endif %}
+    <p>{{ session_message }}</p>
     <div class="animate-logo">
       <img src="{{ base_url }}/public/images/logo_acronym.png" class="logo-name" alt="NLH Logo Acronym">
       <img src="{{ base_url }}/public/images/logo_icon.png" class="logo-icon" alt="NLH Logo Icon">
     </div>
     <div class="input-field">
       <label for="email">E-mail:</label>
-      <input type="email" name="email" id="email">
+      <input type="email" name="email" id="email" value="{{ email }}">
     </div>
     <div class="input-field">
       <label for="password">Senha:</label>
-      <input type="password" name="password" id="password">
+      <input type="password" name="password" id="password" value="{{ password }}">
     </div>
     <button type="submit" class="btn">Entrar</button>
   </form>
