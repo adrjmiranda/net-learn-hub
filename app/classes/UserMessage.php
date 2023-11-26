@@ -12,9 +12,11 @@ use app\classes\GlobalValues;
 class UserMessage
 {
   // Error messages related to email lookup
-  const ERR_EMAIL_NOT_FOUND = 'Email não encontrado. Não existe um usuário com esse email.';
+  const ERR_EMAIL_NOT_FOUND = 'Usuário não encontrado.';
   const ERR_INCORRECT_PASS = 'A seenha está incorreta.';
-  const ERR_LOGIN = 'Houve um problema e não foi possível fazer o login agora.';
+  const ERR_LOGIN = 'Senha ou email incorreto.';
+  const ERR_EMPTY_EMAIL = 'E-mail não pode ser vazio.';
+  const ERR_EMPTY_PASS = 'Senha não pode ser vazia.';
 
   // Error messages related to email registration
   const ERR_EMAIL_ALREADY_REGISTERED = 'E-mail already registered.';

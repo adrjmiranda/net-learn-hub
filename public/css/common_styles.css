@@ -7,6 +7,8 @@
 	--quaternary-color: #ffffff;
 	--bg-light-color: #efefef;
 	--bg-dark-color: #252627;
+	--danger-color: #eb0000;
+	--success-color: #4cab47;
 }
 
 /* general */
@@ -41,6 +43,20 @@
 
 body {
 	overflow-x: hidden;
+}
+
+.container {
+	max-width: 1140px;
+	padding: 0 0.8rem;
+	margin: 0 auto;
+}
+
+.content {
+	min-height: 100vh;
+}
+
+.row {
+	display: flex;
 }
 
 a {
@@ -101,6 +117,34 @@ button {
 	z-index: 2;
 }
 
+.session-message {
+	background-color: var(--danger-color);
+	color: var(--quaternary-color);
+	text-align: center;
+	padding: 0.5rem;
+	border-radius: 3px;
+}
+
+form .input-field {
+	display: flex;
+	flex-direction: column;
+	gap: 0.3rem;
+	position: relative;
+}
+
+form .input-field label {
+	font-size: 1rem;
+	font-weight: 600;
+}
+
+form .input-field ion-icon {
+	position: absolute;
+	font-size: 1.5rem;
+	color: var(--primary-color);
+	left: 0.5rem;
+	top: 2.3rem;
+}
+
 input,
 textarea {
 	width: 100%;
@@ -116,29 +160,22 @@ textarea:focus {
 	border-color: var(--secondary-color);
 }
 
-form .input-field {
-	display: flex;
-	flex-direction: column;
-	gap: 0.3rem;
+input.input-error,
+textarea.input-error,
+select.input-error {
+	border-color: var(--danger-color);
 }
 
-form .input-field label {
-	font-size: 1rem;
-	font-weight: 600;
+input {
+	padding-left: 2.2rem;
 }
 
-.container {
-	max-width: 1140px;
-	padding: 0 0.8rem;
-	margin: 0 auto;
+input::placeholder {
+	font-weight: 300;
 }
 
-.content {
-	min-height: 100vh;
-}
-
-.row {
-	display: flex;
+input:focus + ion-icon {
+	color: var(--secondary-color);
 }
 
 /* login and register form */

@@ -27,19 +27,6 @@ if (!isset($_SESSION[GlobalValues::CSRF_TOKEN])) {
   $_SESSION[GlobalValues::CSRF_TOKEN] = $csrf_token;
 }
 
-if (!isset($_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT])) {
-  $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = '';
-}
-
-if (!isset($_SESSION[GlobalValues::SESSION_MESSAGE])) {
-  $_SESSION[GlobalValues::SESSION_MESSAGE] = '';
-}
-
-if (isset($_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT])) {
-  $_SESSION[GlobalValues::SESSION_MESSAGE] = $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT];
-  $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = '';
-}
-
 // TODO: define the environment
 // in development environment
 $baseURL = 'http://' . $_SERVER['SERVER_NAME'];

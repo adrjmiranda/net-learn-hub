@@ -29,11 +29,15 @@ class AdministratorController extends Controller
 
   public function index(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
   {
-    return $this->twig->render($response, '/pages/administrators/login.html.twig', [
-      'page_title' => 'NetLearnHub | Aprenda de graça TI',
-      'email' => '',
-      'password' => ''
-    ]);
+    $this->path .= 'login.html.twig';
+    $this->data['page_title'] = 'NetLearnHub | Aprenda de graça TI';
+    $this->data['email'] = '';
+    $this->data['password'] = '';
+    $this->data['err_email'] = false;
+    $this->data['err_password'] = false;
+    $this->data['session_message'] = '';
+
+    return $this->twig->render($response, $this->path, $this->data);
   }
 
   public function login(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
@@ -42,40 +46,67 @@ class AdministratorController extends Controller
     $email = $params['email'];
     $password = $params['password'];
 
-    $this->path .= 'login.html.twig';
     $this->data['page_title'] = 'NetLearnHub | Aprenda de graça TI';
     $this->data['email'] = $email;
     $this->data['password'] = $password;
+    $this->data['err_email'] = false;
+    $this->data['err_password'] = false;
+    $this->data['session_message'] = '';
 
-    $administratorByEmail = $this->model->getUserByEmail($email);
-
-    if ($administratorByEmail) {
-      $auth = authentication($password, $administratorByEmail->password, $this->model->getTable());
-
-      if ($auth) {
-        unset($this->data['email']);
-        unset($this->data['password']);
-        $this->path .= 'dashboard.html.twig';
-      } else {
-        $this->data['session_message'] = UserMessage::ERR_LOGIN;
-      }
+    if (empty($email)) {
+      $this->path .= 'login.html.twig';
+      $this->data['err_email'] = true;
+      $this->data['session_message'] = UserMessage::ERR_EMPTY_EMAIL;
+    } elseif (empty($password)) {
+      $this->path .= 'login.html.twig';
+      $this->data['err_password'] = true;
+      $this->data['session_message'] = UserMessage::ERR_EMPTY_PASS;
     } else {
-      $this->data['session_message'] = UserMessage::ERR_EMAIL_NOT_FOUND;
+      $administratorByEmail = $this->model->getUserByEmail($email);
+
+      if ($administratorByEmail) {
+        $auth = authentication($password, $administratorByEmail->password, $this->model->getTable());
+
+        if ($auth) {
+          unset($this->data['email']);
+          unset($this->data['password']);
+          unset($this->data['err_email']);
+          unset($this->data['err_password']);
+          $this->path .= 'dashboard.html.twig';
+        } else {
+          $this->path .= 'login.html.twig';
+          $this->data['err_email'] = true;
+          $this->data['err_pass'] = true;
+          $this->data['session_message'] = UserMessage::ERR_LOGIN;
+        }
+      } else {
+        $this->path .= 'login.html.twig';
+        $this->data['session_message'] = UserMessage::ERR_EMAIL_NOT_FOUND;
+        $this->data['err_email'] = true;
+      }
     }
 
     return $this->twig->render($response, $this->path, $this->data);
   }
 
-  // public function dashboard(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
-  // {
-  //   $this->view('/pages/administrators/dashboard.html.twig', [
-  //     'page_title' => 'NetLearnHub | Aprenda de graça TI'
-  //   ]);
-  //   return $response;
-  // }
+  public function dashboard(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
+  {
+    $this->path .= 'dashboard.html.twig';
+    $this->data['page_title'] = 'NetLearnHub | Aprenda de graça TI';
+
+    return $this->twig->render($response, $this->path, $this->data);
+  }
 
   public function logout(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
   {
+    $this->path .= 'login.html.twig';
+    $this->data['page_title'] = 'NetLearnHub | Aprenda de graça TI';
+    $this->data['email'] = '';
+    $this->data['password'] = '';
+    $this->data['err_email'] = false;
+    $this->data['err_password'] = false;
+    $this->data['session_message'] = '';
+
     $_SESSION = array();
 
     if (ini_get("session.use_cookies")) {
@@ -93,6 +124,6 @@ class AdministratorController extends Controller
 
     session_destroy();
 
-    return $response->withHeader('Location', '/admin/login')->withStatus(302);
+    return $this->twig->render($response, $this->path, $this->data);
   }
 }
