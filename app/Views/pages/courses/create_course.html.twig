@@ -1,6 +1,7 @@
 {% extends '/components/base_admin.html.twig' %}
 {% block content %}
 <div id="create-course" class="content">
+  <h1>Criar novo curso:</h1>
   <form action="#">
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
     <div class="input-field">
@@ -16,6 +17,14 @@
       <label for="description">Descrição do Curso:</label>
       <textarea name="description" id="description" rows="10" placeholder="Crie uma descrição para esse curso"
         class="{{ err_description ? 'input-error' : '' }}">{{ description }}</textarea>
+    </div>
+    <button type="submit" class="btn btn-color">Criar Curso</button>
+    <div class="observation">
+      <b>Prezado Administrador,</b>
+      <p>Para ativar um curso em nossa plataforma, é imprescindível adicionar pelo menos um tópico de conteúdo
+        relacionado a ele. Esses tópicos incluem aulas, módulos ou materiais didáticos essenciais para uma experiência
+        de aprendizado valiosa. Sua contribuição ao criar e associar tópicos de conteúdo aos cursos é fundamental para
+        garantir o acesso e a qualidade do material disponibilizado aos nossos usuários.</p>
     </div>
   </form>
 </div>

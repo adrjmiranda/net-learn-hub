@@ -86,6 +86,10 @@ h6 {
 	font-weight: 600;
 }
 
+h1 {
+	margin-bottom: 2rem;
+}
+
 /* buttons and links */
 a {
 	text-decoration: none;
@@ -169,7 +173,7 @@ button {
 	animation-delay: -2s;
 }
 
-.animate-logo .logo-name {
+.animate-logo .logo-acronym {
 	z-index: 2;
 }
 
@@ -262,6 +266,26 @@ footer {
 }
 
 /* forms */
+form {
+	display: flex;
+	flex-direction: column;
+	gap: 1.2rem;
+}
+
+form .observation {
+	margin-top: 2rem;
+}
+
+form .observation p {
+	text-align: justify;
+	margin-top: 1rem;
+	font-weight: 300;
+}
+
+form .observation p::first-letter {
+	margin-left: 1.5rem;
+}
+
 form .input-field {
 	display: flex;
 	flex-direction: column;
@@ -311,7 +335,8 @@ textarea {
 	padding: 0.9rem;
 }
 
-input::placeholder {
+input::placeholder,
+textarea::placeholder {
 	font-weight: 300;
 }
 
@@ -329,11 +354,8 @@ input:focus + ion-icon {
 
 #login form,
 #register form {
-	display: flex;
-	flex-direction: column;
 	max-width: 320px;
 	flex: 1;
-	gap: 1rem;
 }
 
 @media screen and (min-width: 768px) {

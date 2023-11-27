@@ -1,30 +1,32 @@
 {% extends '/components/header_admin.html.twig' %}
 {% block inner %}
-<div id="login" class="container content">
-  <form action="{{ base_url }}/admin/login" method="post">
-    {% if session_message %}
-    <div class="session-message">
-      <p>{{ session_message }}</p>
-    </div>
-    {% endif %}
-    <div class="animate-logo">
-      <img src="{{ base_url }}/public/images/logo_acronym.png" class="logo-name" alt="NLH Logo Acronym">
-      <img src="{{ base_url }}/public/images/logo_icon.png" class="logo-icon" alt="NLH Logo Icon">
-    </div>
-    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-    <div class="input-field">
-      <label for="email">E-mail:</label>
-      <input type="email" name="email" id="email" placeholder="Seu email" value="{{ email }}"
-        class="{{ err_email ? 'input-error' : '' }}">
-      <ion-icon name="mail"></ion-icon>
-    </div>
-    <div class="input-field">
-      <label for="password">Senha:</label>
-      <input type="password" name="password" id="password" placeholder="Sua senha" value="{{ password }}"
-        class="{{ err_password ? 'input-error' : '' }}">
-      <ion-icon name="lock-closed"></ion-icon>
-    </div>
-    <button type="submit" class="btn btn-color">Entrar</button>
-  </form>
+<div class="container">
+  <div id="login" class="content">
+    <form action="{{ base_url }}/admin/login" method="post">
+      {% if session_message %}
+      <div class="session-message">
+        <p>{{ session_message }}</p>
+      </div>
+      {% endif %}
+      <div class="animate-logo">
+        <img src="{{ base_url }}/public/images/logo_acronym.png" class="logo-acronym" alt="NLH Logo Acronym">
+        <img src="{{ base_url }}/public/images/logo_icon.png" class="logo-icon" alt="NLH Logo Icon">
+      </div>
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <div class="input-field">
+        <label for="email">E-mail:</label>
+        <input type="email" name="email" id="email" placeholder="Seu email" value="{{ email }}"
+          class="{{ err_email ? 'input-error' : '' }}">
+        <ion-icon name="mail"></ion-icon>
+      </div>
+      <div class="input-field">
+        <label for="password">Senha:</label>
+        <input type="password" name="password" id="password" placeholder="Sua senha" value="{{ password }}"
+          class="{{ err_password ? 'input-error' : '' }}">
+        <ion-icon name="lock-closed"></ion-icon>
+      </div>
+      <button type="submit" class="btn btn-color">Entrar</button>
+    </form>
+  </div>
 </div>
 {% endblock %}
