@@ -41,6 +41,7 @@ class AdministratorController extends Controller
     $this->data['err_email'] = false;
     $this->data['err_password'] = false;
     $this->data['session_message'] = '';
+    $this->data['message_type'] = 'error';
 
     return $this->twig->render($response, $this->path, $this->data);
   }
@@ -58,6 +59,7 @@ class AdministratorController extends Controller
     $this->data['err_email'] = false;
     $this->data['err_password'] = false;
     $this->data['session_message'] = '';
+    $this->data['message_type'] = 'error';
 
     if (empty($email)) {
       $this->data['err_email'] = true;
@@ -104,6 +106,7 @@ class AdministratorController extends Controller
     $this->data['err_email'] = false;
     $this->data['err_password'] = false;
     $this->data['session_message'] = '';
+    $this->data['message_type'] = 'error';
 
     $_SESSION = array();
 

@@ -11,6 +11,9 @@ use app\classes\GlobalValues;
  */
 class UserMessage
 {
+  // Error messages related to invalid csrf token
+  const INVALID_CSRF_TOKEN = 'Houve um problema de segurança na sua solicitação.';
+
   // Error messages related to email lookup
   const ERR_EMAIL_NOT_FOUND = 'Usuário não encontrado.';
   const ERR_INCORRECT_PASS = 'A seenha está incorreta.';

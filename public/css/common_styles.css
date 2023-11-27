@@ -5,7 +5,7 @@
 	--secondary-color: #1590f9;
 	--tertiary-color: #07def9;
 	--quaternary-color: #ffffff;
-	--bg-light-color: #efefef;
+	--bg-light-color: #fbfafa;
 	--bg-dark-color: #252627;
 	--danger-color: #eb0000;
 	--success-color: #4cab47;
@@ -258,11 +258,18 @@ footer {
 
 /* messages */
 .session-message {
-	background-color: var(--danger-color);
 	color: var(--quaternary-color);
 	text-align: center;
 	padding: 0.5rem;
 	border-radius: 3px;
+}
+
+.session-message.error {
+	background-color: var(--danger-color);
+}
+
+.session-message.success {
+	background-color: var(--success-color);
 }
 
 /* forms */
