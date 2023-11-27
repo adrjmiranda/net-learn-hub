@@ -2,16 +2,23 @@
 {% block content %}
 <div id="create-course" class="content">
   <h1>Criar novo curso:</h1>
-  <form action="#">
+  <form action="{{ base_url }}/admin/course/create" method="post" enctype="multipart/form-data">
+    {% if session_message %}
+    <div class="session-message {{ message_type }}">
+      <p>{{ session_message }}</p>
+    </div>
+    {% endif %}
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
     <div class="input-field">
       <label for="image">Escolha uma imagem principal para o curso:</label>
       <input type="file" name="image" id="image" class="{{ err_image ? 'input-error' : '' }}">
+      <ion-icon name="link"></ion-icon>
     </div>
     <div class="input-field">
       <label for="title">Título do Curso:</label>
       <input type="text" name="title" id="title" placeholder="Escolha um título para o curso" value="{{ title }}"
         class="{{ err_title ? 'input-error' : '' }}">
+      <ion-icon name="ellipsis-horizontal-circle"></ion-icon>
     </div>
     <div class="input-field">
       <label for="description">Descrição do Curso:</label>

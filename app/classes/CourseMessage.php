@@ -15,9 +15,9 @@ class CourseMessage
   const ERR_FAIL_DELETE = 'Falha ao tentar deletar curso.';
 
   // Error messages related to course details validation
-  const ERR_INVALID_TITLE = 'Título inválido.';
-  const ERR_INVALID_DESCRIPTION = 'Descrição inválido.';
-  const ERR_INVALID_IMAGE_TYPE = 'Tipo de imagem inválido. Somente jpg, jpeg ou png.';
+  const ERR_INVALID_TITLE = 'O título pode ser somente texto.';
+  const ERR_INVALID_DESCRIPTION = 'A descrição pode ser somente texto.';
+  const ERR_INVALID_IMAGE_TYPE = 'Somente imagens jpg, jpeg ou png.';
   const ERR_INVALID_IMAGE_LENGTH = 'Tamanho da imagem inválido. Deve ter no máximo 2 MB.';
 
   // Error messages related to course topics

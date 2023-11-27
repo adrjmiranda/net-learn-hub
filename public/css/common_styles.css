@@ -95,7 +95,7 @@ a {
 	text-decoration: none;
 	color: var(--secondary-color);
 	transition: 0.3s ease;
-	font-weight: 500;
+	font-weight: 600;
 }
 
 a:hover {
@@ -308,7 +308,7 @@ form .input-field label {
 form .input-field ion-icon {
 	position: absolute;
 	font-size: 1.5rem;
-	color: var(--primary-color);
+	color: var(--secondary-color);
 	left: 0.5rem;
 	top: 2.3rem;
 }
@@ -317,6 +317,7 @@ input,
 textarea {
 	width: 100%;
 	background-color: transparent;
+	border-color: var(--secondary-color);
 	border-radius: 3px;
 	font-size: 1rem;
 	padding: 0.4rem;
@@ -325,7 +326,6 @@ textarea {
 input:focus,
 textarea:focus {
 	outline: none;
-	border-color: var(--secondary-color);
 }
 
 input.input-error,
@@ -348,7 +348,7 @@ textarea::placeholder {
 }
 
 input:focus + ion-icon {
-	color: var(--secondary-color);
+	color: var(--tertiary-color);
 }
 
 /* login and register form */
