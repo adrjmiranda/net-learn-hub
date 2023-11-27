@@ -27,6 +27,10 @@ if (!isset($_SESSION[GlobalValues::CSRF_TOKEN])) {
   $_SESSION[GlobalValues::CSRF_TOKEN] = $csrf_token;
 }
 
+if (!isset($_SESSION[GlobalValues::CSRF_TOKEN_IS_INVALID])) {
+  $_SESSION[GlobalValues::CSRF_TOKEN_IS_INVALID] = true;
+}
+
 // TODO: define the environment
 // in development environment
 $baseURL = 'http://' . $_SERVER['SERVER_NAME'];

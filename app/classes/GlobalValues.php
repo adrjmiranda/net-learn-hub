@@ -95,9 +95,14 @@ class GlobalValues
    * Maximum size of the description.
    */
   const MAXIMUM_SIZE_OF_THE_DESCRIPTION = 200;
-
+  
   /**
    * Maximum image size in MB
    */
   const MAXIMUM_IMAGE_SIZE_IN_MB = 2;
+
+  /**
+   * Maximum image size in MB
+   */
+  const CSRF_TOKEN_IS_INVALID = 'csrf_token_is_invalid';
 }

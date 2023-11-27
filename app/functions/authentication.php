@@ -68,19 +68,15 @@ function verifyCSRFToken(Request $request, RequestHandler $handler)
   $session = $_SESSION ?? [];
   $params = $request->getParsedBody();
 
-  $currentPath = $request->getUri()->getPath();
-
-  $response = new SlimResponse();
+  $_SESSION[GlobalValues::CSRF_TOKEN_IS_INVALID] = true;
 
   if (isset($params['csrf_token'])) {
     $csrfToken = $params['csrf_token'];
 
     if ($csrfToken === $session[GlobalValues::CSRF_TOKEN]) {
-      return $handler->handle($request);
-    } else {
-      return $response->withHeader('Location', $currentPath)->withHeader('Allow', 'GET')->withStatus(302);
+      $_SESSION[GlobalValues::CSRF_TOKEN_IS_INVALID] = false;
     }
-  } else {
-    return $response->withHeader('Location', $currentPath)->withHeader('Allow', 'GET')->withStatus(302);
   }
+
+  return $handler->handle($request);
 }
