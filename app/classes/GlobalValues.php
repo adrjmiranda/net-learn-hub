@@ -90,16 +90,44 @@ class GlobalValues
   /**
    * Maximum size of the comment.
    */
-  const MAXIMUM_SIZE_OF_THE_COMMENT = 200;
+  const MAXIMUM_SIZE_OF_THE_COMMENT = 255;
+  /**
+   * Maximum size of the title.
+   */
+  const MAXIMUM_SIZE_OF_THE_TITLE = 100;
   /**
    * Maximum size of the description.
    */
-  const MAXIMUM_SIZE_OF_THE_DESCRIPTION = 200;
-  
+  const MAXIMUM_SIZE_OF_THE_DESCRIPTION = 255;
+  /**
+   * Maximum size of the question.
+   */
+  const MAXIMUM_SIZE_OF_THE_QUESTION = 65535;
+  /**
+   * Maximum size of the alternative.
+   */
+  const MAXIMUM_SIZE_OF_THE_ALTERNATIVE = 65535;
+  /**
+   * Maximum size of the first name.
+   */
+  const MAXIMUM_SIZE_OF_THE_FIRST_NAME = 100;
+  /**
+   * Maximum size of the last name.
+   */
+  const MAXIMUM_SIZE_OF_THE_LAST_NAME = 255;
+
   /**
    * Maximum image size in MB
    */
-  const MAXIMUM_IMAGE_SIZE_IN_MB = 2;
+  const MAXIMUM_IMAGE_SIZE_IN_MB = 2097152;
+  /**
+   * Maximum image size in MB
+   */
+  const MAXIMUM_SIZE_OF_THE_IMAGE_BLOB = 5242880;
+  /**
+   * Maximum image size in MB
+   */
+  const MAXIMUM_SIZE_OF_THE_DOCUMENT_BLOB = 2097152;
 
   /**
    * Maximum image size in MB

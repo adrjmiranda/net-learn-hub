@@ -3,6 +3,7 @@
 namespace app\Controllers;
 
 require_once __DIR__ . '/../functions/authentication.php';
+require_once __DIR__ . '/../functions/validations.php';
 
 use app\classes\GlobalValues;
 use app\classes\UserMessage;
@@ -64,12 +65,12 @@ class AdministratorController extends Controller
 
     if ($_SESSION[GlobalValues::CSRF_TOKEN_IS_INVALID]) {
       $this->data['session_message'] = UserMessage::INVALID_CSRF_TOKEN;
-    } elseif (empty($email)) {
+    } elseif (!isValidEmail($email)) {
       $this->data['err_email'] = true;
-      $this->data['session_message'] = UserMessage::ERR_EMPTY_EMAIL;
-    } elseif (empty($password)) {
+      $this->data['session_message'] = UserMessage::ERR_INVALID_EMAIL;
+    } elseif (!isValidPassword($password)) {
       $this->data['err_password'] = true;
-      $this->data['session_message'] = UserMessage::ERR_EMPTY_PASS;
+      $this->data['session_message'] = UserMessage::ERR_INVALID_PASS;
     } else {
       $administratorByEmail = $this->model->getUserByEmail($email);
 

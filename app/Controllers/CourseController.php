@@ -76,10 +76,10 @@ class CourseController extends Controller
     } elseif ($uploadedImage === null || $uploadedImage->getError() !== UPLOAD_ERR_OK || !in_array($imageType, $imagesTypes)) {
       $this->data['err_image'] = true;
       $this->data['session_message'] = CourseMessage::ERR_INVALID_IMAGE_TYPE;
-    } elseif ($imageSize > 2 * 1024 * 1024) {
+    } elseif ($imageSize > GlobalValues::MAXIMUM_IMAGE_SIZE_IN_MB) {
       $this->data['err_image'] = true;
       $this->data['session_message'] = CourseMessage::ERR_INVALID_IMAGE_LENGTH;
-    } else {
+    } elseif (1) {
     }
 
     return $this->twig->render($response, $this->path, $this->data);

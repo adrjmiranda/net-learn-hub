@@ -272,6 +272,11 @@ footer {
 	background-color: var(--success-color);
 }
 
+.session-message p {
+	font-size: 0.8rem;
+	font-weight: 600;
+}
+
 /* forms */
 form {
 	display: flex;

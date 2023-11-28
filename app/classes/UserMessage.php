@@ -18,21 +18,19 @@ class UserMessage
   const ERR_EMAIL_NOT_FOUND = 'Usuário não encontrado.';
   const ERR_INCORRECT_PASS = 'A seenha está incorreta.';
   const ERR_LOGIN = 'Senha ou email incorreto.';
-  const ERR_EMPTY_EMAIL = 'E-mail não pode ser vazio.';
-  const ERR_EMPTY_PASS = 'Senha não pode ser vazia.';
 
   // Error messages related to email registration
-  const ERR_EMAIL_ALREADY_REGISTERED = 'E-mail already registered.';
+  const ERR_EMAIL_ALREADY_REGISTERED = 'Este e-mail já está registrado.';
   const ERR_REGISTER = 'Houve um erro e não foi possível fazer o registro agora.';
 
   // Error messages related to user details validation
-  const ERR_INVALID_FIRST_NAME = 'Nome inválido. Somente letras e espaços em branco.';
-  const ERR_INVALID_LAST_NAME = 'Sobrenome inválido. Somente letras e espaços em branco.';
-  const ERR_INVALID_EMAIL = 'Formato de email inválido.';
-  const ERR_INVALID_PASS = 'Senha inválida. Deve ter de ' . GlobalValues::MINIMUM_PASSWORD_SIZE . ' a ' . GlobalValues::MAXIMUM_PASSWORD_SIZE . ' caracteres (com letras e números).';
+  const ERR_INVALID_FIRST_NAME = 'Sobrenome deve ser somente texto (máximo ' . GlobalValues::MAXIMUM_SIZE_OF_THE_FIRST_NAME . ' de caracteres).';
+  const ERR_INVALID_LAST_NAME = 'Sobrenome deve ser somente texto (máximo ' . GlobalValues::MAXIMUM_SIZE_OF_THE_LAST_NAME . ' de caracteres).';
+  const ERR_INVALID_EMAIL = 'E-mail não pode ser vazio e deve ter um formato válido.';
+  const ERR_INVALID_PASS = 'Senha incorreta e/ou o formato é inválido (deve ter de ' . GlobalValues::MINIMUM_PASSWORD_SIZE . ' a ' . GlobalValues::MAXIMUM_PASSWORD_SIZE . ' caracteres).';
   const ERR_INVALID_PASS_CONFIRMATION = 'A confirmação da senha não corresponde.';
   const ERR_INVALID_IMAGE_TYPE = 'Tipo de imagem inválido. Somente jpg, jpeg ou png.';
-  const ERR_INVALID_IMAGE_LENGTH = 'Tamanho da imagem inválido. Deve ter no máximo ' . GlobalValues::MAXIMUM_IMAGE_SIZE_IN_MB . ' MB.';
+  const ERR_INVALID_IMAGE_LENGTH = 'Tamanho da imagem inválido. Deve ter no máximo ' . GlobalValues::MAXIMUM_IMAGE_SIZE_IN_MB . 'B.';
   const ERR_INVALID_DESCRIPTION = 'Descrição inválida. Somente texto com no máximo ' . GlobalValues::MAXIMUM_SIZE_OF_THE_DESCRIPTION . 'caracteres.';
 
   // Error message related to comment
