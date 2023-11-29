@@ -9,6 +9,9 @@
     </div>
     {% endif %}
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <div id="image-preview">
+      <img id="preview" src="">
+    </div>
     <div class="input-field">
       <label for="image">Escolha uma imagem principal para o curso:</label>
       <input type="file" name="image" id="image" class="{{ err_image ? 'input-error' : '' }}">

@@ -19,6 +19,7 @@ class CourseMessage
   const ERR_INVALID_DESCRIPTION = 'A descrição não pode ser vazia (máximo de ' . GlobalValues::MAXIMUM_SIZE_OF_THE_DESCRIPTION . ' caracteres).';
   const ERR_INVALID_IMAGE_TYPE = 'Somente imagens jpg, jpeg ou png.';
   const ERR_INVALID_IMAGE_LENGTH = 'Tamanho da imagem inválido (máximo ' . GlobalValues::MAXIMUM_SIZE_OF_THE_IMAGE_BLOB . ' bytes).';
+  const ERR_TITLE_ALREADY_EXISTS = 'Já existe um curso com esse título. Por favor escolha outro título.';
 
   // Error messages related to course topics
   const ERR_INVALID_TOPIC_CONTENT = 'Conteúdo do tópico inválido (máximo de ' . GlobalValues::MAXIMUM_SIZE_OF_THE_DOCUMENT_BLOB . ' bytes).';

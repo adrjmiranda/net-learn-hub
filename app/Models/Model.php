@@ -43,4 +43,33 @@ class Model
 
     return $data;
   }
+
+  public function getByTitle(string $title): ?object
+  {
+    $data = null;
+
+    try {
+      $searchQueryOptions = new SearchQueryOptions();
+
+      $searchQueryOptions->limit = 1;
+      $searchQueryOptions->type = SearchQueryOptions::SPECIFIC;
+      $searchQueryOptions->conditions = [
+        'column_name' => 'title',
+        'operator' => SearchQueryOptions::EQUAL_OPERATOR,
+        'values' => $title
+      ];
+      ;
+
+      $stmt = prepareSearchStatement($this->connect, $this->table, $searchQueryOptions);
+      $stmt->execute();
+
+      if ($stmt->rowCount() > 0) {
+        $data = $stmt->fetch();
+      }
+    } catch (PDOException $pDOException) {
+      echo $pDOException->getMessage();
+    }
+
+    return $data;
+  }
 }

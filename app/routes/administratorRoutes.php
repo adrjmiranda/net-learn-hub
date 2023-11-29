@@ -41,7 +41,7 @@ $app->group('/admin', function (RouteCollectorProxy $group) use ($administratorC
   });
 
   $group->post('/course/create', function ($request, $response, $args) use ($courseController) {
-    return $courseController->store($request, $response, $args);
+    return $courseController->processStoreRequest($request, $response, $args);
   });
 })->add(function ($request, $handler) use ($table) {
   return verifyTokenMiddleware($request, $handler, $table);

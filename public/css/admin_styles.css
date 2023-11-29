@@ -1,1 +1,11 @@
+#image-preview {
+	height: auto;
+	width: auto;
+	background-color: #ccc;
+}
 
+#preview {
+	width: 100vh;
+	display: block;
+	margin: 0 auto;
+}

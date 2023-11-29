@@ -11,7 +11,7 @@ trait User
 {
   public function getUserByEmail(string $email): ?object
   {
-    $user = null;
+    $data = null;
 
     try {
       $searchQueryOptions = new SearchQueryOptions();
@@ -29,12 +29,12 @@ trait User
       $stmt->execute();
 
       if ($stmt->rowCount() > 0) {
-        $user = $stmt->fetch();
+        $data = $stmt->fetch();
       }
     } catch (PDOException $pDOException) {
       echo $pDOException->getMessage();
     }
 
-    return $user;
+    return $data;
   }
 }
