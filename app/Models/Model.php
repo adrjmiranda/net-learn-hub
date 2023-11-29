@@ -36,6 +36,14 @@ class Model
 
       if ($stmt->rowCount() > 0) {
         $data = $stmt->fetchAll();
+
+        if (!empty($data)) {
+          foreach ($data as $object) {
+            if (property_exists($object, 'image')) {
+              $object->image = base64_encode($object->image);
+            }
+          }
+        }
       }
     } catch (PDOException $pDOException) {
       echo $pDOException->getMessage();

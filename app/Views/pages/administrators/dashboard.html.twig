@@ -9,6 +9,7 @@
   {% if courses %}
   {% for course in courses %}
   <p>{{ course.title }}</p>
+  <img src="data:image;base64,{{ course.image }}" alt="">
   {% endfor %}
   {% endif %}
 </div>
