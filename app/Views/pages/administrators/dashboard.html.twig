@@ -1,4 +1,15 @@
 {% extends '/components/base_admin.html.twig' %}
 {% block content %}
-<div id="dashboard" class="content">Dashboard</div>
+<div id="dashboard" class="content">
+  {% if session_message %}
+  <p class="session-message {{ message_type }}">
+    {{ session_message }}
+  </p>
+  {% endif %}
+  {% if courses %}
+  {% for course in courses %}
+  <p>{{ course.title }}</p>
+  {% endfor %}
+  {% endif %}
+</div>
 {% endblock %}

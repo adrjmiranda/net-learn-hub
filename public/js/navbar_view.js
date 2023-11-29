@@ -4,7 +4,7 @@ const navbarBtn = document.querySelectorAll('#navbar .btn');
 
 if (navbarDrop && topBar && navbarBtn) {
 	navbarDrop.addEventListener('click', () => {
-		topBar.classList.toggle('hide');
-		navbarBtn.forEach((btn) => btn.classList.toggle('hide'));
+		topBar.classList.toggle('show');
+		navbarBtn.forEach((btn) => btn.classList.toggle('show'));
 	});
 }

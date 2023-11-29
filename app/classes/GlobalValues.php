@@ -75,8 +75,13 @@ class GlobalValues
   /**
    * Name of the session message.
    */
-  const SESSION_MESSAGE = 'session_message';
   const SESSION_MESSAGE_CONTENT = 'session_message_content';
+  const SESSION_MESSAGE = 'session_message';
+  const SESSION_MESSAGE_TYPE = 'session_message_type';
+
+  // messages types
+  const TYPE_MSG_SUCCESS = 'success';
+  const TYPE_MSG_ERROR = 'error';
 
   /**
    * Minimum  password size.
@@ -127,7 +132,7 @@ class GlobalValues
   const MAXIMUM_SIZE_OF_THE_DOCUMENT_BLOB = 5242880;
 
   /**
-   * Maximum image size in MB
+   * CSRF token is invalid NAME
    */
   const CSRF_TOKEN_IS_INVALID = 'csrf_token_is_invalid';
 }

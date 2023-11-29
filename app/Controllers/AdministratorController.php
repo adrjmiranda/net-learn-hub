@@ -8,6 +8,7 @@ require_once __DIR__ . '/../functions/validations.php';
 use app\classes\GlobalValues;
 use app\classes\UserMessage;
 use app\Models\AdministratorModel;
+use app\Models\CourseModel;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -42,8 +43,8 @@ class AdministratorController extends Controller
     $this->data['password'] = '';
     $this->data['err_email'] = false;
     $this->data['err_password'] = false;
-    $this->data['session_message'] = '';
-    $this->data['message_type'] = 'error';
+    $this->data['session_message'] = $_SESSION[GlobalValues::SESSION_MESSAGE] ?? '';
+    $this->data['message_type'] = $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] ?? '';
 
     return $this->twig->render($response, $this->path, $this->data);
   }
@@ -60,17 +61,19 @@ class AdministratorController extends Controller
     $this->data['password'] = $password;
     $this->data['err_email'] = false;
     $this->data['err_password'] = false;
-    $this->data['session_message'] = '';
-    $this->data['message_type'] = 'error';
+    $this->data['session_message'] = $_SESSION[GlobalValues::SESSION_MESSAGE] ?? '';
+    $this->data['message_type'] = $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] ?? '';
+
+    $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_ERROR;
 
     if ($_SESSION[GlobalValues::CSRF_TOKEN_IS_INVALID]) {
-      $this->data['session_message'] = UserMessage::INVALID_CSRF_TOKEN;
+      $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = UserMessage::INVALID_CSRF_TOKEN;
     } elseif (!isValidEmail($email)) {
       $this->data['err_email'] = true;
-      $this->data['session_message'] = UserMessage::ERR_INVALID_EMAIL;
+      $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = UserMessage::ERR_INVALID_EMAIL;
     } elseif (!isValidPassword($password)) {
       $this->data['err_password'] = true;
-      $this->data['session_message'] = UserMessage::ERR_INVALID_PASS;
+      $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = UserMessage::ERR_INVALID_PASS;
     } else {
       $administratorByEmail = $this->model->getUserByEmail($email);
 
@@ -78,14 +81,16 @@ class AdministratorController extends Controller
         $auth = authentication($password, $administratorByEmail->password, $this->model->getTable());
 
         if ($auth) {
+          $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = UserMessage::SUCCESS_LOGIN;
+          $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_SUCCESS;
           return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
         } else {
           $this->data['err_email'] = true;
           $this->data['err_pass'] = true;
-          $this->data['session_message'] = UserMessage::ERR_LOGIN;
+          $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = UserMessage::ERR_LOGIN;
         }
       } else {
-        $this->data['session_message'] = UserMessage::ERR_EMAIL_NOT_FOUND;
+        $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = UserMessage::ERR_EMAIL_NOT_FOUND;
         $this->data['err_email'] = true;
       }
     }
@@ -95,8 +100,14 @@ class AdministratorController extends Controller
 
   public function dashboard(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
   {
+    $courseModel = new CourseModel();
+    $courses = $courseModel->all();
+
     $this->path .= 'dashboard.html.twig';
     $this->data['page_title'] = 'NetLearnHub | Aprenda de graça TI';
+    $this->data['session_message'] = $_SESSION[GlobalValues::SESSION_MESSAGE] ?? '';
+    $this->data['message_type'] = $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] ?? '';
+    $this->data['courses'] = $courses;
 
     return $this->twig->render($response, $this->path, $this->data);
   }
@@ -109,8 +120,8 @@ class AdministratorController extends Controller
     $this->data['password'] = '';
     $this->data['err_email'] = false;
     $this->data['err_password'] = false;
-    $this->data['session_message'] = '';
-    $this->data['message_type'] = 'error';
+    $this->data['session_message'] = $_SESSION[GlobalValues::SESSION_MESSAGE] ?? '';
+    $this->data['message_type'] = $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] ?? '';
 
     $_SESSION = array();
 
@@ -129,6 +140,8 @@ class AdministratorController extends Controller
 
     session_destroy();
 
+    $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = UserMessage::SUCCESS_LOGOUT;
+    $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_SUCCESS;
     return $response->withHeader('Location', '/admin/login')->withHeader('Allow', 'GET')->withStatus(302);
   }
 }

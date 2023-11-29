@@ -41,8 +41,8 @@ class CourseController extends Controller
     $this->data['err_image'] = false;
     $this->data['err_title'] = false;
     $this->data['err_description'] = false;
-    $this->data['session_message'] = '';
-    $this->data['message_type'] = 'error';
+    $this->data['session_message'] = $_SESSION[GlobalValues::SESSION_MESSAGE] ?? '';
+    $this->data['message_type'] = $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] ?? '';
 
     return $this->twig->render($response, $this->path, $this->data);
   }
@@ -66,23 +66,25 @@ class CourseController extends Controller
     $this->data['err_image'] = false;
     $this->data['err_title'] = false;
     $this->data['err_description'] = false;
-    $this->data['session_message'] = '';
-    $this->data['message_type'] = 'error';
+    $this->data['session_message'] = $_SESSION[GlobalValues::SESSION_MESSAGE] ?? '';
+    $this->data['message_type'] = $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] ?? '';
+
+    $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_ERROR;
 
     if ($_SESSION[GlobalValues::CSRF_TOKEN_IS_INVALID]) {
-      $this->data['session_message'] = UserMessage::INVALID_CSRF_TOKEN;
+      $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = UserMessage::INVALID_CSRF_TOKEN;
     } elseif ($uploadedImage === null || $uploadedImage['error'] !== UPLOAD_ERR_OK || !in_array($imageType, $imagesTypes)) {
       $this->data['err_image'] = true;
-      $this->data['session_message'] = CourseMessage::ERR_INVALID_IMAGE_TYPE;
+      $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::ERR_INVALID_IMAGE_TYPE;
     } elseif (!isValidBlob(file_get_contents($uploadedImage['tmp_name']), 'image')) {
       $this->data['err_image'] = true;
-      $this->data['session_message'] = CourseMessage::ERR_INVALID_IMAGE_LENGTH;
+      $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::ERR_INVALID_IMAGE_LENGTH;
     } elseif (!isValidText($title, 'title')) {
       $this->data['err_title'] = true;
-      $this->data['session_message'] = CourseMessage::ERR_INVALID_TITLE;
+      $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::ERR_INVALID_TITLE;
     } elseif (!isValidText($description, 'description')) {
       $this->data['err_description'] = true;
-      $this->data['session_message'] = CourseMessage::ERR_INVALID_DESCRIPTION;
+      $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::ERR_INVALID_DESCRIPTION;
     } else {
       $this->data['err_image'] = false;
       $this->data['err_title'] = false;
@@ -93,11 +95,13 @@ class CourseController extends Controller
 
       if ($courseByTitle) {
         $this->data['err_title'] = true;
-        $this->data['session_message'] = CourseMessage::ERR_TITLE_ALREADY_EXISTS;
+        $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::ERR_TITLE_ALREADY_EXISTS;
       } elseif ($this->model->store($image, $title, $description)) {
+        $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::SUCCESS_CREATE;
+        $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_SUCCESS;
         return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
       } else {
-        $this->data['session_message'] = CourseMessage::ERR_FAIL_CREATE;
+        $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::ERR_FAIL_CREATE;
       }
     }
 

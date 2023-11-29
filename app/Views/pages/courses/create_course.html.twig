@@ -4,9 +4,9 @@
   <h1>Criar novo curso:</h1>
   <form action="{{ base_url }}/admin/course/create" method="post" enctype="multipart/form-data">
     {% if session_message %}
-    <div class="session-message {{ message_type }}">
-      <p>{{ session_message }}</p>
-    </div>
+    <p class="session-message {{ message_type }}">
+      {{ session_message }}
+    </p>
     {% endif %}
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
     <div id="image-preview">
@@ -25,7 +25,7 @@
     </div>
     <div class="input-field">
       <label for="description">Descrição do Curso:</label>
-      <textarea name="description" id="description" rows="10" placeholder="Crie uma descrição para esse curso"
+      <textarea name="description" id="description" rows="5" placeholder="Crie uma descrição para esse curso"
         class="{{ err_description ? 'input-error' : '' }}">{{ description }}</textarea>
     </div>
     <button type="submit" class="btn btn-color">Criar Curso</button>

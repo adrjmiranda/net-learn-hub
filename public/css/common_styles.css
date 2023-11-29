@@ -72,8 +72,12 @@ body {
 	max-width: 32%;
 }
 
-.hide {
+.show {
 	display: flex !important;
+}
+
+.hide {
+	display: none !important;
 }
 
 /* headers */
@@ -272,7 +276,7 @@ footer {
 	background-color: var(--success-color);
 }
 
-.session-message p {
+.session-message {
 	font-size: 0.8rem;
 	font-weight: 600;
 }

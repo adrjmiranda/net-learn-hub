@@ -31,4 +31,9 @@ class CourseMessage
   // Error messages related to alternatives in quizzes
   const ERR_INVALID_LETTER = 'A alternativa deve ser uma letra do alfabeto.';
   const ERR_INVALID_ALTERNATIVE = 'Texto para alternativa inválido (máximo de ' . GlobalValues::MAXIMUM_SIZE_OF_THE_DOCUMENT_BLOB . ' caracteres.';
+
+  // successes messages to users
+  const SUCCESS_CREATE = 'Curso criado com sucesso!';
+  const SUCCESS_UPDATE = 'Curso atualizado com sucesso!';
+  const SUCCESS_DELETE = 'Curso removido com sucesso!';
 }
