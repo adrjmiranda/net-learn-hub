@@ -38,6 +38,11 @@ $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] ??= '';
 
 $_SESSION[GlobalValues::SESSION_MESSAGE] = $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT];
 
+if ($_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] !== '') {
+  $_SESSION[GlobalValues::SESSION_MESSAGE] = $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT];
+  $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = '';
+}
+
 // TODO: define the environment
 // in development environment
 $baseURL = 'http://' . $_SERVER['SERVER_NAME'];

@@ -61,19 +61,17 @@ class AdministratorController extends Controller
     $this->data['password'] = $password;
     $this->data['err_email'] = false;
     $this->data['err_password'] = false;
-    $this->data['session_message'] = $_SESSION[GlobalValues::SESSION_MESSAGE] ?? '';
-    $this->data['message_type'] = $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] ?? '';
-
-    $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_ERROR;
+    $this->data['session_message'] = '';
+    $this->data['message_type'] = GlobalValues::TYPE_MSG_ERROR;
 
     if ($_SESSION[GlobalValues::CSRF_TOKEN_IS_INVALID]) {
-      $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = UserMessage::INVALID_CSRF_TOKEN;
+      $message = UserMessage::INVALID_CSRF_TOKEN;
     } elseif (!isValidEmail($email)) {
       $this->data['err_email'] = true;
-      $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = UserMessage::ERR_INVALID_EMAIL;
+      $message = UserMessage::ERR_INVALID_EMAIL;
     } elseif (!isValidPassword($password)) {
       $this->data['err_password'] = true;
-      $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = UserMessage::ERR_INVALID_PASS;
+      $message = UserMessage::ERR_INVALID_PASS;
     } else {
       $administratorByEmail = $this->model->getUserByEmail($email);
 
@@ -87,13 +85,15 @@ class AdministratorController extends Controller
         } else {
           $this->data['err_email'] = true;
           $this->data['err_pass'] = true;
-          $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = UserMessage::ERR_LOGIN;
+          $message = UserMessage::ERR_LOGIN;
         }
       } else {
-        $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = UserMessage::ERR_EMAIL_NOT_FOUND;
+        $message = UserMessage::ERR_EMAIL_NOT_FOUND;
         $this->data['err_email'] = true;
       }
     }
+
+    $this->data['session_message'] = $message;
 
     return $this->twig->render($response, $this->path, $this->data);
   }
@@ -140,8 +140,6 @@ class AdministratorController extends Controller
 
     session_destroy();
 
-    $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = UserMessage::SUCCESS_LOGOUT;
-    $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_SUCCESS;
     return $response->withHeader('Location', '/admin/login')->withHeader('Allow', 'GET')->withStatus(302);
   }
 }

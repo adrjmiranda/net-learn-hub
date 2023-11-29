@@ -95,7 +95,7 @@ class GlobalValues
   /**
    * Maximum size of the comment.
    */
-  const MAXIMUM_SIZE_OF_THE_COMMENT = 255;
+  const MAXIMUM_SIZE_OF_THE_COMMENT = 65535;
   /**
    * Maximum size of the title.
    */
@@ -103,7 +103,7 @@ class GlobalValues
   /**
    * Maximum size of the description.
    */
-  const MAXIMUM_SIZE_OF_THE_DESCRIPTION = 255;
+  const MAXIMUM_SIZE_OF_THE_DESCRIPTION = 65535;
   /**
    * Maximum size of the question.
    */

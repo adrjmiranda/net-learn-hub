@@ -38,6 +38,5 @@ class UserMessage
 
   // successes messages to users
   const SUCCESS_LOGIN = 'Login feito com sucesso!';
-  const SUCCESS_LOGOUT = 'Logout feito com sucesso!';
   const SUCCESS_REGISTER = 'Registro na plataforma feito com sucesso!';
 }
