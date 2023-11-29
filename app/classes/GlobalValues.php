@@ -119,15 +119,12 @@ class GlobalValues
   /**
    * Maximum image size in MB
    */
-  const MAXIMUM_IMAGE_SIZE_IN_MB = 2097152;
+  const MAXIMUM_SIZE_OF_THE_IMAGE_BLOB = 2097152;
+
   /**
    * Maximum image size in MB
    */
-  const MAXIMUM_SIZE_OF_THE_IMAGE_BLOB = 5242880;
-  /**
-   * Maximum image size in MB
-   */
-  const MAXIMUM_SIZE_OF_THE_DOCUMENT_BLOB = 2097152;
+  const MAXIMUM_SIZE_OF_THE_DOCUMENT_BLOB = 5242880;
 
   /**
    * Maximum image size in MB

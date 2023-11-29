@@ -18,10 +18,10 @@ class CourseMessage
   const ERR_INVALID_TITLE = 'O título não poder ser vazio (máximo de ' . GlobalValues::MAXIMUM_SIZE_OF_THE_TITLE . ' caracteres).';
   const ERR_INVALID_DESCRIPTION = 'A descrição não pode ser vazia (máximo de ' . GlobalValues::MAXIMUM_SIZE_OF_THE_DESCRIPTION . ' caracteres).';
   const ERR_INVALID_IMAGE_TYPE = 'Somente imagens jpg, jpeg ou png.';
-  const ERR_INVALID_IMAGE_LENGTH = 'Tamanho da imagem inválido (máximo ' . GlobalValues::MAXIMUM_IMAGE_SIZE_IN_MB . 'B).';
+  const ERR_INVALID_IMAGE_LENGTH = 'Tamanho da imagem inválido (máximo ' . GlobalValues::MAXIMUM_SIZE_OF_THE_IMAGE_BLOB . ' bytes).';
 
   // Error messages related to course topics
-  const ERR_INVALID_TOPIC_CONTENT = 'Conteúdo do tópico inválido (máximo de ' . GlobalValues::MAXIMUM_SIZE_OF_THE_DOCUMENT_BLOB . 'B).';
+  const ERR_INVALID_TOPIC_CONTENT = 'Conteúdo do tópico inválido (máximo de ' . GlobalValues::MAXIMUM_SIZE_OF_THE_DOCUMENT_BLOB . ' bytes).';
 
   // Error messages related to questions in quizzes
   const ERR_INVALID_QUESTION_TEXT = 'Texto da questão inválido (máximo de ' . GlobalValues::MAXIMUM_SIZE_OF_THE_QUESTION . ' caracteres.';

@@ -30,7 +30,7 @@ class UserMessage
   const ERR_INVALID_PASS = 'Senha incorreta e/ou o formato é inválido (deve ter de ' . GlobalValues::MINIMUM_PASSWORD_SIZE . ' a ' . GlobalValues::MAXIMUM_PASSWORD_SIZE . ' caracteres).';
   const ERR_INVALID_PASS_CONFIRMATION = 'A confirmação da senha não corresponde.';
   const ERR_INVALID_IMAGE_TYPE = 'Tipo de imagem inválido. Somente jpg, jpeg ou png.';
-  const ERR_INVALID_IMAGE_LENGTH = 'Tamanho da imagem inválido. Deve ter no máximo ' . GlobalValues::MAXIMUM_IMAGE_SIZE_IN_MB . 'B.';
+  const ERR_INVALID_IMAGE_LENGTH = 'Tamanho da imagem inválido. Deve ter no máximo ' . GlobalValues::MAXIMUM_SIZE_OF_THE_IMAGE_BLOB . ' bytes.';
   const ERR_INVALID_DESCRIPTION = 'Descrição inválida. Somente texto com no máximo ' . GlobalValues::MAXIMUM_SIZE_OF_THE_DESCRIPTION . 'caracteres.';
 
   // Error message related to comment

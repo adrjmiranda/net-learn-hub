@@ -12,7 +12,7 @@ use app\classes\GlobalValues;
 function isValidText(string $text, string $field): bool
 {
   // Filters and sanitizes the text to prevent SQL Injection
-  $filteredText = filter_var($text, FILTER_SANITIZE_STRING);
+  $filteredText = strip_tags($text);
 
   $maximumSizes = [
     'title' => GlobalValues::MAXIMUM_SIZE_OF_THE_TITLE,
@@ -33,7 +33,7 @@ function isValidText(string $text, string $field): bool
   }
 
   // Checks if the text is empty or exceeds the maximum size for the field
-  return empty($filteredText) || strlen($filteredText) > $maximumSize;
+  return !empty($filteredText) && strlen($filteredText) <= $maximumSize;
 }
 
 /**
@@ -58,7 +58,7 @@ function isValidBlob(mixed $blobData, string $field): bool
   }
 
   // Checks whether BLOB data is empty or exceeds the maximum size allowed
-  return empty($blobData) || strlen($blobData) > $maximumSize;
+  return !empty($blobData) && strlen($blobData) <= $maximumSize;
 }
 
 /**
