@@ -21,12 +21,6 @@ $app->group('/admin', function (RouteCollectorProxy $group) use ($administratorC
     return $administratorController->index($request, $response, $args);
   });
 
-  $group->post('/login', function ($request, $response, $args) use ($administratorController) {
-    return $administratorController->login($request, $response, $args);
-  })->add(function ($request, $handler) {
-    return verifyCSRFToken($request, $handler);
-  });
-
   $group->get('/dashboard', function ($request, $response, $args) use ($administratorController) {
     return $administratorController->dashboard($request, $response, $args);
   });
@@ -35,13 +29,31 @@ $app->group('/admin', function (RouteCollectorProxy $group) use ($administratorC
     return $administratorController->logout($request, $response, $args);
   });
 
-  // course
   $group->get('/course/create', function ($request, $response, $args) use ($courseController) {
     return $courseController->create($request, $response, $args);
   });
 
+  $group->get('/course/edit', function ($request, $response, $args) use ($courseController) {
+    return $courseController->edit($request, $response, $args);
+  });
+
+  // send form
+  $group->post('/login', function ($request, $response, $args) use ($administratorController) {
+    return $administratorController->login($request, $response, $args);
+  })->add(function ($request, $handler) {
+    return verifyCSRFToken($request, $handler);
+  });
+
   $group->post('/course/create', function ($request, $response, $args) use ($courseController) {
     return $courseController->processStoreRequest($request, $response, $args);
+  })->add(function ($request, $handler) {
+    return verifyCSRFToken($request, $handler);
+  });
+
+  $group->post('/course/edit', function ($request, $response, $args) use ($courseController) {
+    return $courseController->processUpdateRequest($request, $response, $args);
+  })->add(function ($request, $handler) {
+    return verifyCSRFToken($request, $handler);
   });
 })->add(function ($request, $handler) use ($table) {
   return verifyTokenMiddleware($request, $handler, $table);

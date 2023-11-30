@@ -15,6 +15,7 @@ class CourseMessage
   const ERR_FAIL_DELETE = 'Falha ao tentar deletar curso.';
 
   // Error messages related to course details validation
+  const ERR_COURSE_INEXISTENT = 'Este curso não existe!';
   const ERR_INVALID_TITLE = 'O título não poder ser vazio (máximo de ' . GlobalValues::MAXIMUM_SIZE_OF_THE_TITLE . ' caracteres).';
   const ERR_INVALID_WORKLOAD = 'A carga horária deve ser um número inteiro de horas não nulo.';
   const ERR_INVALID_DESCRIPTION = 'A descrição não pode ser vazia (máximo de ' . GlobalValues::MAXIMUM_SIZE_OF_THE_DESCRIPTION . ' caracteres).';

@@ -1,7 +1,7 @@
 {% extends '/components/administrators/base.html.twig' %}
 {% block content %}
 <div id="edit-course" class="content">
-  <h1>Criar novo curso:</h1>
+  <h1>Atualizar Curso: <span>{{ title }}</span></h1>
   <form action="{{ base_url }}/admin/course/edit" method="post" enctype="multipart/form-data">
     {% if session_message %}
     <p class="session-message {{ message_type }}">
@@ -9,6 +9,7 @@
     </p>
     {% endif %}
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <input type="hidden" name="id" value="{{ id }}">
     <div id="image-preview">
       <img id="preview" src="">
     </div>
@@ -34,7 +35,7 @@
       <textarea name="description" id="description" rows="5" placeholder="Crie uma descrição para esse curso"
         class="{{ err_description ? 'input-error' : '' }}">{{ description }}</textarea>
     </div>
-    <button type="submit" class="btn btn-color">Criar Curso</button>
+    <button type="submit" class="btn btn-color">Atualizar Curso</button>
     <div class="observation">
       <b>Prezado Administrador,</b>
       <p>Para ativar um curso em nossa plataforma, é imprescindível adicionar pelo menos um tópico de conteúdo

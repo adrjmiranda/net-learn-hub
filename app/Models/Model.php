@@ -80,4 +80,33 @@ class Model
 
     return $data;
   }
+
+  public function getById(string $id): ?object
+  {
+    $data = null;
+
+    try {
+      $searchQueryOptions = new SearchQueryOptions();
+
+      $searchQueryOptions->limit = 1;
+      $searchQueryOptions->type = SearchQueryOptions::SPECIFIC;
+      $searchQueryOptions->conditions = [
+        'column_name' => 'id',
+        'operator' => SearchQueryOptions::EQUAL_OPERATOR,
+        'values' => $id
+      ];
+      ;
+
+      $stmt = prepareSearchStatement($this->connect, $this->table, $searchQueryOptions);
+      $stmt->execute();
+
+      if ($stmt->rowCount() > 0) {
+        $data = $stmt->fetch();
+      }
+    } catch (PDOException $pDOException) {
+      echo $pDOException->getMessage();
+    }
+
+    return $data;
+  }
 }

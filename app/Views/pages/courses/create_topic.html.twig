@@ -1,0 +1,19 @@
+{% extends '/components/administrators/base.html.twig' %}
+{% block content %}
+<div id="create-course" class="content">
+  <h1>Criar Novo Tópico do Curso: <span>{{ title }}</span></h1>
+  <form action="" method="post"></form>
+  <script>
+    $('#summernote').summernote({
+      placeholder: '',
+      tabsize: 2,
+      height: 1200,
+      styleTags: [
+        'p',
+        { title: 'Blockquote', tag: 'blockquote', className: 'blockquote', value: 'blockquote' },
+        'pre', 'h2', 'h3', 'h4', 'h5', 'h6'
+      ]
+    });
+  </script>
+</div>
+{% endblock %}

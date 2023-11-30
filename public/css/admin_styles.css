@@ -89,3 +89,9 @@
 	justify-content: space-between;
 	gap: 1rem;
 }
+
+/* forms */
+#edit-course h1 span,
+#create-course h1 span {
+	color: var(--secondary-color);
+}

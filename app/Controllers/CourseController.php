@@ -116,4 +116,117 @@ class CourseController extends Controller
 
     return $this->twig->render($response, $this->path, $this->data);
   }
+
+  public function edit(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
+  {
+    $params = $request->getQueryParams();
+    $id = $params['id'] ?? '';
+
+    if (empty($id)) {
+      return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
+    } else {
+      $id = (int) $id;
+
+      $courseById = $this->model->getById($id);
+
+      if (empty($courseById)) {
+        return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
+      } else {
+        $this->path .= 'edit_course.html.twig';
+        $this->data['page_title'] = 'NetLearnHub | Aprenda de graça TI';
+        $this->data['id'] = $courseById->id;
+        $this->data['title'] = $courseById->title;
+        $this->data['workload'] = $courseById->workload;
+        $this->data['description'] = $courseById->description;
+        $this->data['err_image'] = false;
+        $this->data['err_title'] = false;
+        $this->data['err_workload'] = false;
+        $this->data['err_description'] = false;
+        $this->data['session_message'] = '';
+        $this->data['message_type'] = '';
+      }
+    }
+
+    return $this->twig->render($response, $this->path, $this->data);
+  }
+
+  public function processUpdateRequest(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
+  {
+    $params = $request->getParsedBody();
+
+    $uploadedImage = $_FILES['image'] ?? [];
+    $id = (int) $params['id'];
+    $title = $params['title'];
+    $workload = $params['workload'];
+    $description = $params['description'];
+
+    $imagesTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+
+    $imageType = $uploadedImage['type'];
+
+    $this->path .= 'edit_course.html.twig';
+    $this->data['page_title'] = 'NetLearnHub | Aprenda de graça TI';
+    $this->data['id'] = $id;
+    $this->data['title'] = $title;
+    $this->data['workload'] = $workload;
+    $this->data['description'] = $description;
+    $this->data['err_image'] = false;
+    $this->data['err_title'] = false;
+    $this->data['err_workload'] = false;
+    $this->data['err_description'] = false;
+    $this->data['session_message'] = '';
+    $this->data['message_type'] = GlobalValues::TYPE_MSG_ERROR;
+
+    if ($_SESSION[GlobalValues::CSRF_TOKEN_IS_INVALID]) {
+      $message = UserMessage::INVALID_CSRF_TOKEN;
+    } else {
+      $courseById = $this->model->getById($id);
+
+      if (empty($courseById)) {
+        $message = CourseMessage::ERR_COURSE_INEXISTENT;
+      } elseif (!isValidText($title, 'title')) {
+        $this->data['err_title'] = true;
+        $message = CourseMessage::ERR_INVALID_TITLE;
+      } elseif (!isValidWorkLoad($workload)) {
+        $this->data['err_workload'] = true;
+        $message = CourseMessage::ERR_INVALID_WORKLOAD;
+      } elseif (!isValidText($description, 'description')) {
+        $this->data['err_description'] = true;
+        $message = CourseMessage::ERR_INVALID_DESCRIPTION;
+      } else {
+        $this->data['err_image'] = false;
+        $this->data['err_title'] = false;
+        $this->data['err_workload'] = false;
+        $this->data['err_description'] = false;
+
+        $image = null;
+
+        if ($uploadedImage['size'] !== 0 || $uploadedImage['error'] !== UPLOAD_ERR_NO_FILE) {
+          if ($uploadedImage['error'] !== UPLOAD_ERR_OK || !in_array($imageType, $imagesTypes)) {
+            $this->data['err_image'] = true;
+            $message = CourseMessage::ERR_INVALID_IMAGE_TYPE;
+          } elseif (!isValidBlob(file_get_contents($uploadedImage['tmp_name']), 'image')) {
+            $this->data['err_image'] = true;
+            $message = CourseMessage::ERR_INVALID_IMAGE_LENGTH;
+          } else {
+            $image = file_get_contents($uploadedImage['tmp_name']);
+          }
+        }
+
+        if ($this->data['err_image'] === false) {
+          if ($this->model->update($id, $image, $title, $workload, $description)) {
+            $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::SUCCESS_UPDATE;
+            $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_SUCCESS;
+            return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
+          } else {
+            $message = CourseMessage::ERR_FAIL_UPDATE;
+          }
+        }
+      }
+    }
+
+    $this->data['session_message'] = $message;
+
+    return $this->twig->render($response, $this->path, $this->data);
+  }
 }

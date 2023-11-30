@@ -27,4 +27,30 @@ class CourseModel extends Model
       return false;
     }
   }
+
+  public function update(int $id, mixed $image, string $title, int $workload, string $description): bool
+  {
+    if ($image) {
+      $stmt = $this->connect->prepare('UPDATE ' . $this->table . ' SET image = :image, title = :title, workload = :workload, description = :description WHERE id = :id');
+    } else {
+      $stmt = $this->connect->prepare('UPDATE ' . $this->table . ' SET title = :title, workload = :workload, description = :description WHERE id = :id');
+    }
+
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmt->bindParam(':title', $title, PDO::PARAM_STR);
+    $stmt->bindParam(':workload', $workload, PDO::PARAM_INT);
+    $stmt->bindParam(':description', $description, PDO::PARAM_STR);
+
+    if ($image) {
+      $stmt->bindParam(':image', $image, PDO::PARAM_LOB);
+    }
+
+    try {
+      $stmt->execute();
+      return true;
+    } catch (PDOException $pDOException) {
+      echo $pDOException->getMessage();
+      return false;
+    }
+  }
 }
