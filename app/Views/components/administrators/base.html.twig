@@ -1,0 +1,9 @@
+{% extends '/components/administrators/header.html.twig' %}
+{% block inner %}
+{% include '/components/administrators/navbar.html.twig' %}
+<div class="container">
+  {% block content %}
+  {% endblock %}
+</div>
+{% include '/components/administrators/footer.html.twig' %}
+{% endblock %}

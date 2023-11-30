@@ -62,6 +62,18 @@ function isValidBlob(mixed $blobData, string $field): bool
 }
 
 /**
+ * Checks if an workload is valid (positive integer number).
+ *
+ * @param int $workload The workload to be validated.
+ * @return bool Returns true if the workload is valid; false otherwise.
+ */
+function isValidWorkLoad(int $workload): bool
+{
+  // Checks that the workload is not empty and is a positive integer (greater than zero)
+  return !empty($workload) && is_int($workload) && $workload > 0;
+}
+
+/**
  * Checks if an ID is valid (positive integer number).
  *
  * @param int $id The ID to be validated.

@@ -1,4 +1,4 @@
-{% extends '/components/base_admin.html.twig' %}
+{% extends '/components/administrators/base.html.twig' %}
 {% block content %}
 <div id="dashboard" class="content">
   {% if session_message %}
@@ -6,11 +6,23 @@
     {{ session_message }}
   </p>
   {% endif %}
+  <div class="dash-header">
+    <h1>Todos os Cursos:</h1>
+    <div class="filter">
+      <select name="filter" id="filter">
+        <option value="" disabled selected>Filtrar</option>
+        <option value="all">Todos</option>
+        <option value="active">Ativos</option>
+        <option value="inactive">Inativos</option>
+      </select>
+    </div>
+  </div>
   {% if courses %}
-  {% for course in courses %}
-  <p>{{ course.title }}</p>
-  <img src="data:image;base64,{{ course.image }}" alt="">
-  {% endfor %}
+  <div class="row">
+    {% for course in courses %}
+    {% include '/components/administrators/course_card.html.twig' with {'course': course} %}
+    {% endfor %}
+  </div>
   {% endif %}
 </div>
 {% endblock %}

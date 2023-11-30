@@ -16,6 +16,7 @@ class CourseMessage
 
   // Error messages related to course details validation
   const ERR_INVALID_TITLE = 'O título não poder ser vazio (máximo de ' . GlobalValues::MAXIMUM_SIZE_OF_THE_TITLE . ' caracteres).';
+  const ERR_INVALID_WORKLOAD = 'A carga horária deve ser um número inteiro de horas não nulo.';
   const ERR_INVALID_DESCRIPTION = 'A descrição não pode ser vazia (máximo de ' . GlobalValues::MAXIMUM_SIZE_OF_THE_DESCRIPTION . ' caracteres).';
   const ERR_INVALID_IMAGE_TYPE = 'Somente imagens jpg, jpeg ou png.';
   const ERR_INVALID_IMAGE_LENGTH = 'Tamanho da imagem inválido (máximo ' . GlobalValues::MAXIMUM_SIZE_OF_THE_IMAGE_BLOB . ' bytes).';

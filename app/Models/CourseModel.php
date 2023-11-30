@@ -10,13 +10,14 @@ class CourseModel extends Model
 {
   protected string $table = GlobalValues::COURSES_TABLE;
 
-  public function store(mixed $image, string $title, string $description): bool
+  public function store(mixed $image, string $title, int $workload, string $description): bool
   {
-    $stmt = $this->connect->prepare('INSERT INTO ' . $this->table . ' (image, title, description) VALUES (:image, :title, :description)');
+    $stmt = $this->connect->prepare('INSERT INTO ' . $this->table . ' (image, title, workload, description) VALUES (:image, :title, :workload, :description)');
 
     $stmt->bindParam(':image', $image, PDO::PARAM_LOB);
-    $stmt->bindParam(':title', $title, PDO::PARAM_LOB);
-    $stmt->bindParam(':description', $description, PDO::PARAM_LOB);
+    $stmt->bindParam(':title', $title, PDO::PARAM_STR);
+    $stmt->bindParam(':workload', $workload, PDO::PARAM_INT);
+    $stmt->bindParam(':description', $description, PDO::PARAM_STR);
 
     try {
       $stmt->execute();

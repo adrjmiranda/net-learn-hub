@@ -1,0 +1,24 @@
+<div class="course-card col" data-visibility="{{ course.visibility }}">
+  <img src="data:image;base64,{{ course.image }}" alt="{{ course.title }}" class="image">
+  <div class="info">
+    <div class="course-header">
+      <h3 class="title">{{ course.title }}</h3>
+      <p class="workload"><ion-icon name="time"></ion-icon>Carga Horária: <span>{{ course.workload }}h</span>
+      </p>
+    </div>
+    <div class="actions">
+      <a href="{{ base_url }}/admin/course/edit?id={{ course.id }}" class="btn btn-color"><ion-icon
+          name="create"></ion-icon>Editar</a>
+      <a href="#" class="btn btn-color"><ion-icon name="add-circle"></ion-icon>Adicionar Tópico</a>
+      <a href="#" class="btn btn-color"><ion-icon name="add-circle"></ion-icon>Adicionar Quiz</a>
+      <div class="sub-actions">
+        {% if course.visibility %}
+        <a href="#" class="btn inactive btn-warning"><ion-icon name="eye-off"></ion-icon>Desativar</a>
+        {% else %}
+        <a href="#" class="btn active btn-active"><ion-icon name="eye"></ion-icon>Ativar</a>
+        {% endif %}
+        <a href="#" class="btn btn-danger"><ion-icon name="trash"></ion-icon>Deletar</a>
+      </div>
+    </div>
+  </div>
+</div>

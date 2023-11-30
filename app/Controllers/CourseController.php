@@ -37,9 +37,11 @@ class CourseController extends Controller
     $this->path .= 'create_course.html.twig';
     $this->data['page_title'] = 'NetLearnHub | Aprenda de graça TI';
     $this->data['title'] = '';
+    $this->data['workload'] = '';
     $this->data['description'] = '';
     $this->data['err_image'] = false;
     $this->data['err_title'] = false;
+    $this->data['err_workload'] = false;
     $this->data['err_description'] = false;
     $this->data['session_message'] = '';
     $this->data['message_type'] = '';
@@ -53,6 +55,7 @@ class CourseController extends Controller
 
     $uploadedImage = $_FILES['image'] ?? [];
     $title = $params['title'];
+    $workload = $params['workload'];
     $description = $params['description'];
 
     $imagesTypes = ['image/jpeg', 'image/jpg', 'image/png'];
@@ -62,9 +65,11 @@ class CourseController extends Controller
     $this->path .= 'create_course.html.twig';
     $this->data['page_title'] = 'NetLearnHub | Aprenda de graça TI';
     $this->data['title'] = $title;
+    $this->data['workload'] = $workload;
     $this->data['description'] = $description;
     $this->data['err_image'] = false;
     $this->data['err_title'] = false;
+    $this->data['err_workload'] = false;
     $this->data['err_description'] = false;
     $this->data['session_message'] = '';
     $this->data['message_type'] = GlobalValues::TYPE_MSG_ERROR;
@@ -80,12 +85,16 @@ class CourseController extends Controller
     } elseif (!isValidText($title, 'title')) {
       $this->data['err_title'] = true;
       $message = CourseMessage::ERR_INVALID_TITLE;
+    } elseif (!isValidWorkLoad($workload)) {
+      $this->data['err_workload'] = true;
+      $message = CourseMessage::ERR_INVALID_WORKLOAD;
     } elseif (!isValidText($description, 'description')) {
       $this->data['err_description'] = true;
       $message = CourseMessage::ERR_INVALID_DESCRIPTION;
     } else {
       $this->data['err_image'] = false;
       $this->data['err_title'] = false;
+      $this->data['err_workload'] = false;
       $this->data['err_description'] = false;
 
       $courseByTitle = $this->model->getByTitle($title);
@@ -94,7 +103,7 @@ class CourseController extends Controller
       if ($courseByTitle) {
         $this->data['err_title'] = true;
         $message = CourseMessage::ERR_TITLE_ALREADY_EXISTS;
-      } elseif ($this->model->store($image, $title, $description)) {
+      } elseif ($this->model->store($image, $title, $workload, $description)) {
         $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::SUCCESS_CREATE;
         $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_SUCCESS;
         return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
