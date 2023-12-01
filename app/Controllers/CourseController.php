@@ -5,9 +5,14 @@ namespace app\Controllers;
 use app\classes\CourseMessage;
 use app\classes\GlobalValues;
 use app\classes\UserMessage;
+use app\Models\AlternativeModel;
+use app\Models\CommentModel;
 use app\Models\CourseModel;
+use app\Models\QuestionModel;
 use app\Models\QuizModel;
 use app\Models\TopicModel;
+use app\Models\UserCourseRelationModel;
+use app\Models\UserQuizRelationModel;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -232,6 +237,29 @@ class CourseController extends Controller
   public function processDeleteRequest(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
   {
     $id = (int) ($args['id'] || '');
+
+    $courseById = $this->model->getById($id);
+
+    if (empty($courseById)) {
+      $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::ERR_COURSE_INEXISTENT;
+      $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_ERROR;
+      return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
+    } else {
+      $alternativeModel = new AlternativeModel();
+      $commentModel = new CommentModel();
+      $questionModel = new QuestionModel();
+      $topicModel = new TopicModel();
+      $quizModel = new QuizModel();
+      $userCourseRelationModel = new UserCourseRelationModel();
+      $userQuizRelationModel = new UserQuizRelationModel();
+
+      try {
+        $alternativeModel->delete();
+      } catch (\Throwable $th) {
+        //throw $th;
+      }
+
+    }
 
     return $this->twig->render($response, $this->path, $this->data);
   }

@@ -33,7 +33,7 @@ class GlobalValues
   /**
    * Name of the courses' topics table.
    */
-  const COURSES_TOPICS_TABLE = 'courses_topics';
+  const COURSES_TOPICS_TABLE = 'topics';
 
   /**
    * Name of the quizzes' table.
