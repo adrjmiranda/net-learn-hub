@@ -229,6 +229,13 @@ class CourseController extends Controller
     return $this->twig->render($response, $this->path, $this->data);
   }
 
+  public function processDeleteRequest(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
+  {
+    $id = (int) ($args['id'] || '');
+
+    return $this->twig->render($response, $this->path, $this->data);
+  }
+
   public function topics(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
   {
     $courseId = (int) ($args['course_id'] ?? '');

@@ -21,6 +21,11 @@ class GlobalValues
   const USERS_TABLE = 'users';
 
   /**
+   * Name of the comments' table.
+   */
+  const COMMENTS_TABLE = 'comments';
+
+  /**
    * Name of the courses' table.
    */
   const COURSES_TABLE = 'courses';

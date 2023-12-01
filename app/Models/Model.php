@@ -162,4 +162,20 @@ class Model
 
     return $data;
   }
+
+  public function delete(int $id, string $column): bool
+  {
+    $stmt = $this->connect->prepare('DELETE FROM ' . $this->table . ' WHERE ' . $column . ' = :id');
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+
+    try {
+      if ($stmt->execute()) {
+        return true;
+      }
+    } catch (PDOException $pDOException) {
+      echo $pDOException->getMessage();
+    }
+
+    return false;
+  }
 }
