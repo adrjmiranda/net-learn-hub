@@ -106,11 +106,11 @@ class CourseController extends Controller
         $this->data['err_title'] = true;
         $message = CourseMessage::ERR_TITLE_ALREADY_EXISTS;
       } elseif ($this->model->store($image, $title, $workload, $description)) {
-        $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::SUCCESS_CREATE;
+        $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::SUCCESS_CREATE_COURSE;
         $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_SUCCESS;
         return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
       } else {
-        $message = CourseMessage::ERR_FAIL_CREATE;
+        $message = CourseMessage::ERR_FAIL_CREATE_COURSE;
       }
     }
 
@@ -214,11 +214,11 @@ class CourseController extends Controller
 
         if ($this->data['err_image'] === false) {
           if ($this->model->update($id, $image, $title, $workload, $description)) {
-            $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::SUCCESS_UPDATE;
+            $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::SUCCESS_UPDATE_COURSE;
             $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_SUCCESS;
             return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
           } else {
-            $message = CourseMessage::ERR_FAIL_UPDATE;
+            $message = CourseMessage::ERR_FAIL_UPDATE_COURSE;
           }
         }
       }
@@ -280,6 +280,64 @@ class CourseController extends Controller
         $this->data['message_type'] = '';
       }
     }
+
+    return $this->twig->render($response, $this->path, $this->data);
+  }
+
+  public function processStoreTopicRequest(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
+  {
+    $params = $request->getParsedBody();
+
+    $courseId = (int) ($params['course_id'] ?? '');
+    $title = $params['title'];
+    $content = $params['content'];
+
+    $this->path .= 'create_topic.html.twig';
+    $this->data['page_title'] = 'NetLearnHub | Aprenda de graça TI';
+    $this->data['course_id'] = $courseId;
+    $this->data['title'] = $title;
+    $this->data['content'] = $content;
+    $this->data['err_title'] = false;
+    $this->data['err_content'] = false;
+    $this->data['session_message'] = '';
+    $this->data['message_type'] = GlobalValues::TYPE_MSG_ERROR;
+
+    if ($_SESSION[GlobalValues::CSRF_TOKEN_IS_INVALID]) {
+      $message = UserMessage::INVALID_CSRF_TOKEN;
+    } elseif (!isValidText($title, 'title')) {
+      $this->data['err_title'] = true;
+      $message = CourseMessage::ERR_INVALID_TITLE;
+    } elseif (!isValidBlob($content, 'document')) {
+      $this->data['err_content'] = true;
+      $message = CourseMessage::ERR_INVALID_TOPIC_CONTENT;
+    } else {
+      $this->data['err_title'] = false;
+      $this->data['err_content'] = false;
+
+      $courseById = $this->model->getById($courseId);
+
+      if (empty($courseById)) {
+        $message = CourseMessage::ERR_COURSE_INEXISTENT;
+      } else {
+        $topicModel = new TopicModel();
+        $topicByTitleAndCourseId = $topicModel->getByTitleByCourseId($title, $courseId);
+
+
+        if ($topicByTitleAndCourseId) {
+          $this->data['err_title'] = true;
+          $message = CourseMessage::ERR_TITLE_ALREADY_EXISTS;
+        } elseif ($topicModel->store($title, $content, $courseId)) {
+          $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::SUCCESS_CREATE_TOPIC;
+          $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_SUCCESS;
+          return $response->withHeader('Location', '/admin/course/topics/' . $courseId)->withHeader('Allow', 'GET')->withStatus(302);
+        } else {
+          $message = CourseMessage::ERR_FAIL_CREATE_TOPIC;
+        }
+      }
+
+    }
+
+    $this->data['session_message'] = $message;
 
     return $this->twig->render($response, $this->path, $this->data);
   }

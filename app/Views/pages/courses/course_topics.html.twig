@@ -5,12 +5,12 @@
     <h1>Tópicos do Curso: <span>{{ course_name }}</span></h1>
     <a href="{{ base_url }}/admin/course/topics/create/{{ course_id }}" class="btn btn-color wauto">Criar Novo</a>
   </div>
-  {% if quizzes %}
+  {% if topics %}
   <ul id="topics">
-    {% for quiz in quizzes %}
-    <li>{{ quiz.title }}
+    {% for topic in topics %}
+    <li>{{ topic.title }}
       <span class="actions">
-        <a href="#" class="btn btn-action"><ion-icon name="add-circle"></ion-icon></a>
+        <a href="#" class="btn btn-active"><ion-icon name="add-circle"></ion-icon></a>
         <a href="#" class="btn btn-warning"><ion-icon name="create"></ion-icon></a>
         <a href="#" class="btn btn-danger"><ion-icon name="trash"></ion-icon></a>
       </span>

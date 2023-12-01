@@ -2,7 +2,7 @@
 {% block content %}
 <div id="create-course" class="content">
   <h1>Criar Novo Tópico do Curso: <span>{{ course_name }}</span></h1>
-  <form action="" method="post">
+  <form action="{{ base_url }}/admin/course/topics/create/{{ course_id }}" method="post">
     {% if session_message %}
     <p class="session-message {{ message_type }}">
       {{ session_message }}
@@ -12,12 +12,13 @@
     <input type="hidden" name="course_id" value="{{ course_id }}">
     <div class="input-field">
       <label for="title">Título do Tópico</label>
-      <input type="text" id="title" name="title" value="{{ title }}" placeholder="Crie um título para o tópico">
+      <input type="text" id="title" name="title" value="{{ title }}" placeholder="Crie um título para o tópico"
+        class="{{ err_title ? 'input-error' : '' }}">
       <ion-icon name="document-text"></ion-icon>
     </div>
     <div class="input-field">
       <label for="content">Conteúdo do Tópico</label>
-      <textarea name="content" id="content">{{ content }}</textarea>
+      <textarea name="content" id="content" class="{{ err_content ? 'input-error' : '' }}">{{ content }}</textarea>
     </div>
     <button type="submit" class="btn btn-color">Criar Tópico</button>
   </form>

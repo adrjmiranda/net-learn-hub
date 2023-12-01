@@ -142,4 +142,24 @@ class Model
 
     return $data;
   }
+
+  public function getByTitleByCourseId(string $title, int $courseId): ?object
+  {
+    $data = null;
+
+    try {
+      $stmt = $this->connect->prepare('SELECT * FROM ' . $this->table . ' WHERE title = :title AND course_id = :course_id LIMIT 1');
+      $stmt->bindParam(':title', $title, PDO::PARAM_STR);
+      $stmt->bindParam(':course_id', $courseId, PDO::PARAM_INT);
+      $stmt->execute();
+
+      if ($stmt->rowCount() > 0) {
+        $data = $stmt->fetch();
+      }
+    } catch (PDOException $pDOException) {
+      echo $pDOException->getMessage();
+    }
+
+    return $data;
+  }
 }

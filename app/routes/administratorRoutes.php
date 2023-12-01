@@ -67,6 +67,13 @@ $app->group('/admin', function (RouteCollectorProxy $group) use ($administratorC
   })->add(function ($request, $handler) {
     return verifyCSRFToken($request, $handler);
   });
+
+  $group->post('/course/topics/create/{course_id}', function ($request, $response, $args) use ($courseController) {
+    return $courseController->processStoreTopicRequest($request, $response, $args);
+  })->add(function ($request, $handler) {
+    return verifyCSRFToken($request, $handler);
+  });
+
 })->add(function ($request, $handler) use ($table) {
   return verifyTokenMiddleware($request, $handler, $table);
 });

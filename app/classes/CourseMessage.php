@@ -10,9 +10,17 @@ namespace app\classes;
 class CourseMessage
 {
   // Error messages related to course operations
-  const ERR_FAIL_CREATE = 'Falha ao tentar criar curso.';
-  const ERR_FAIL_UPDATE = 'Falha ao tentar atualizar curso.';
-  const ERR_FAIL_DELETE = 'Falha ao tentar deletar curso.';
+  const ERR_FAIL_CREATE_COURSE = 'Falha ao tentar criar curso.';
+  const ERR_FAIL_UPDATE_COURSE = 'Falha ao tentar atualizar curso.';
+  const ERR_FAIL_DELETE_COURSE = 'Falha ao tentar deletar curso.';
+
+  const ERR_FAIL_CREATE_TOPIC = 'Falha ao tentar criar tópico.';
+  const ERR_FAIL_UPDATE_TOPIC = 'Falha ao tentar atualizar tópico.';
+  const ERR_FAIL_DELETE_TOPIC = 'Falha ao tentar deletar tópico.';
+
+  const ERR_FAIL_CREATE_QUIZ = 'Falha ao tentar criar quiz.';
+  const ERR_FAIL_UPDATE_QUIZ = 'Falha ao tentar atualizar quiz.';
+  const ERR_FAIL_DELETE_QUIZ = 'Falha ao tentar deletar quiz.';
 
   // Error messages related to course details validation
   const ERR_COURSE_INEXISTENT = 'Este curso não existe!';
@@ -21,7 +29,7 @@ class CourseMessage
   const ERR_INVALID_DESCRIPTION = 'A descrição não pode ser vazia (máximo de ' . GlobalValues::MAXIMUM_SIZE_OF_THE_DESCRIPTION . ' caracteres).';
   const ERR_INVALID_IMAGE_TYPE = 'Somente imagens jpg, jpeg ou png.';
   const ERR_INVALID_IMAGE_LENGTH = 'Tamanho da imagem inválido (máximo ' . GlobalValues::MAXIMUM_SIZE_OF_THE_IMAGE_BLOB . ' bytes).';
-  const ERR_TITLE_ALREADY_EXISTS = 'Já existe um curso com esse título. Por favor escolha outro título.';
+  const ERR_TITLE_ALREADY_EXISTS = 'Já existe uma entidade de mesma natureza com esse título.';
 
   // Error messages related to course topics
   const ERR_INVALID_TOPIC_CONTENT = 'Conteúdo do tópico inválido (máximo de ' . GlobalValues::MAXIMUM_SIZE_OF_THE_DOCUMENT_BLOB . ' bytes).';
@@ -35,7 +43,15 @@ class CourseMessage
   const ERR_INVALID_ALTERNATIVE = 'Texto para alternativa inválido (máximo de ' . GlobalValues::MAXIMUM_SIZE_OF_THE_DOCUMENT_BLOB . ' caracteres.';
 
   // successes messages to users
-  const SUCCESS_CREATE = 'Curso criado com sucesso!';
-  const SUCCESS_UPDATE = 'Curso atualizado com sucesso!';
-  const SUCCESS_DELETE = 'Curso removido com sucesso!';
+  const SUCCESS_CREATE_COURSE = 'Curso criado com sucesso!';
+  const SUCCESS_UPDATE_COURSE = 'Curso atualizado com sucesso!';
+  const SUCCESS_DELETE_COURSE = 'Curso removido com sucesso!';
+
+  const SUCCESS_CREATE_TOPIC = 'Tópico criado com sucesso!';
+  const SUCCESS_UPDATE_TOPIC = 'Tópico atualizado com sucesso!';
+  const SUCCESS_DELETE_TOPIC = 'Tópico removido com sucesso!';
+
+  const SUCCESS_CREATE_QUIZ = 'Quiz criado com sucesso!';
+  const SUCCESS_UPDATE_QUIZ = 'Quiz atualizado com sucesso!';
+  const SUCCESS_DELETE_QUIZ = 'Quiz removido com sucesso!';
 }
