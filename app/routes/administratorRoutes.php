@@ -41,6 +41,10 @@ $app->group('/admin', function (RouteCollectorProxy $group) use ($administratorC
     return $courseController->topics($request, $response, $args);
   });
 
+  $group->get('/course/topics/create/{course_id}', function ($request, $response, $args) use ($courseController) {
+    return $courseController->createTopic($request, $response, $args);
+  });
+
   $group->get('/course/quizzes/{course_id}', function ($request, $response, $args) use ($courseController) {
     return $courseController->quizzes($request, $response, $args);
   });

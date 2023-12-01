@@ -1,10 +1,28 @@
 {% extends '/components/administrators/base.html.twig' %}
 {% block content %}
 <div id="create-course" class="content">
-  <h1>Criar Novo Tópico do Curso: <span>{{ title }}</span></h1>
-  <form action="" method="post"></form>
+  <h1>Criar Novo Tópico do Curso: <span>{{ course_name }}</span></h1>
+  <form action="" method="post">
+    {% if session_message %}
+    <p class="session-message {{ message_type }}">
+      {{ session_message }}
+    </p>
+    {% endif %}
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <input type="hidden" name="course_id" value="{{ course_id }}">
+    <div class="input-field">
+      <label for="title">Título do Tópico</label>
+      <input type="text" id="title" name="title" value="{{ title }}" placeholder="Crie um título para o tópico">
+      <ion-icon name="document-text"></ion-icon>
+    </div>
+    <div class="input-field">
+      <label for="content">Conteúdo do Tópico</label>
+      <textarea name="content" id="content">{{ content }}</textarea>
+    </div>
+    <button type="submit" class="btn btn-color">Criar Tópico</button>
+  </form>
   <script>
-    $('#summernote').summernote({
+    $('#content').summernote({
       placeholder: '',
       tabsize: 2,
       height: 1200,

@@ -247,8 +247,38 @@ class CourseController extends Controller
       $topicModel = new TopicModel();
 
       $topicsByCourseId = $topicModel->getByCourseId($courseId);
+      $course = $this->model->getById($courseId);
 
+      $this->data['course_name'] = $course->title;
       $this->data['topics'] = $topicsByCourseId;
+    }
+
+    return $this->twig->render($response, $this->path, $this->data);
+  }
+
+  public function createTopic(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
+  {
+    $courseId = (int) ($args['course_id'] ?? '');
+
+    if (!isValidId($courseId)) {
+      return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
+    } else {
+      $courseById = $this->model->getById($courseId);
+
+      if (empty($courseById)) {
+        return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
+      } else {
+        $this->path .= 'create_topic.html.twig';
+        $this->data['page_title'] = 'NetLearnHub | Aprenda de graça TI';
+        $this->data['course_id'] = $courseById->id;
+        $this->data['course_name'] = $courseById->title;
+        $this->data['title'] = '';
+        $this->data['content'] = null;
+        $this->data['err_title'] = false;
+        $this->data['err_content'] = false;
+        $this->data['session_message'] = '';
+        $this->data['message_type'] = '';
+      }
     }
 
     return $this->twig->render($response, $this->path, $this->data);
@@ -271,7 +301,9 @@ class CourseController extends Controller
       $quizModel = new QuizModel();
 
       $quizzesByCourseId = $quizModel->getByCourseId($courseId);
+      $course = $this->model->getById($courseId);
 
+      $this->data['course_name'] = $course->title;
       $this->data['quizzes'] = $quizzesByCourseId;
     }
 
