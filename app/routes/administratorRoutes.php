@@ -74,6 +74,11 @@ $app->group('/admin', function (RouteCollectorProxy $group) use ($administratorC
     return verifyCSRFToken($request, $handler);
   });
 
+  // delete
+  $group->get('/course/delete/{course_id}', function ($request, $response, $args) use ($courseController) {
+    return $courseController->processDeleteRequest($request, $response, $args);
+  });
+
 })->add(function ($request, $handler) use ($table) {
   return verifyTokenMiddleware($request, $handler, $table);
 });

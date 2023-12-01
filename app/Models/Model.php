@@ -80,7 +80,7 @@ class Model
     return $data;
   }
 
-  public function getById(string $id): ?object
+  public function getById(int $id): ?object
   {
     $data = null;
 

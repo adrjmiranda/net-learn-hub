@@ -236,9 +236,9 @@ class CourseController extends Controller
 
   public function processDeleteRequest(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
   {
-    $id = (int) ($args['id'] || '');
+    $courseId = (int) ($args['course_id'] ?? '');
 
-    $courseById = $this->model->getById($id);
+    $courseById = $this->model->getById($courseId);
 
     if (empty($courseById)) {
       $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::ERR_COURSE_INEXISTENT;
@@ -246,22 +246,33 @@ class CourseController extends Controller
       return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
     } else {
       $alternativeModel = new AlternativeModel();
-      $commentModel = new CommentModel();
       $questionModel = new QuestionModel();
-      $topicModel = new TopicModel();
-      $quizModel = new QuizModel();
-      $userCourseRelationModel = new UserCourseRelationModel();
       $userQuizRelationModel = new UserQuizRelationModel();
+      $quizModel = new QuizModel();
+      $commentModel = new CommentModel();
+      $topicModel = new TopicModel();
+      $userCourseRelationModel = new UserCourseRelationModel();
 
-      try {
-        $alternativeModel->delete();
-      } catch (\Throwable $th) {
-        //throw $th;
+      if (
+        $alternativeModel->delete($courseId, 'course_id') &&
+        $questionModel->delete($courseId, 'course_id') &&
+        $userQuizRelationModel->delete($courseId, 'course_id') &&
+        $quizModel->delete($courseId, 'course_id') &&
+        $commentModel->delete($courseId, 'course_id') &&
+        $topicModel->delete($courseId, 'course_id') &&
+        $userCourseRelationModel->delete($courseId, 'course_id')
+      ) {
+        if ($this->model->delete($courseId, 'id')) {
+          $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::SUCCESS_DELETE_COURSE;
+          $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_SUCCESS;
+        }
+      } else {
+        $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::ERR_FAIL_DELETE_COURSE;
+        $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_ERROR;
       }
-
     }
 
-    return $this->twig->render($response, $this->path, $this->data);
+    return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
   }
 
   public function topics(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
