@@ -15,14 +15,15 @@
           name="help-circle"></ion-icon>Quizzes</a>
       <div class="sub-actions">
         {% if course.visibility %}
-        <a href="#" data-modal="disable-course" data-id="{{ course.id }}" class="btn inactive btn-warning"
-          style="padding-left: 1.2rem;"><ion-icon name="eye-off"></ion-icon>Desativar</a>
+        <button data-modal="disable-course" data-id="{{ course.id }}" data-title="{{ course.title }}"
+          class="btn inactive btn-warning" style="padding-left: 1.2rem;"><ion-icon
+            name="eye-off"></ion-icon>Desativar</button>
         {% else %}
-        <a href="#" data-modal="activate-course" data-id="{{ course.id }}" class="btn active btn-active"><ion-icon
-            name="eye"></ion-icon>Ativar</a>
+        <button data-modal="activate-course" data-id="{{ course.id }}" data-title="{{ course.title }}"
+          class="btn active btn-active"><ion-icon name="eye"></ion-icon>Ativar</button>
         {% endif %}
-        <a href="#" data-modal="delete-course" data-id="{{ course.id }}" class="btn btn-danger"><ion-icon
-            name="trash"></ion-icon>Deletar</a>
+        <button data-modal="delete-course" data-id="{{ course.id }}" data-title="{{ course.title }}"
+          class="btn btn-danger"><ion-icon name="trash"></ion-icon>Deletar</button>
       </div>
     </div>
   </div>

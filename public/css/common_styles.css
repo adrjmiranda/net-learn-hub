@@ -445,9 +445,9 @@ input:focus + ion-icon {
 
 /* modal */
 #modal {
-	position: absolute;
+	position: fixed;
 	left: 0;
-	top: 0;
+	bottom: 0;
 	height: 100vh;
 	width: 100vw;
 	display: flex;
@@ -457,7 +457,7 @@ input:focus + ion-icon {
 }
 
 #modal #modal-box {
-	width: 500px;
+	max-width: 95%;
 	background-color: var(--quaternary-color);
 	padding: 3rem 1rem 2rem;
 	box-shadow: 2px 2px 23px 11px rgba(100, 100, 100, 0.3);
@@ -468,6 +468,7 @@ input:focus + ion-icon {
 	border-bottom: 1px solid rgba(0, 0, 0, 0.3);
 	padding-bottom: 1rem;
 	margin-bottom: 2rem;
+	text-align: justify;
 }
 
 #modal #modal-box #modal-actions {

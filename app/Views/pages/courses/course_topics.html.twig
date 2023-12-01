@@ -11,8 +11,8 @@
     <li>{{ topic.title }}
       <span class="actions">
         <a href="#" class="btn btn-warning"><ion-icon name="create"></ion-icon></a>
-        <a href="#" data-modal="delete-topic" data-id="{{ topic.id }}" class="btn btn-danger"><ion-icon
-            name="trash"></ion-icon></a>
+        <a href="#" data-modal="delete-topic" data-id="{{ topic.id }}" data-title="{{ topic.title }}"
+          class="btn btn-danger"><ion-icon name="trash"></ion-icon></a>
       </span>
     </li>
     {% endfor %}
