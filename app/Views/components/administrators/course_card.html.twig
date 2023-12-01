@@ -15,11 +15,14 @@
           name="help-circle"></ion-icon>Quizzes</a>
       <div class="sub-actions">
         {% if course.visibility %}
-        <a href="#" class="btn inactive btn-warning"><ion-icon name="eye-off"></ion-icon>Desativar</a>
+        <a href="#" data-modal="disable-course" data-id="{{ course.id }}" class="btn inactive btn-warning"
+          style="padding-left: 1.2rem;"><ion-icon name="eye-off"></ion-icon>Desativar</a>
         {% else %}
-        <a href="#" class="btn active btn-active"><ion-icon name="eye"></ion-icon>Ativar</a>
+        <a href="#" data-modal="activate-course" data-id="{{ course.id }}" class="btn active btn-active"><ion-icon
+            name="eye"></ion-icon>Ativar</a>
         {% endif %}
-        <a href="#" class="btn btn-danger"><ion-icon name="trash"></ion-icon>Deletar</a>
+        <a href="#" data-modal="delete-course" data-id="{{ course.id }}" class="btn btn-danger"><ion-icon
+            name="trash"></ion-icon>Deletar</a>
       </div>
     </div>
   </div>

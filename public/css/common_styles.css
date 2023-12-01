@@ -44,6 +44,7 @@
 
 body {
 	overflow-x: hidden;
+	position: relative;
 }
 
 .container {
@@ -200,7 +201,6 @@ button {
 
 .btn-warning {
 	background-color: var(--warning-color);
-	padding-left: 1.2rem;
 }
 
 .btn-active,
@@ -443,6 +443,44 @@ input:focus + ion-icon {
 	flex: 1;
 }
 
+/* modal */
+#modal {
+	position: absolute;
+	left: 0;
+	top: 0;
+	height: 100vh;
+	width: 100vw;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: rgba(255, 255, 255, 0.8);
+}
+
+#modal #modal-box {
+	width: 500px;
+	background-color: var(--quaternary-color);
+	padding: 3rem 1rem 2rem;
+	box-shadow: 2px 2px 23px 11px rgba(100, 100, 100, 0.3);
+	border-radius: 3px;
+}
+
+#modal #modal-box #modal-question {
+	border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+	padding-bottom: 1rem;
+	margin-bottom: 2rem;
+}
+
+#modal #modal-box #modal-actions {
+	display: flex;
+	justify-content: flex-end;
+	gap: 1rem;
+}
+
+#modal #modal-box #modal-actions .btn {
+	flex: 0;
+}
+
+/* media queries */
 @media screen and (min-width: 768px) {
 	#footer .col:nth-child(2) {
 		align-items: center;

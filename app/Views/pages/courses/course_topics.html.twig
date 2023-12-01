@@ -10,9 +10,9 @@
     {% for topic in topics %}
     <li>{{ topic.title }}
       <span class="actions">
-        <a href="#" class="btn btn-active"><ion-icon name="add-circle"></ion-icon></a>
         <a href="#" class="btn btn-warning"><ion-icon name="create"></ion-icon></a>
-        <a href="#" class="btn btn-danger"><ion-icon name="trash"></ion-icon></a>
+        <a href="#" data-modal="delete-topic" data-id="{{ topic.id }}" class="btn btn-danger"><ion-icon
+            name="trash"></ion-icon></a>
       </span>
     </li>
     {% endfor %}
