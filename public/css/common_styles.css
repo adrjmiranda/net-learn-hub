@@ -57,6 +57,17 @@ body {
 	padding: 3rem 0;
 }
 
+.header-content {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 3rem;
+}
+
+.header-content h1 {
+	margin: auto 0;
+}
+
 .row {
 	display: flex;
 	row-gap: 1rem;
@@ -93,6 +104,10 @@ h6 {
 
 h1 {
 	margin-bottom: 2rem;
+}
+
+h1 span {
+	color: var(--secondary-color);
 }
 
 /* images */
@@ -201,6 +216,10 @@ button {
 .btn-warning:hover {
 	color: var(--quaternary-color);
 	opacity: 1;
+}
+
+.btn.wauto {
+	max-width: fit-content;
 }
 
 /* logos */

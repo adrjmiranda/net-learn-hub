@@ -66,7 +66,6 @@ class Model
         'operator' => SearchQueryOptions::EQUAL_OPERATOR,
         'values' => $title
       ];
-      ;
 
       $stmt = prepareSearchStatement($this->connect, $this->table, $searchQueryOptions);
       $stmt->execute();
@@ -95,13 +94,47 @@ class Model
         'operator' => SearchQueryOptions::EQUAL_OPERATOR,
         'values' => $id
       ];
-      ;
 
       $stmt = prepareSearchStatement($this->connect, $this->table, $searchQueryOptions);
       $stmt->execute();
 
       if ($stmt->rowCount() > 0) {
         $data = $stmt->fetch();
+      }
+    } catch (PDOException $pDOException) {
+      echo $pDOException->getMessage();
+    }
+
+    return $data;
+  }
+
+  public function getByCourseId(int $courseId): ?array
+  {
+    $data = null;
+
+    try {
+      $searchQueryOptions = new SearchQueryOptions();
+
+      $searchQueryOptions->type = SearchQueryOptions::SPECIFIC;
+      $searchQueryOptions->conditions = [
+        'column_name' => 'course_id',
+        'operator' => SearchQueryOptions::EQUAL_OPERATOR,
+        'values' => $courseId
+      ];
+
+      $stmt = prepareSearchStatement($this->connect, $this->table, $searchQueryOptions);
+      $stmt->execute();
+
+      if ($stmt->rowCount() > 0) {
+        $data = $stmt->fetchAll();
+
+        if (!empty($data)) {
+          foreach ($data as $object) {
+            if (property_exists($object, 'image')) {
+              $object->image = base64_encode($object->image);
+            }
+          }
+        }
       }
     } catch (PDOException $pDOException) {
       echo $pDOException->getMessage();

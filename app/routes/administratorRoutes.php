@@ -33,8 +33,16 @@ $app->group('/admin', function (RouteCollectorProxy $group) use ($administratorC
     return $courseController->create($request, $response, $args);
   });
 
-  $group->get('/course/edit', function ($request, $response, $args) use ($courseController) {
+  $group->get('/course/edit/{id}', function ($request, $response, $args) use ($courseController) {
     return $courseController->edit($request, $response, $args);
+  });
+
+  $group->get('/course/topics/{course_id}', function ($request, $response, $args) use ($courseController) {
+    return $courseController->topics($request, $response, $args);
+  });
+
+  $group->get('/course/quizzes/{course_id}', function ($request, $response, $args) use ($courseController) {
+    return $courseController->quizzes($request, $response, $args);
   });
 
   // send form

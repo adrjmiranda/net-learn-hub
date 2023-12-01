@@ -8,7 +8,6 @@ require_once __DIR__ . '/app/routes/administratorRoutes.php';
 require_once __DIR__ . '/app/routes/courseRoutes.php';
 require_once __DIR__ . '/app/routes/userRoutes.php';
 require_once __DIR__ . '/app/routes/commentRoutes.php';
-require_once __DIR__ . '/app/routes/quizRoutes.php';
 require_once __DIR__ . '/app/routes/commonRoutes.php';
 
 $app->run();

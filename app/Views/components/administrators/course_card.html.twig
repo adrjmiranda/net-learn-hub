@@ -7,10 +7,12 @@
       </p>
     </div>
     <div class="actions">
-      <a href="{{ base_url }}/admin/course/edit?id={{ course.id }}" class="btn btn-color"><ion-icon
+      <a href="{{ base_url }}/admin/course/edit/{{ course.id }}" class="btn btn-color"><ion-icon
           name="create"></ion-icon>Editar</a>
-      <a href="#" class="btn btn-color"><ion-icon name="add-circle"></ion-icon>Adicionar Tópico</a>
-      <a href="#" class="btn btn-color"><ion-icon name="add-circle"></ion-icon>Adicionar Quiz</a>
+      <a href="{{ base_url }}/admin/course/topics/{{ course.id }}" class="btn btn-color"><ion-icon
+          name="document-text"></ion-icon>Tópicos</a>
+      <a href="{{ base_url }}/admin/course/quizzes/{{ course.id }}" class="btn btn-color"><ion-icon
+          name="help-circle"></ion-icon>Quizzes</a>
       <div class="sub-actions">
         {% if course.visibility %}
         <a href="#" class="btn inactive btn-warning"><ion-icon name="eye-off"></ion-icon>Desativar</a>

@@ -1,0 +1,24 @@
+{% extends '/components/administrators/base.html.twig' %}
+{% block content %}
+<div id="course-topics" class="content">
+  <div class="header-content">
+    <h1>Tópicos do Curso: <span>{{ course_name }}</span></h1>
+    <a href="#" class="btn btn-color wauto">Criar Novo</a>
+  </div>
+  {% if quizzes %}
+  <ul id="topics">
+    {% for quiz in quizzes %}
+    <li>{{ quiz.title }}
+      <span class="actions">
+        <a href="#" class="btn btn-action"><ion-icon name="add-circle"></ion-icon></a>
+        <a href="#" class="btn btn-warning"><ion-icon name="create"></ion-icon></a>
+        <a href="#" class="btn btn-danger"><ion-icon name="trash"></ion-icon></a>
+      </span>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p>Ainda não há nenhum tópico para este curso!</p>
+  {% endif %}
+</div>
+{% endblock %}
