@@ -28,6 +28,7 @@
 	border-radius: 3px;
 	overflow: hidden;
 	box-shadow: 3px 5px 25px 5px rgba(0, 0, 0, 0.1);
+	display: flex;
 }
 
 .course-card .image {
@@ -64,6 +65,10 @@
 
 .course-card .info {
 	padding: 0 0.5rem 0.8rem;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	flex: 1;
 }
 
 .course-card .actions {

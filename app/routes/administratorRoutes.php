@@ -45,6 +45,11 @@ $app->group('/admin', function (RouteCollectorProxy $group) use ($administratorC
     return $courseController->createTopic($request, $response, $args);
   });
 
+  $group->get('/course/topics/edit/{course_id}/{topic_id}', function ($request, $response, $args) use ($courseController) {
+    return $courseController->editTopic($request, $response, $args);
+  });
+
+
   $group->get('/course/quizzes/{course_id}', function ($request, $response, $args) use ($courseController) {
     return $courseController->quizzes($request, $response, $args);
   });
@@ -68,8 +73,14 @@ $app->group('/admin', function (RouteCollectorProxy $group) use ($administratorC
     return verifyCSRFToken($request, $handler);
   });
 
-  $group->post('/course/topics/create/{course_id}', function ($request, $response, $args) use ($courseController) {
-    return $courseController->processStoreTopicRequest($request, $response, $args);
+  $group->post('/course/topics/create', function ($request, $response, $args) use ($courseController) {
+    return $courseController->processTopicStoreRequest($request, $response, $args);
+  })->add(function ($request, $handler) {
+    return verifyCSRFToken($request, $handler);
+  });
+
+  $group->post('/course/topics/edit', function ($request, $response, $args) use ($courseController) {
+    return $courseController->processTopicUpdateRequest($request, $response, $args);
   })->add(function ($request, $handler) {
     return verifyCSRFToken($request, $handler);
   });
@@ -77,6 +88,10 @@ $app->group('/admin', function (RouteCollectorProxy $group) use ($administratorC
   // delete
   $group->get('/course/delete/{course_id}', function ($request, $response, $args) use ($courseController) {
     return $courseController->processDeleteRequest($request, $response, $args);
+  });
+
+  $group->get('/course/topics/delete/{course_id}/{topic_id}', function ($request, $response, $args) use ($courseController) {
+    return $courseController->processTopicDeleteRequest($request, $response, $args);
   });
 
 })->add(function ($request, $handler) use ($table) {

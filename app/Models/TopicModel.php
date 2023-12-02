@@ -26,4 +26,21 @@ class TopicModel extends Model
       return false;
     }
   }
+
+  public function update(int $id, string $title, mixed $content): bool
+  {
+    $stmt = $this->connect->prepare('UPDATE ' . $this->table . ' SET title = :title, content = :content WHERE id = :id');
+
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmt->bindParam(':title', $title, PDO::PARAM_STR);
+    $stmt->bindParam(':content', $content, PDO::PARAM_LOB);
+
+    try {
+      $stmt->execute();
+      return true;
+    } catch (PDOException $pDOException) {
+      echo $pDOException->getMessage();
+      return false;
+    }
+  }
 }

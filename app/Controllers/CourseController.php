@@ -330,7 +330,7 @@ class CourseController extends Controller
     return $this->twig->render($response, $this->path, $this->data);
   }
 
-  public function processStoreTopicRequest(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
+  public function processTopicStoreRequest(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
   {
     $params = $request->getParsedBody();
 
@@ -366,7 +366,7 @@ class CourseController extends Controller
         $message = CourseMessage::ERR_COURSE_INEXISTENT;
       } else {
         $topicModel = new TopicModel();
-        $topicByTitleAndCourseId = $topicModel->getByTitleByCourseId($title, $courseId);
+        $topicByTitleAndCourseId = $topicModel->getByTitleAndCourseId($title, $courseId);
 
 
         if ($topicByTitleAndCourseId) {
@@ -381,6 +381,98 @@ class CourseController extends Controller
         }
       }
 
+    }
+
+    $this->data['session_message'] = $message;
+
+    return $this->twig->render($response, $this->path, $this->data);
+  }
+
+  public function editTopic(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
+  {
+
+    $courseId = (int) ($args['course_id'] ?? '');
+    $topicId = (int) ($args['topic_id'] ?? '');
+
+    if (!isValidId($courseId) || !isValidId($topicId)) {
+      return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
+    } else {
+      $courseById = $this->model->getById($courseId);
+      $topicModel = new TopicModel();
+
+      $topicByIdAndCourseId = $topicModel->getByIdAndCourseId($topicId, $courseId);
+
+      if (empty($courseById) || empty($topicByIdAndCourseId)) {
+        return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
+      } else {
+        $title = $topicByIdAndCourseId->title;
+        $content = $topicByIdAndCourseId->content;
+
+        $this->path .= 'edit_topic.html.twig';
+        $this->data['page_title'] = 'NetLearnHub | Aprenda de graça TI';
+        $this->data['course_id'] = $courseById->id;
+        $this->data['topic_id'] = $topicByIdAndCourseId->id;
+        $this->data['course_name'] = $courseById->title;
+        $this->data['title'] = $title;
+        $this->data['content'] = $content;
+        $this->data['err_title'] = false;
+        $this->data['err_content'] = false;
+        $this->data['session_message'] = '';
+        $this->data['message_type'] = '';
+      }
+    }
+
+    return $this->twig->render($response, $this->path, $this->data);
+  }
+
+  public function processTopicUpdateRequest(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
+  {
+    $params = $request->getParsedBody();
+
+    $courseId = (int) ($params['course_id'] ?? '');
+    $topicId = (int) ($params['topic_id'] ?? '');
+    $title = $params['title'];
+    $content = $params['content'];
+
+    $this->path .= 'edit_topic.html.twig';
+    $this->data['page_title'] = 'NetLearnHub | Aprenda de graça TI';
+    $this->data['course_id'] = $courseId;
+    $this->data['topic_id'] = $topicId;
+    $this->data['title'] = $title;
+    $this->data['content'] = $content;
+    $this->data['err_title'] = false;
+    $this->data['err_content'] = false;
+    $this->data['session_message'] = '';
+    $this->data['message_type'] = GlobalValues::TYPE_MSG_ERROR;
+
+    if ($_SESSION[GlobalValues::CSRF_TOKEN_IS_INVALID]) {
+      $message = UserMessage::INVALID_CSRF_TOKEN;
+    } else {
+      $courseById = $this->model->getById($courseId);
+      $topicModel = new TopicModel();
+
+      $topicByIdAndCourseId = $topicModel->getByIdAndCourseId($topicId, $courseId);
+
+      if (empty($courseById) || empty($topicByIdAndCourseId)) {
+        $message = CourseMessage::ERR_TOPIC_INEXISTENT;
+      } elseif (!isValidText($title, 'title')) {
+        $this->data['err_title'] = true;
+        $message = CourseMessage::ERR_INVALID_TITLE;
+      } elseif (!isValidBlob($content, 'document')) {
+        $this->data['err_content'] = true;
+        $message = CourseMessage::ERR_INVALID_TOPIC_CONTENT;
+      } else {
+        $this->data['err_title'] = false;
+        $this->data['err_content'] = false;
+
+        if ($topicModel->update($topicId, $title, $content)) {
+          $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::SUCCESS_UPDATE_TOPIC;
+          $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_SUCCESS;
+          return $response->withHeader('Location', '/admin/course/topics/' . $courseId)->withHeader('Allow', 'GET')->withStatus(302);
+        } else {
+          $message = CourseMessage::ERR_FAIL_UPDATE_TOPIC;
+        }
+      }
     }
 
     $this->data['session_message'] = $message;
