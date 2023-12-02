@@ -84,14 +84,14 @@
 }
 
 /* course topics */
-#course-topics #topics {
+#resources {
 	list-style: none;
 	display: flex;
 	flex-direction: column;
 	gap: 1.2rem;
 }
 
-#course-topics #topics li {
+#resources li {
 	display: flex;
 	justify-content: space-between;
 	background-color: var(--quaternary-colo);
@@ -102,18 +102,18 @@
 	align-items: center;
 }
 
-#course-topics #topics li .actions {
+#resources li .actions {
 	display: flex;
 	gap: 1.5rem;
 }
 
-#course-topics #topics li .actions a {
+#resources li .actions a {
 	width: 40px;
 	height: 40px;
 	position: relative;
 }
 
-#course-topics #topics li .actions a ion-icon {
+#resources li .actions a ion-icon {
 	position: absolute;
 	top: 50%;
 	left: 50%;

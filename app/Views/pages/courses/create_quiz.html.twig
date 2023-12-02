@@ -2,7 +2,7 @@
 {% block content %}
 <div id="create-quiz" class="content">
   <h1>Criar Novo Quiz Do Curso: <span>{{ course_name }}</span></h1>
-  <form action="{{ base_url }}/admin/course/topics/create" method="post">
+  <form action="{{ base_url }}/admin/course/quizzes/create" method="post">
     {% if session_message %}
     <p class="session-message {{ message_type }}">
       {{ session_message }}

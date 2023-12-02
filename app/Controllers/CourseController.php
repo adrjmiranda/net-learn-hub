@@ -388,7 +388,6 @@ class CourseController extends Controller
           $message = CourseMessage::ERR_FAIL_CREATE_TOPIC;
         }
       }
-
     }
 
     $this->data['session_message'] = $message;
@@ -582,6 +581,55 @@ class CourseController extends Controller
         $this->data['message_type'] = '';
       }
     }
+
+    return $this->twig->render($response, $this->path, $this->data);
+  }
+
+  public function processQuizStoreRequest(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
+  {
+    $params = $request->getParsedBody();
+
+    $courseId = (int) ($params['course_id'] ?? '');
+    $title = $params['title'];
+
+    $this->path .= 'create_quiz.html.twig';
+    $this->data['page_title'] = 'NetLearnHub | Aprenda de graça TI';
+    $this->data['course_id'] = $courseId;
+    $this->data['title'] = $title;
+    $this->data['err_title'] = false;
+    $this->data['session_message'] = '';
+    $this->data['message_type'] = GlobalValues::TYPE_MSG_ERROR;
+
+    if ($_SESSION[GlobalValues::CSRF_TOKEN_IS_INVALID]) {
+      $message = UserMessage::INVALID_CSRF_TOKEN;
+    } elseif (!isValidText($title, 'title')) {
+      $this->data['err_title'] = true;
+      $message = CourseMessage::ERR_INVALID_TITLE;
+    } else {
+      $this->data['err_title'] = false;
+
+      $courseById = $this->model->getById($courseId);
+
+      if (empty($courseById)) {
+        $message = CourseMessage::ERR_COURSE_INEXISTENT;
+      } else {
+        $quizModel = new QuizModel();
+        $quizByTitleAndCourseId = $quizModel->getByTitleAndCourseId($title, $courseId);
+
+        if ($quizByTitleAndCourseId) {
+          $this->data['err_title'] = true;
+          $message = CourseMessage::ERR_TITLE_ALREADY_EXISTS;
+        } elseif ($quizModel->store($title, $courseId)) {
+          $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::SUCCESS_CREATE_QUIZ;
+          $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_SUCCESS;
+          return $response->withHeader('Location', '/admin/course/quizzes/' . $courseId)->withHeader('Allow', 'GET')->withStatus(302);
+        } else {
+          $message = CourseMessage::ERR_FAIL_CREATE_QUIZ;
+        }
+      }
+    }
+
+    $this->data['session_message'] = $message;
 
     return $this->twig->render($response, $this->path, $this->data);
   }

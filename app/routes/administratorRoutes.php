@@ -89,6 +89,12 @@ $app->group('/admin', function (RouteCollectorProxy $group) use ($administratorC
     return verifyCSRFToken($request, $handler);
   });
 
+  $group->post('/course/quizzes/create', function ($request, $response, $args) use ($courseController) {
+    return $courseController->processQuizStoreRequest($request, $response, $args);
+  })->add(function ($request, $handler) {
+    return verifyCSRFToken($request, $handler);
+  });
+
   // delete
   $group->get('/course/delete/{course_id}', function ($request, $response, $args) use ($courseController) {
     return $courseController->processDeleteRequest($request, $response, $args);
