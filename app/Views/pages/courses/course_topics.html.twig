@@ -1,6 +1,11 @@
 {% extends '/components/administrators/base.html.twig' %}
 {% block content %}
 <div id="course-topics" class="content">
+  {% if session_message %}
+  <p class="session-message {{ message_type }}">
+    {{ session_message }}
+  </p>
+  {% endif %}
   <div class="header-content">
     <h1>Tópicos do Curso: <span>{{ course_name }}</span></h1>
     <a href="{{ base_url }}/admin/course/topics/create/{{ course_id }}" class="btn btn-color wauto">Criar Novo</a>
@@ -12,8 +17,8 @@
       <span class="actions">
         <a href="{{ base_url }}/admin/course/topics/edit/{{ course_id }}/{{ topic.id }}"
           class="btn btn-warning"><ion-icon name="create"></ion-icon></a>
-        <a href="#" data-modal="delete-topic" data-id="{{ topic.id }}" data-title="{{ topic.title }}"
-          class="btn btn-danger"><ion-icon name="trash"></ion-icon></a>
+        <a href="#" data-modal="delete-topic" data-id="{{ topic.id }}" data-course-id="{{ course_id }}"
+          data-title="{{ topic.title }}" class="btn btn-danger"><ion-icon name="trash"></ion-icon></a>
       </span>
     </li>
     {% endfor %}

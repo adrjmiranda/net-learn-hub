@@ -44,7 +44,8 @@ if (
 				// topics
 				case 'delete-topic':
 					modalQuestion.innerHTML = `Tem certeza que quer remover o tópico: <b>${title}</b>?`;
-					url = `/admin/topics/delete/${id}`;
+					const courseId = action.dataset.courseId;
+					url = `/admin/course/topics/delete/${courseId}/${id}`;
 					break;
 
 				default:

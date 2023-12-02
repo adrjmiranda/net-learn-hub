@@ -265,6 +265,9 @@ class CourseController extends Controller
         if ($this->model->delete($courseId, 'id')) {
           $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::SUCCESS_DELETE_COURSE;
           $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_SUCCESS;
+        } else {
+          $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::ERR_FAIL_DELETE_COURSE;
+          $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_ERROR;
         }
       } else {
         $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::ERR_FAIL_DELETE_COURSE;
@@ -284,8 +287,8 @@ class CourseController extends Controller
     $this->data['course_id'] = $courseId;
     $this->data['course_name'] = '';
     $this->data['topics'] = [];
-    $this->data['session_message'] = '';
-    $this->data['message_type'] = GlobalValues::TYPE_MSG_ERROR;
+    $this->data['session_message'] = $_SESSION[GlobalValues::SESSION_MESSAGE] ?? '';
+    $this->data['message_type'] = $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] ?? '';
 
     if (!isValidId($courseId)) {
       return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
@@ -456,6 +459,8 @@ class CourseController extends Controller
       if (empty($courseById) || empty($topicByIdAndCourseId)) {
         $message = CourseMessage::ERR_TOPIC_INEXISTENT;
       } elseif (!isValidText($title, 'title')) {
+        $this->data['course_name'] = $courseById->title;
+
         $this->data['err_title'] = true;
         $message = CourseMessage::ERR_INVALID_TITLE;
       } elseif (!isValidBlob($content, 'document')) {
@@ -478,6 +483,39 @@ class CourseController extends Controller
     $this->data['session_message'] = $message;
 
     return $this->twig->render($response, $this->path, $this->data);
+  }
+
+  public function processTopicDeleteRequest(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
+  {
+    $courseId = (int) ($args['course_id'] ?? '');
+    $topicId = (int) ($args['topic_id'] ?? '');
+
+    if (!isValidId($courseId) || !isValidId($topicId)) {
+      $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::ERR_COURSE_INEXISTENT;
+      $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_ERROR;
+      return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
+    } else {
+      $courseById = $this->model->getById($courseId);
+      $topicModel = new TopicModel();
+
+      $topicByIdAndCourseId = $topicModel->getByIdAndCourseId($topicId, $courseId);
+
+      if (empty($courseById) || empty($topicByIdAndCourseId)) {
+        $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::ERR_TOPIC_INEXISTENT;
+        $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_ERROR;
+        return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
+      } else {
+        if ($topicModel->delete($topicId, 'id')) {
+          $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::SUCCESS_DELETE_TOPIC;
+          $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_SUCCESS;
+        } else {
+          $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::ERR_FAIL_DELETE_TOPIC;
+          $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_ERROR;
+        }
+      }
+    }
+
+    return $response->withHeader('Location', '/admin/course/topics/' . $courseId)->withHeader('Allow', 'GET')->withStatus(302);
   }
 
   public function quizzes(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
