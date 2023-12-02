@@ -722,4 +722,48 @@ class CourseController extends Controller
 
     return $this->twig->render($response, $this->path, $this->data);
   }
+
+  public function processQuizDeleteRequest(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
+  {
+    $courseId = (int) ($args['course_id'] ?? '');
+    $quizId = (int) ($args['quiz_id'] ?? '');
+
+    if (!isValidId($courseId) || !isValidId($quizId)) {
+      $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::ERR_COURSE_INEXISTENT;
+      $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_ERROR;
+      return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
+    } else {
+      $courseById = $this->model->getById($courseId);
+      $quizModel = new QuizModel();
+
+      $quizByIdAndCourseId = $quizModel->getByIdAndCourseId($quizId, $courseId);
+
+      if (empty($courseById) || empty($quizByIdAndCourseId)) {
+        $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::ERR_QUIZ_INEXISTENT;
+        $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_ERROR;
+        return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
+      } else {
+        $questionModel = new QuestionModel();
+        $userQuizRelationModel = new UserQuizRelationModel();
+
+        if (
+          $questionModel->delete($courseId, 'course_id') &&
+          $userQuizRelationModel->delete($courseId, 'course_id')
+        ) {
+          if ($quizModel->delete($quizId, 'id')) {
+            $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::SUCCESS_DELETE_QUIZ;
+            $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_SUCCESS;
+          } else {
+            $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::ERR_FAIL_DELETE_QUIZ;
+            $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_ERROR;
+          }
+        } else {
+          $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::ERR_FAIL_DELETE_QUIZ;
+          $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_ERROR;
+        }
+      }
+    }
+
+    return $response->withHeader('Location', '/admin/course/quizzes/' . $courseId)->withHeader('Allow', 'GET')->withStatus(302);
+  }
 }

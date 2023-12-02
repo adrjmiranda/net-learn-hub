@@ -18,7 +18,8 @@
         <a href="#" class="btn btn-active"><ion-icon name="help-circle"></ion-icon></a>
         <a href="{{ base_url }}/admin/course/quizzes/edit/{{ course_id }}/{{ quiz.id }}"
           class="btn btn-warning"><ion-icon name="create"></ion-icon></a>
-        <a href="#" class="btn btn-danger"><ion-icon name="trash"></ion-icon></a>
+        <a href="{{ base_url }}/admin/course/quizzes/delete/{{ course_id }}/{{ quiz.id }}"
+          class="btn btn-danger"><ion-icon name="trash"></ion-icon></a>
       </span>
     </li>
     {% endfor %}
