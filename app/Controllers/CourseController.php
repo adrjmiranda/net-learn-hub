@@ -667,4 +667,59 @@ class CourseController extends Controller
 
     return $this->twig->render($response, $this->path, $this->data);
   }
+
+  public function processQuizUpdateRequest(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
+  {
+    $params = $request->getParsedBody();
+
+    $courseId = (int) ($params['course_id'] ?? '');
+    $quizId = (int) ($params['quiz_id'] ?? '');
+    $title = $params['title'];
+
+    $this->path .= 'edit_quiz.html.twig';
+    $this->data['page_title'] = 'NetLearnHub | Aprenda de graça TI';
+    $this->data['course_id'] = $courseId;
+    $this->data['quiz_id'] = $quizId;
+    $this->data['title'] = $title;
+    $this->data['err_title'] = false;
+    $this->data['session_message'] = '';
+    $this->data['message_type'] = GlobalValues::TYPE_MSG_ERROR;
+
+    if ($_SESSION[GlobalValues::CSRF_TOKEN_IS_INVALID]) {
+      $message = UserMessage::INVALID_CSRF_TOKEN;
+    } else {
+      $courseById = $this->model->getById($courseId);
+      $quizModel = new QuizModel();
+
+      $quizByIdAndCourseId = $quizModel->getByIdAndCourseId($quizId, $courseId);
+      $quizByTitleAndCourseId = $quizModel->getByTitleAndCourseId($title, $courseId);
+
+      if (empty($courseById) || empty($quizByIdAndCourseId)) {
+        $message = CourseMessage::ERR_QUIZ_INEXISTENT;
+      } elseif (!isValidText($title, 'title')) {
+        $this->data['course_name'] = $courseById->title;
+
+        $this->data['err_title'] = true;
+        $message = CourseMessage::ERR_INVALID_TITLE;
+      } elseif ($quizByTitleAndCourseId) {
+        $this->data['err_title'] = true;
+        $message = CourseMessage::ERR_TITLE_ALREADY_EXISTS;
+      } else {
+        $this->data['err_title'] = false;
+        $this->data['err_content'] = false;
+
+        if ($quizModel->update($quizId, $title)) {
+          $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::SUCCESS_UPDATE_QUIZ;
+          $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_SUCCESS;
+          return $response->withHeader('Location', '/admin/course/quizzes/' . $courseId)->withHeader('Allow', 'GET')->withStatus(302);
+        } else {
+          $message = CourseMessage::ERR_FAIL_UPDATE_QUIZ;
+        }
+      }
+    }
+
+    $this->data['session_message'] = $message;
+
+    return $this->twig->render($response, $this->path, $this->data);
+  }
 }

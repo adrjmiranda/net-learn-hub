@@ -25,4 +25,20 @@ class QuizModel extends Model
       return false;
     }
   }
+
+  public function update(int $id, string $title): bool
+  {
+    $stmt = $this->connect->prepare('UPDATE ' . $this->table . ' SET title = :title WHERE id = :id');
+
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmt->bindParam(':title', $title, PDO::PARAM_STR);
+
+    try {
+      $stmt->execute();
+      return true;
+    } catch (PDOException $pDOException) {
+      echo $pDOException->getMessage();
+      return false;
+    }
+  }
 }
