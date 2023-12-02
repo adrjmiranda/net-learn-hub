@@ -1,7 +1,7 @@
 {% extends '/components/administrators/base.html.twig' %}
 {% block content %}
 <div id="create-topic" class="content">
-  <h1>Criar Novo Tópico do Curso: <span>{{ course_name }}</span></h1>
+  <h1>Criar Novo Tópico Do Curso: <span>{{ course_name }}</span></h1>
   <form action="{{ base_url }}/admin/course/topics/create" method="post">
     {% if session_message %}
     <p class="session-message {{ message_type }}">

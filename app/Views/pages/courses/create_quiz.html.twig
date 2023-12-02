@@ -1,0 +1,22 @@
+{% extends '/components/administrators/base.html.twig' %}
+{% block content %}
+<div id="create-quiz" class="content">
+  <h1>Criar Novo Quiz Do Curso: <span>{{ course_name }}</span></h1>
+  <form action="{{ base_url }}/admin/course/topics/create" method="post">
+    {% if session_message %}
+    <p class="session-message {{ message_type }}">
+      {{ session_message }}
+    </p>
+    {% endif %}
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <input type="hidden" name="course_id" value="{{ course_id }}">
+    <div class="input-field">
+      <label for="title">Título do Tópico</label>
+      <input type="text" id="title" name="title" value="{{ title }}" placeholder="Crie um título para o quiz"
+        class="{{ err_title ? 'input-error' : '' }}">
+      <ion-icon name="document-text"></ion-icon>
+    </div>
+    <button type="submit" class="btn btn-color">Criar Quiz</button>
+  </form>
+</div>
+{% endblock %}

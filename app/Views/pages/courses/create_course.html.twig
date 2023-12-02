@@ -1,7 +1,7 @@
 {% extends '/components/administrators/base.html.twig' %}
 {% block content %}
 <div id="create-course" class="content">
-  <h1>Criar novo curso:</h1>
+  <h1>Criar Novo Curso:</h1>
   <form action="{{ base_url }}/admin/course/create" method="post" enctype="multipart/form-data">
     {% if session_message %}
     <p class="session-message {{ message_type }}">

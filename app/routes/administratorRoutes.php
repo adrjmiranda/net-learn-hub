@@ -54,6 +54,10 @@ $app->group('/admin', function (RouteCollectorProxy $group) use ($administratorC
     return $courseController->quizzes($request, $response, $args);
   });
 
+  $group->get('/course/quizzes/create/{course_id}', function ($request, $response, $args) use ($courseController) {
+    return $courseController->createQuiz($request, $response, $args);
+  });
+
   // send form
   $group->post('/login', function ($request, $response, $args) use ($administratorController) {
     return $administratorController->login($request, $response, $args);

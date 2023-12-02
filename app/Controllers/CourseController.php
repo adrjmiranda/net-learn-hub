@@ -293,13 +293,19 @@ class CourseController extends Controller
     if (!isValidId($courseId)) {
       return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
     } else {
-      $topicModel = new TopicModel();
+      $courseById = $this->model->getById($courseId);
 
-      $topicsByCourseId = $topicModel->getByCourseId($courseId);
-      $course = $this->model->getById($courseId);
+      if (empty($courseById)) {
+        return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
+      } else {
+        $topicModel = new TopicModel();
 
-      $this->data['course_name'] = $course->title;
-      $this->data['topics'] = $topicsByCourseId;
+        $topicsByCourseId = $topicModel->getByCourseId($courseId);
+        $course = $this->model->getById($courseId);
+
+        $this->data['course_name'] = $course->title;
+        $this->data['topics'] = $topicsByCourseId;
+      }
     }
 
     return $this->twig->render($response, $this->path, $this->data);
@@ -370,7 +376,6 @@ class CourseController extends Controller
       } else {
         $topicModel = new TopicModel();
         $topicByTitleAndCourseId = $topicModel->getByTitleAndCourseId($title, $courseId);
-
 
         if ($topicByTitleAndCourseId) {
           $this->data['err_title'] = true;
@@ -455,6 +460,7 @@ class CourseController extends Controller
       $topicModel = new TopicModel();
 
       $topicByIdAndCourseId = $topicModel->getByIdAndCourseId($topicId, $courseId);
+      $topicByTitleAndCourseId = $topicModel->getByTitleAndCourseId($title, $courseId);
 
       if (empty($courseById) || empty($topicByIdAndCourseId)) {
         $message = CourseMessage::ERR_TOPIC_INEXISTENT;
@@ -463,6 +469,9 @@ class CourseController extends Controller
 
         $this->data['err_title'] = true;
         $message = CourseMessage::ERR_INVALID_TITLE;
+      } elseif ($topicByTitleAndCourseId) {
+        $this->data['err_title'] = true;
+        $message = CourseMessage::ERR_TITLE_ALREADY_EXISTS;
       } elseif (!isValidBlob($content, 'document')) {
         $this->data['err_content'] = true;
         $message = CourseMessage::ERR_INVALID_TOPIC_CONTENT;
@@ -526,19 +535,52 @@ class CourseController extends Controller
     $this->data['page_title'] = 'NetLearnHub | Aprenda de graça TI';
     $this->data['course_id'] = $courseId;
     $this->data['course_name'] = '';
-    $this->data['session_message'] = '';
-    $this->data['message_type'] = GlobalValues::TYPE_MSG_ERROR;
+    $this->data['quizzes'] = [];
+    $this->data['session_message'] = $_SESSION[GlobalValues::SESSION_MESSAGE] ?? '';
+    $this->data['message_type'] = $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] ?? '';
 
     if (!isValidId($courseId)) {
       return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
     } else {
-      $quizModel = new QuizModel();
+      $courseById = $this->model->getById($courseId);
 
-      $quizzesByCourseId = $quizModel->getByCourseId($courseId);
-      $course = $this->model->getById($courseId);
+      if (empty($courseById)) {
+        return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
+      } else {
+        $quizModel = new QuizModel();
 
-      $this->data['course_name'] = $course->title;
-      $this->data['quizzes'] = $quizzesByCourseId;
+        $quizzesByCourseId = $quizModel->getByCourseId($courseId);
+        $course = $this->model->getById($courseId);
+
+        $this->data['course_name'] = $course->title;
+        $this->data['quizzes'] = $quizzesByCourseId;
+      }
+    }
+
+    return $this->twig->render($response, $this->path, $this->data);
+  }
+
+  public function createQuiz(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
+  {
+    $courseId = (int) ($args['course_id'] ?? '');
+
+    if (!isValidId($courseId)) {
+      return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
+    } else {
+      $courseById = $this->model->getById($courseId);
+
+      if (empty($courseById)) {
+        return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
+      } else {
+        $this->path .= 'create_quiz.html.twig';
+        $this->data['page_title'] = 'NetLearnHub | Aprenda de graça TI';
+        $this->data['course_id'] = $courseById->id;
+        $this->data['course_name'] = $courseById->title;
+        $this->data['title'] = '';
+        $this->data['err_title'] = false;
+        $this->data['session_message'] = '';
+        $this->data['message_type'] = '';
+      }
     }
 
     return $this->twig->render($response, $this->path, $this->data);
