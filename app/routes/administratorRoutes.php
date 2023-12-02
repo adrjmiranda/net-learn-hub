@@ -49,13 +49,16 @@ $app->group('/admin', function (RouteCollectorProxy $group) use ($administratorC
     return $courseController->editTopic($request, $response, $args);
   });
 
-
   $group->get('/course/quizzes/{course_id}', function ($request, $response, $args) use ($courseController) {
     return $courseController->quizzes($request, $response, $args);
   });
 
   $group->get('/course/quizzes/create/{course_id}', function ($request, $response, $args) use ($courseController) {
     return $courseController->createQuiz($request, $response, $args);
+  });
+
+  $group->get('/course/quizzes/edit/{course_id}/{quiz_id}', function ($request, $response, $args) use ($courseController) {
+    return $courseController->editQuiz($request, $response, $args);
   });
 
   // send form
@@ -91,6 +94,12 @@ $app->group('/admin', function (RouteCollectorProxy $group) use ($administratorC
 
   $group->post('/course/quizzes/create', function ($request, $response, $args) use ($courseController) {
     return $courseController->processQuizStoreRequest($request, $response, $args);
+  })->add(function ($request, $handler) {
+    return verifyCSRFToken($request, $handler);
+  });
+
+  $group->post('/course/quizzes/edit', function ($request, $response, $args) use ($courseController) {
+    return $courseController->processQuizUpdateRequest($request, $response, $args);
   })->add(function ($request, $handler) {
     return verifyCSRFToken($request, $handler);
   });
