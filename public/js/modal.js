@@ -32,13 +32,9 @@ if (
 					modalQuestion.innerHTML = `Tem certeza que quer desativar o curso: <b>${title}</b>?`;
 					url = `/admin/course/disabled/${id}`;
 					break;
-				case 'activate-course':
+				case 'visibility-course':
 					modalQuestion.innerHTML = `Tem certeza que quer ativar o curso: <b>${title}</b>?`;
-					url = `/admin/course/activate/${id}`;
-					break;
-				case 'delete-course':
-					modalQuestion.innerHTML = `Tem certeza que quer remover o curso: <b>${title}</b>?`;
-					url = `/admin/course/delete/${id}`;
+					url = `/admin/course/visibility/${id}`;
 					break;
 
 				// topics

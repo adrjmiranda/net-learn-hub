@@ -483,6 +483,7 @@ input:focus + ion-icon {
 
 /* media queries */
 @media screen and (min-width: 768px) {
+	/* footer */
 	#footer .col:nth-child(2) {
 		align-items: center;
 	}
@@ -493,11 +494,17 @@ input:focus + ion-icon {
 }
 
 @media screen and (max-width: 768px) {
+	/* general */
 	.row .col {
 		width: 100%;
 		min-width: 100%;
 	}
 
+	.btn.wauto {
+		max-width: 100%;
+	}
+
+	/* navbar */
 	#navbar {
 		align-items: start;
 		flex-wrap: wrap;
@@ -527,6 +534,7 @@ input:focus + ion-icon {
 		display: block;
 	}
 
+	/* footer */
 	#footer .terms,
 	#footer .footer-end {
 		flex-direction: column;

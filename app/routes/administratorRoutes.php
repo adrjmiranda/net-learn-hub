@@ -117,6 +117,10 @@ $app->group('/admin', function (RouteCollectorProxy $group) use ($administratorC
     return $courseController->processQuizDeleteRequest($request, $response, $args);
   });
 
+  // activate/deactivate course
+  $group->get('/course/visibility/{course_id}', function ($request, $response, $args) use ($courseController) {
+    return $courseController->processVisibilityRequest($request, $response, $args);
+  });
 })->add(function ($request, $handler) use ($table) {
   return verifyTokenMiddleware($request, $handler, $table);
 });

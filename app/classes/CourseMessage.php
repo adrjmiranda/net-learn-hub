@@ -23,6 +23,8 @@ class CourseMessage
   const ERR_FAIL_DELETE_QUIZ = 'Falha ao tentar deletar quiz.';
 
   // Error messages related to course details validation
+  const ERR_COURSE_NOT_POSSIBLE_TOPIC = 'O curso não pode ser ativado pois não possui tópicos!';
+  const ERR_FAIL_TO_CHANGE_COURSE_VISIBILITY = 'Falha ao tentar mudar visibilidade do curso!';
   const ERR_COURSE_INEXISTENT = 'Este curso não existe!';
   const ERR_TOPIC_INEXISTENT = 'Este tópico não existe!';
   const ERR_QUIZ_INEXISTENT = 'Este quiz não existe!';
@@ -56,4 +58,6 @@ class CourseMessage
   const SUCCESS_CREATE_QUIZ = 'Quiz criado com sucesso!';
   const SUCCESS_UPDATE_QUIZ = 'Quiz atualizado com sucesso!';
   const SUCCESS_DELETE_QUIZ = 'Quiz removido com sucesso!';
+
+  const SUCCESS_TO_CHANGE_COURSE_VISIBILITY = 'Visibilidade do curso aterada com sucesso!';
 }

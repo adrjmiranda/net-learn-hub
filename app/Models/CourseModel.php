@@ -53,4 +53,20 @@ class CourseModel extends Model
       return false;
     }
   }
+
+  public function setVisibility(int $id, int $visibility): bool
+  {
+    $stmt = $this->connect->prepare('UPDATE ' . $this->table . ' SET visibility = :visibility WHERE id = :id');
+
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmt->bindParam(':visibility', $visibility, PDO::PARAM_INT);
+
+    try {
+      $stmt->execute();
+      return true;
+    } catch (PDOException $pDOException) {
+      echo $pDOException->getMessage();
+      return false;
+    }
+  }
 }

@@ -766,4 +766,40 @@ class CourseController extends Controller
 
     return $response->withHeader('Location', '/admin/course/quizzes/' . $courseId)->withHeader('Allow', 'GET')->withStatus(302);
   }
+
+  public function processVisibilityRequest(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
+  {
+    $courseId = (int) ($args['course_id'] ?? '');
+
+    $courseById = $this->model->getById($courseId);
+
+    if (empty($courseById)) {
+      $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::ERR_COURSE_INEXISTENT;
+      $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_ERROR;
+      return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
+    } else {
+      $topicModel = new TopicModel();
+
+      $allTopicByCourseId = $topicModel->getByCourseId($courseId);
+
+      $courseVisibility = (int) $courseById->visibility;
+
+      if (empty($allTopicByCourseId)) {
+        $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::ERR_COURSE_NOT_POSSIBLE_TOPIC;
+        $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_ERROR;
+      } else {
+        $newVisibility = $courseVisibility == 0 ? 1 : 0;
+
+        if ($this->model->setVisibility($courseId, $newVisibility)) {
+          $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::SUCCESS_TO_CHANGE_COURSE_VISIBILITY;
+          $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_SUCCESS;
+        } else {
+          $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::ERR_FAIL_TO_CHANGE_COURSE_VISIBILITY;
+          $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_ERROR;
+        }
+      }
+    }
+
+    return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
+  }
 }
