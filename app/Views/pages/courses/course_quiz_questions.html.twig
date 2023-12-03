@@ -1,0 +1,31 @@
+{% extends '/components/administrators/base.html.twig' %}
+{% block content %}
+<div id="course-quiz-questions" class="content">
+  {% if session_message %}
+  <p class="session-message {{ message_type }}">
+    {{ session_message }}
+  </p>
+  {% endif %}
+  <div class="header-content">
+    <h1>Questões do Quiz: <span>{{ quiz_name }}</span></h1>
+    <a href="{{ base_url }}/admin/course/quizzes/questions/create/{{ course_id }}/{{ quiz_id }}"
+      class="btn btn-color wauto">Adicionar Questão</a>
+  </div>
+  {% if questions %}
+  <ul id="resources">
+    {% for question in questions %}
+    <li><b>{{ loop.index }}</b>
+      <span class="actions">
+        <a href="{{ base_url }}/admin/course/quizzes/questions/edit/{{ course_id }}/{{ quiz_id }}/{{ question.id }}"
+          class="btn btn-warning"><ion-icon name="create"></ion-icon></a>
+        <a href="{{ base_url }}/admin/course/quizzes/questions/delete/{{ course_id }}/{{ quiz_id }}/{{ question.id }}"
+          class="btn btn-danger"><ion-icon name="trash"></ion-icon></a>
+      </span>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p>Ainda não há nenhuma questão para este quiz!</p>
+  {% endif %}
+</div>
+{% endblock %}
