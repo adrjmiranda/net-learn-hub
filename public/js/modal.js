@@ -37,6 +37,11 @@ if (
 					url = `/admin/course/visibility/${id}`;
 					break;
 
+				case 'delete-course':
+					modalQuestion.innerHTML = `Tem certeza que quer remover o curso: <b>${title}</b>?`;
+					url = `/admin/course/delete/${id}`;
+					break;
+
 				// topics
 				case 'delete-topic':
 					modalQuestion.innerHTML = `Tem certeza que quer remover o tópico: <b>${title}</b>?`;

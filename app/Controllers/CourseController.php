@@ -970,13 +970,13 @@ class CourseController extends Controller
       $questionModel = new QuestionModel();
       $alternativeModel = new AlternativeModel();
 
-      if ($questionModel->store($question, $correct, $courseId, $quizId)) {
-        $questionByQuizId = $questionModel->getByQuizIdAndCourseId($quizId, $courseId);
+      $newQuestion = $questionModel->store($question, $correct, $courseId, $quizId);
 
+      if (!empty($newQuestion)) {
         $errorSavingAlternative = false;
 
         foreach ($alternatives as $alternative) {
-          if (!$alternativeModel->store($alternative[1], $alternative[0], $courseId, $questionByQuizId->id)) {
+          if (!$alternativeModel->store($alternative[1], $alternative[0], $courseId, $newQuestion->id)) {
             $errorSavingAlternative = true;
           }
         }
@@ -994,6 +994,57 @@ class CourseController extends Controller
     }
 
     $this->data['session_message'] = $message;
+
+    return $this->twig->render($response, $this->path, $this->data);
+  }
+
+  public function editQuestion(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
+  {
+    $courseId = (int) ($args['course_id'] ?? '');
+    $quizId = (int) ($args['quiz_id'] ?? '');
+    $questionId = (int) ($args['question_id'] ?? '');
+
+    if (!isValidId($courseId) || !isValidId($quizId) || !isValidId($questionId)) {
+      return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
+    } else {
+      $quizModel = new QuizModel();
+      $questionModel = new QuestionModel();
+      $alternativeModel = new AlternativeModel();
+
+      $courseById = $this->model->getById($courseId);
+      $quizByIdAndCourseId = $quizModel->getByIdAndCourseId($quizId, $courseId);
+      $questionByIdAndCourseId = $questionModel->getByIdAndCourseId($questionId, $courseId);
+
+      if (empty($courseById) || empty($quizByIdAndCourseId) || empty($questionByIdAndCourseId)) {
+        return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
+      } else {
+        $this->path .= 'edit_quiz_question.html.twig';
+        $this->data['page_title'] = 'NetLearnHub | Aprenda de graça TI';
+        $this->data['course_id'] = $courseById->id;
+        $this->data['quiz_id'] = $quizByIdAndCourseId->id;
+        $this->data['question_id'] = $questionByIdAndCourseId->id;
+        $this->data['quiz_name'] = $quizByIdAndCourseId->title;
+        $this->data['question'] = $questionByIdAndCourseId->question;
+        $this->data['correct'] = $questionByIdAndCourseId->correct;
+        $this->data['err_question'] = false;
+        $this->data['err_correct'] = false;
+        $this->data['err_alternative_1'] = false;
+        $this->data['err_alternative_2'] = false;
+        $this->data['err_alternative_3'] = false;
+        $this->data['err_alternative_4'] = false;
+        $this->data['err_alternative_5'] = false;
+        $this->data['session_message'] = '';
+        $this->data['message_type'] = '';
+
+        $alternativeModel = new AlternativeModel();
+
+        $alternativesByQuestionId = $alternativeModel->getByQuestionId($questionId);
+
+        foreach ($alternativesByQuestionId as $index => $alternative) {
+          $this->data['alternative_' . ($index + 1)] = $alternative->alternative;
+        }
+      }
+    }
 
     return $this->twig->render($response, $this->path, $this->data);
   }

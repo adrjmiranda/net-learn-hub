@@ -23,6 +23,8 @@
     {% include '/components/administrators/course_card.html.twig' with {'course': course} %}
     {% endfor %}
   </div>
+  {% else %}
+  <p>Ainda não há cursos criados!</p>
   {% endif %}
   <div id="summernote" name="body" id="body"></div>
 </div>

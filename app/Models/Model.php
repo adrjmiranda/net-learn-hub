@@ -178,6 +178,42 @@ class Model
     return $data;
   }
 
+  public function getByQuestionId(int $questionId): ?array
+  {
+    $data = null;
+
+    try {
+      $searchQueryOptions = new SearchQueryOptions();
+
+      $searchQueryOptions->type = SearchQueryOptions::SPECIFIC;
+      $searchQueryOptions->conditions = [
+        'column_name' => 'question_id',
+        'operator' => SearchQueryOptions::EQUAL_OPERATOR,
+        'values' => $questionId
+      ];
+      $searchQueryOptions->order = SearchQueryOptions::ASC;
+
+      $stmt = prepareSearchStatement($this->connect, $this->table, $searchQueryOptions);
+      $stmt->execute();
+
+      if ($stmt->rowCount() > 0) {
+        $data = $stmt->fetchAll();
+
+        if (!empty($data)) {
+          foreach ($data as $object) {
+            if (property_exists($object, 'image')) {
+              $object->image = base64_encode($object->image);
+            }
+          }
+        }
+      }
+    } catch (PDOException $pDOException) {
+      echo $pDOException->getMessage();
+    }
+
+    return $data;
+  }
+
   public function getByIdAndCourseId(int $id, int $courseId): ?object
   {
     $data = null;

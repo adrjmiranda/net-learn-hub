@@ -69,6 +69,10 @@ $app->group('/admin', function (RouteCollectorProxy $group) use ($administratorC
     return $courseController->createQuestion($request, $response, $args);
   });
 
+  $group->get('/course/quizzes/questions/edit/{course_id}/{quiz_id}/{question_id}', function ($request, $response, $args) use ($courseController) {
+    return $courseController->editQuestion($request, $response, $args);
+  });
+
   // send form
   $group->post('/login', function ($request, $response, $args) use ($administratorController) {
     return $administratorController->login($request, $response, $args);
@@ -114,6 +118,12 @@ $app->group('/admin', function (RouteCollectorProxy $group) use ($administratorC
 
   $group->post('/course/quizzes/questions/create', function ($request, $response, $args) use ($courseController) {
     return $courseController->processQuestionStoreRequest($request, $response, $args);
+  })->add(function ($request, $handler) {
+    return verifyCSRFToken($request, $handler);
+  });
+
+  $group->post('/course/quizzes/questions/edit', function ($request, $response, $args) use ($courseController) {
+    return $courseController->processQuestionUpdateRequest($request, $response, $args);
   })->add(function ($request, $handler) {
     return verifyCSRFToken($request, $handler);
   });

@@ -10,7 +10,7 @@ class QuestionModel extends Model
 {
   protected string $table = GlobalValues::QUESTIONS_TABLE;
 
-  public function store(string $question, int $correct, int $courseId, int $quizId): bool
+  public function store(string $question, int $correct, int $courseId, int $quizId): ?object
   {
     $stmt = $this->connect->prepare('INSERT INTO ' . $this->table . ' (question, correct, course_id, quiz_id) VALUES (:question, :correct, :course_id, :quiz_id)');
 
@@ -21,10 +21,19 @@ class QuestionModel extends Model
 
     try {
       $stmt->execute();
-      return true;
+      $lastInsertedId = $this->connect->lastInsertId();
+
+      $query = 'SELECT * FROM ' . $this->table . ' WHERE id = :id';
+      $stmt = $this->connect->prepare($query);
+      $stmt->bindParam(':id', $lastInsertedId, PDO::PARAM_INT);
+      $stmt->execute();
+
+      $row = $stmt->fetch();
+
+      return $row ? $row : null;
     } catch (PDOException $pDOException) {
       echo $pDOException->getMessage();
-      return false;
+      return null;
     }
   }
 }
