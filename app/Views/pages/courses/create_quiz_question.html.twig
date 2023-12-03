@@ -17,16 +17,15 @@
         placeholder="Escreva o texto da questão..." rows="10">{{ question }}</textarea>
     </div>
     <div class="input-field">
-      <label for="correct">
-        <select name="correct" id="correct" class="{{ err_correct ? 'input-error' : '' }}">
-          <option value="" disabled selected>Alternativa Correta</option>
-          <option value="1">Alternativa 1</option>
-          <option value="2">Alternativa 2</option>
-          <option value="3">Alternativa 3</option>
-          <option value="4">Alternativa 4</option>
-          <option value="5">Alternativa 5</option>
-        </select>
-      </label>
+      <label for="correct">Escolha Qual Alternativa Será A Correta:</label>
+      <select name="correct" id="correct" class="{{ err_correct ? 'input-error' : '' }}">
+        <option value="" disabled selected>Alternativa Correta</option>
+        <option value="1">Alternativa 1</option>
+        <option value="2">Alternativa 2</option>
+        <option value="3">Alternativa 3</option>
+        <option value="4">Alternativa 4</option>
+        <option value="5">Alternativa 5</option>
+      </select>
     </div>
     <div class="input-field">
       <label for="alternative_1">Alternativa 1</label>

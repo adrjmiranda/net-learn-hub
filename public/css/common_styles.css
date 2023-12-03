@@ -392,17 +392,20 @@ form .input-field ion-icon {
 }
 
 input,
-textarea {
-	width: 100%;
+textarea,
+select {
+	width: 100% !important;
 	background-color: transparent;
-	border-color: var(--secondary-color);
+	border-color: var(--secondary-color) !important;
+	border-width: 1px;
 	border-radius: 3px;
 	font-size: 1rem;
 	padding: 0.4rem;
 }
 
 input:focus,
-textarea:focus {
+textarea:focus,
+select:focus {
 	outline: none;
 }
 

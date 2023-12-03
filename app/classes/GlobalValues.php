@@ -140,4 +140,17 @@ class GlobalValues
    * CSRF token is invalid NAME
    */
   const CSRF_TOKEN_IS_INVALID = 'csrf_token_is_invalid';
+
+  /** 
+   * Minimum qunatity questions
+   */
+  const MINIMUM_QUANTITY_QUESTIONS = 5;
+  /** 
+   * Maximum qunatity questions
+   */
+  const MAXIMUM_QUANTITY_QUESTIONS = 10;
+  /** 
+   * Number of alternatives
+   */
+  const NUMBER_OF_ALTERNATIVES = 5;
 }

@@ -130,5 +130,39 @@ function isValidSingleLetter(string $input): bool
   return false;
 }
 
+/**
+ * Validates if the provided quantity of questions falls within the defined range.
+ *
+ * @param int $quantityQuestions The quantity of questions to validate.
+ * @return bool Returns true if the quantity of questions falls within the defined range;
+ *              otherwise, returns false.
+ */
+function isValidQuantityQuestions(int $quantityQuestions): bool
+{
+  return $quantityQuestions >= GlobalValues::MINIMUM_QUANTITY_QUESTIONS && $quantityQuestions <= GlobalValues::MAXIMUM_QUANTITY_QUESTIONS;
+}
+
+/**
+ * Checks if the provided number of alternatives matches the predefined global value.
+ *
+ * @param int $numberOfAlternatives The number of alternatives to validate.
+ * @return bool Returns true if the number of alternatives matches the predefined global value; otherwise, returns false.
+ */
+function isValidNumberOfAlternatives(int $numberOfAlternatives): bool
+{
+  return $numberOfAlternatives == GlobalValues::NUMBER_OF_ALTERNATIVES;
+}
+
+/**
+ * Validates if an integer represents a valid question number within the range of 1 to 5.
+ *
+ * @param int $questionNumber The integer to validate as a question number.
+ * @return bool Returns true if the number falls within the valid range (1 to 5); otherwise, returns false.
+ */
+function isValidQuestionNumber(int $questionNumber): bool
+{
+  return $questionNumber >= 1 && $questionNumber <= 5;
+}
+
 
 

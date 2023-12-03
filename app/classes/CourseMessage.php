@@ -22,6 +22,10 @@ class CourseMessage
   const ERR_FAIL_UPDATE_QUIZ = 'Falha ao tentar atualizar quiz.';
   const ERR_FAIL_DELETE_QUIZ = 'Falha ao tentar deletar quiz.';
 
+  const ERR_FAIL_CREATE_QUESTION = 'Falha ao tentar criar questão.';
+  const ERR_FAIL_UPDATE_QUESTION = 'Falha ao tentar atualizar questão.';
+  const ERR_FAIL_DELETE_QUESTION = 'Falha ao tentar deletar questão.';
+
   // Error messages related to course details validation
   const ERR_COURSE_NOT_POSSIBLE_TOPIC = 'O curso não pode ser ativado pois não possui tópicos!';
   const ERR_FAIL_TO_CHANGE_COURSE_VISIBILITY = 'Falha ao tentar mudar visibilidade do curso!';
@@ -43,8 +47,9 @@ class CourseMessage
   const ERR_INVALID_RIGHT_ANSWER = 'A resposta selecionada (dever ser uma letra do alfabeto).';
 
   // Error messages related to alternatives in quizzes
-  const ERR_INVALID_LETTER = 'A alternativa deve ser uma letra do alfabeto.';
-  const ERR_INVALID_ALTERNATIVE = 'Texto para alternativa inválido (máximo de ' . GlobalValues::MAXIMUM_SIZE_OF_THE_DOCUMENT_BLOB . ' caracteres.';
+  const ERR_INVALID_QUESTION_NUMBER = 'Número da alternativa selecionada não é válido.';
+  const ERR_INVALID_ALTERNATIVE = 'Texto para alternativa inválido (máximo de ' . GlobalValues::MAXIMUM_SIZE_OF_THE_ALTERNATIVE . ' caracteres.';
+  const ERR_WHEN_SAVING_ONE_OF_ALTERNATIVES = 'Houve um erro ao salvar uma das alternativas da questão.';
 
   // successes messages to users
   const SUCCESS_CREATE_COURSE = 'Curso criado com sucesso!';
@@ -60,4 +65,8 @@ class CourseMessage
   const SUCCESS_DELETE_QUIZ = 'Quiz removido com sucesso!';
 
   const SUCCESS_TO_CHANGE_COURSE_VISIBILITY = 'Visibilidade do curso aterada com sucesso!';
+
+  const SUCCESS_CREATE_QUESTION = 'Questão criado com sucesso!';
+  const SUCCESS_UPDATE_QUESTION = 'Questão atualizado com sucesso!';
+  const SUCCESS_DELETE_QUESTION = 'Questão removido com sucesso!';
 }

@@ -882,4 +882,119 @@ class CourseController extends Controller
 
     return $this->twig->render($response, $this->path, $this->data);
   }
+
+  public function processQuestionStoreRequest(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
+  {
+    $params = $request->getParsedBody();
+
+    $courseId = (int) ($params['course_id'] ?? '');
+    $quizId = (int) ($params['quiz_id'] ?? '');
+    $question = $params['question'];
+    $correct = (int) $params['correct'];
+    $alternative1 = $params['alternative_1'];
+    $alternative2 = $params['alternative_2'];
+    $alternative3 = $params['alternative_3'];
+    $alternative4 = $params['alternative_4'];
+    $alternative5 = $params['alternative_5'];
+
+    $this->path .= 'create_quiz_question.html.twig';
+    $this->data['page_title'] = 'NetLearnHub | Aprenda de graça TI';
+    $this->data['course_id'] = $courseId;
+    $this->data['quiz_id'] = $quizId;
+    $this->data['question'] = $question;
+    $this->data['correct'] = $correct;
+    $this->data['alternative_1'] = $alternative1;
+    $this->data['alternative_2'] = $alternative2;
+    $this->data['alternative_3'] = $alternative3;
+    $this->data['alternative_4'] = $alternative4;
+    $this->data['alternative_5'] = $alternative5;
+    $this->data['err_question'] = false;
+    $this->data['err_correct'] = false;
+    $this->data['err_alternative_1'] = false;
+    $this->data['err_alternative_2'] = false;
+    $this->data['err_alternative_3'] = false;
+    $this->data['err_alternative_4'] = false;
+    $this->data['err_alternative_5'] = false;
+    $this->data['session_message'] = '';
+    $this->data['message_type'] = GlobalValues::TYPE_MSG_ERROR;
+
+    $quizModel = new QuizModel();
+
+    $courseById = $this->model->getById($courseId);
+    $quizByIdAndCourseId = $quizModel->getByIdAndCourseId($quizId, $courseId);
+
+    if ($_SESSION[GlobalValues::CSRF_TOKEN_IS_INVALID]) {
+      $message = UserMessage::INVALID_CSRF_TOKEN;
+    } elseif (empty($courseById) || empty($quizByIdAndCourseId)) {
+      $message = CourseMessage::ERR_QUIZ_INEXISTENT;
+    } elseif (!isValidText($question, 'question')) {
+      $this->data['err_question'] = true;
+      $message = CourseMessage::ERR_INVALID_QUESTION_TEXT;
+    } elseif (!isValidQuestionNumber($correct)) {
+      $this->data['err_correct'] = true;
+      $message = CourseMessage::ERR_INVALID_QUESTION_NUMBER;
+    } elseif (!isValidText($alternative1, 'alternative')) {
+      $this->data['err_alternative_1'] = true;
+      $message = CourseMessage::ERR_INVALID_ALTERNATIVE;
+    } elseif (!isValidText($alternative2, 'alternative')) {
+      $this->data['err_alternative_2'] = true;
+      $message = CourseMessage::ERR_INVALID_ALTERNATIVE;
+    } elseif (!isValidText($alternative3, 'alternative')) {
+      $this->data['err_alternative_3'] = true;
+      $message = CourseMessage::ERR_INVALID_ALTERNATIVE;
+    } elseif (!isValidText($alternative4, 'alternative')) {
+      $this->data['err_alternative_4'] = true;
+      $message = CourseMessage::ERR_INVALID_ALTERNATIVE;
+    } elseif (!isValidText($alternative5, 'alternative')) {
+      $this->data['err_alternative_5'] = true;
+      $message = CourseMessage::ERR_INVALID_ALTERNATIVE;
+    } else {
+      $this->data['err_question'] = false;
+      $this->data['err_correct'] = false;
+      $this->data['err_alternative_1'] = false;
+      $this->data['err_alternative_2'] = false;
+      $this->data['err_alternative_3'] = false;
+      $this->data['err_alternative_4'] = false;
+      $this->data['err_alternative_5'] = false;
+
+      $alternatives = [];
+
+      for ($i = 1; $i <= 5; $i++) {
+        $variableName = 'alternative' . $i;
+
+        if (isset($$variableName)) {
+          $alternatives[] = [$i, $$variableName];
+        }
+      }
+
+      $questionModel = new QuestionModel();
+      $alternativeModel = new AlternativeModel();
+
+      if ($questionModel->store($question, $correct, $courseId, $quizId)) {
+        $questionByQuizId = $questionModel->getByQuizIdAndCourseId($quizId, $courseId);
+
+        $errorSavingAlternative = false;
+
+        foreach ($alternatives as $alternative) {
+          if (!$alternativeModel->store($alternative[1], $alternative[0], $courseId, $questionByQuizId->id)) {
+            $errorSavingAlternative = true;
+          }
+        }
+
+        if ($errorSavingAlternative) {
+          $message = CourseMessage::ERR_WHEN_SAVING_ONE_OF_ALTERNATIVES;
+        } else {
+          $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::SUCCESS_CREATE_QUESTION;
+          $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_SUCCESS;
+          return $response->withHeader('Location', '/admin/course/quizzes/questions/' . $courseId . '/' . $quizId)->withHeader('Allow', 'GET')->withStatus(302);
+        }
+      } else {
+        $message = CourseMessage::ERR_FAIL_CREATE_QUESTION;
+      }
+    }
+
+    $this->data['session_message'] = $message;
+
+    return $this->twig->render($response, $this->path, $this->data);
+  }
 }
