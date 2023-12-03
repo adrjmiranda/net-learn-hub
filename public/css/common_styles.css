@@ -93,6 +93,12 @@ body {
 	display: none !important;
 }
 
+#return-page {
+	display: flex;
+	justify-content: flex-end;
+	margin-top: 2rem;
+}
+
 /* headers */
 h1,
 h2,

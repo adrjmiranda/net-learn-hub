@@ -27,5 +27,8 @@
   {% else %}
   <p>Ainda não há nenhuma questão para este quiz!</p>
   {% endif %}
+  <div id="return-page">
+    <a href="{{ base_url }}/admin/course/quizzes/{{ course_id }}" class="btn btn-color wauto">Quizzes</a>
+  </div>
 </div>
 {% endblock %}
