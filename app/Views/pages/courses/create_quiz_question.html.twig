@@ -10,7 +10,7 @@
     {% endif %}
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
     <input type="hidden" name="course_id" value="{{ course_id }}">
-    <input type="hidden" name="course_id" value="{{ quiz_id }}">
+    <input type="hidden" name="quiz_id" value="{{ quiz_id }}">
     <div class="input-field">
       <label for="question">Texto da Questão:</label>
       <textarea name="question" id="question" class="{{ err_question ? 'input-error' : '' }}"
@@ -19,7 +19,7 @@
     <div class="input-field">
       <label for="correct">Escolha Qual Alternativa Será A Correta:</label>
       <select name="correct" id="correct" class="{{ err_correct ? 'input-error' : '' }}">
-        <option value="" disabled selected>Alternativa Correta</option>
+        <option value="" disabled selected>Selecione A Alternativa Correta</option>
         <option value="1">Alternativa 1</option>
         <option value="2">Alternativa 2</option>
         <option value="3">Alternativa 3</option>

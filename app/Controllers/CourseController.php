@@ -833,7 +833,7 @@ class CourseController extends Controller
         $questionByQuizId = $questionModel->getByQuizId($quizId);
 
         $this->data['quiz_name'] = $quizByIdAndCourseId->title;
-        $this->data['quizzes'] = $questionByQuizId;
+        $this->data['questions'] = $questionByQuizId;
       }
     }
 
@@ -859,7 +859,7 @@ class CourseController extends Controller
         $this->path .= 'create_quiz_question.html.twig';
         $this->data['page_title'] = 'NetLearnHub | Aprenda de graça TI';
         $this->data['course_id'] = $courseById->id;
-        $this->data['course_id'] = $quizByIdAndCourseId->id;
+        $this->data['quiz_id'] = $quizByIdAndCourseId->id;
         $this->data['quiz_name'] = $quizByIdAndCourseId->title;
         $this->data['question'] = '';
         $this->data['correct'] = '';
@@ -890,7 +890,7 @@ class CourseController extends Controller
     $courseId = (int) ($params['course_id'] ?? '');
     $quizId = (int) ($params['quiz_id'] ?? '');
     $question = $params['question'];
-    $correct = (int) $params['correct'];
+    $correct = (int) ($params['correct'] ?? '');
     $alternative1 = $params['alternative_1'];
     $alternative2 = $params['alternative_2'];
     $alternative3 = $params['alternative_3'];
