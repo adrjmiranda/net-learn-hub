@@ -254,6 +254,26 @@ class Model
     return $data;
   }
 
+  public function getByIdAndQuizId(int $id, int $quizId): ?object
+  {
+    $data = null;
+
+    try {
+      $stmt = $this->connect->prepare('SELECT * FROM ' . $this->table . ' WHERE id = :id AND quiz_id = :quiz_id LIMIT 1');
+      $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+      $stmt->bindParam(':quiz_id', $quizId, PDO::PARAM_INT);
+      $stmt->execute();
+
+      if ($stmt->rowCount() > 0) {
+        $data = $stmt->fetch();
+      }
+    } catch (PDOException $pDOException) {
+      echo $pDOException->getMessage();
+    }
+
+    return $data;
+  }
+
   public function getByTitleAndCourseId(string $title, int $courseId): ?object
   {
     $data = null;

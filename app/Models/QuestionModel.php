@@ -36,4 +36,24 @@ class QuestionModel extends Model
       return null;
     }
   }
+
+  public function update(int $id, string $question, int $correct, int $courseId, int $quizId): bool
+  {
+    $stmt = $this->connect->prepare('UPDATE ' . $this->table . ' SET question = :question, correct = :correct, course_id = :course_id, quiz_id = :quiz_id WHERE id = :id');
+
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmt->bindParam(':question', $question, PDO::PARAM_STR);
+    $stmt->bindParam(':correct', $correct, PDO::PARAM_INT);
+    $stmt->bindParam(':course_id', $courseId, PDO::PARAM_INT);
+    $stmt->bindParam(':quiz_id', $quizId, PDO::PARAM_INT);
+
+
+    try {
+      $stmt->execute();
+      return true;
+    } catch (PDOException $pDOException) {
+      echo $pDOException->getMessage();
+      return false;
+    }
+  }
 }
