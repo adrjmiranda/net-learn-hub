@@ -15,6 +15,13 @@
     {% for quiz in quizzes %}
     <li>{{ quiz.title }}
       <span class="actions">
+        {% if quiz.visibility %}
+        <a href="{{ base_url }}/admin/course/quiz/visibility/{{ course_id }}/{{ quiz.id }}"
+          class="btn btn-color"><ion-icon name="eye-off"></ion-icon></a>
+        {% else %}
+        <a href="{{ base_url }}/admin/course/quiz/visibility/{{ course_id }}/{{ quiz.id }}"
+          class="btn btn-color"><ion-icon name="eye"></ion-icon></a>
+        {% endif %}
         <a href="{{ base_url }}/admin/course/quizzes/questions/{{ course_id }}/{{ quiz.id }}"
           class="btn btn-active"><ion-icon name="help-circle"></ion-icon></a>
         <a href="{{ base_url }}/admin/course/quizzes/edit/{{ course_id }}/{{ quiz.id }}"

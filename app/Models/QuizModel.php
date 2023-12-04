@@ -26,12 +26,13 @@ class QuizModel extends Model
     }
   }
 
-  public function update(int $id, string $title): bool
+  public function update(int $id, string $title, int $visibility): bool
   {
-    $stmt = $this->connect->prepare('UPDATE ' . $this->table . ' SET title = :title WHERE id = :id');
+    $stmt = $this->connect->prepare('UPDATE ' . $this->table . ' SET title = :title, visibility = :visibility WHERE id = :id');
 
     $stmt->bindParam(':id', $id, PDO::PARAM_INT);
     $stmt->bindParam(':title', $title, PDO::PARAM_STR);
+    $stmt->bindParam(':visibility', $visibility, PDO::PARAM_INT);
 
     try {
       $stmt->execute();

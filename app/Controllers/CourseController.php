@@ -708,7 +708,10 @@ class CourseController extends Controller
         $this->data['err_title'] = false;
         $this->data['err_content'] = false;
 
-        if ($quizModel->update($quizId, $title)) {
+        // TODO: treat after
+        $visibility = 0;
+
+        if ($quizModel->update($quizId, $title, $visibility)) {
           $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::SUCCESS_UPDATE_QUIZ;
           $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_SUCCESS;
           return $response->withHeader('Location', '/admin/course/quizzes/' . $courseId)->withHeader('Allow', 'GET')->withStatus(302);
@@ -773,7 +776,12 @@ class CourseController extends Controller
 
     $courseById = $this->model->getById($courseId);
 
-    if (empty($courseById)) {
+
+    if (!isValidId($courseId)) {
+      $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::ERR_COURSE_INEXISTENT;
+      $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_ERROR;
+      return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
+    } elseif (empty($courseById)) {
       $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::ERR_COURSE_INEXISTENT;
       $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_ERROR;
       return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
@@ -1221,5 +1229,51 @@ class CourseController extends Controller
     }
 
     return $response->withHeader('Location', '/admin/course/quizzes/questions/' . $courseId . '/' . $quizId)->withHeader('Allow', 'GET')->withStatus(302);
+  }
+
+  public function processQuizVisibilityRequest(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
+  {
+    $courseId = (int) ($args['course_id'] ?? '');
+    $quizId = (int) ($args['quiz_id'] ?? '');
+
+    $quizModel = new QuizModel();
+
+    $courseById = $this->model->getById($courseId);
+    $quizByIdAndCourseId = $quizModel->getByIdAndCourseId($quizId, $courseId);
+
+    if (!isValidId($courseId) || !isValidId($quizId)) {
+      $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::ERR_QUIZ_INEXISTENT;
+      $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_ERROR;
+      return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
+    } elseif (empty($courseById) || empty($quizByIdAndCourseId)) {
+      $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::ERR_QUIZ_INEXISTENT;
+      $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_ERROR;
+      return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
+    } else {
+      $questionModel = new QuestionModel();
+
+      $questionByQuizId = $questionModel->getByQuizId($quizId);
+
+      $questionsNumber = count($questionByQuizId);
+
+      if ($questionsNumber >= GlobalValues::MINIMUM_QUANTITY_QUESTIONS) {
+        $visibility = (int) $quizByIdAndCourseId->visibility;
+
+        $visibility = ($visibility == 0 ? 1 : 0);
+
+        if ($quizModel->update($quizByIdAndCourseId->id, $quizByIdAndCourseId->title, $visibility)) {
+          $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::SUCCESS_TO_CHANGE_QUIZ_VISIBILITY;
+          $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_SUCCESS;
+        } else {
+          $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::ERR_FAIL_TO_CHANGE_QUIZ_VISIBILITY;
+          $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_ERROR;
+        }
+      } else {
+        $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::ERR_MINIMUM_QUESTIONS_FOR_VISIBILITY;
+        $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_ERROR;
+      }
+    }
+
+    return $response->withHeader('Location', '/admin/course/quizzes/' . $courseId)->withHeader('Allow', 'GET')->withStatus(302);
   }
 }

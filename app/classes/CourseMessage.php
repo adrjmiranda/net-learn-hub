@@ -52,6 +52,10 @@ class CourseMessage
   const ERR_INVALID_ALTERNATIVE = 'Texto para alternativa inválido (máximo de ' . GlobalValues::MAXIMUM_SIZE_OF_THE_ALTERNATIVE . ' caracteres.';
   const ERR_WHEN_SAVING_ONE_OF_ALTERNATIVES = 'Houve um erro ao salvar uma das alternativas da questão.';
   const ERR_WHEN_REMOVING_ONE_OF_ALTERNATIVES = 'Houve um erro ao remover uma das alternativas da questão.';
+  const ERR_MINIMUM_QUESTIONS_FOR_VISIBILITY = 'Só é possível ativar o quiz se ele tiver ao menos ' . GlobalValues::MINIMUM_QUANTITY_QUESTIONS . ' questões!';
+  const ERR_MAXIMUM_QUESTIONS_FOR_ONE_QUIZ = 'Não é possível criar mais de ' . GlobalValues::MAXIMUM_QUANTITY_QUESTIONS . ' questões para um quiz!';
+  const ERR_FAIL_TO_CHANGE_QUIZ_VISIBILITY = 'Falha ao tentar mudar visibilidade do quiz!';
+
 
   // successes messages to users
   const SUCCESS_CREATE_COURSE = 'Curso criado com sucesso!';
@@ -67,6 +71,7 @@ class CourseMessage
   const SUCCESS_DELETE_QUIZ = 'Quiz removido com sucesso!';
 
   const SUCCESS_TO_CHANGE_COURSE_VISIBILITY = 'Visibilidade do curso aterada com sucesso!';
+  const SUCCESS_TO_CHANGE_QUIZ_VISIBILITY = 'Visibilidade do quiz aterada com sucesso!';
 
   const SUCCESS_CREATE_QUESTION = 'Questão criado com sucesso!';
   const SUCCESS_UPDATE_QUESTION = 'Questão atualizado com sucesso!';

@@ -145,9 +145,13 @@ $app->group('/admin', function (RouteCollectorProxy $group) use ($administratorC
     return $courseController->processQuestionDeleteRequest($request, $response, $args);
   });
 
-  // activate/deactivate course
+  // activate/deactivate to courses and quizzes
   $group->get('/course/visibility/{course_id}', function ($request, $response, $args) use ($courseController) {
     return $courseController->processVisibilityRequest($request, $response, $args);
+  });
+
+  $group->get('/course/quiz/visibility/{course_id}/{quiz_id}', function ($request, $response, $args) use ($courseController) {
+    return $courseController->processQuizVisibilityRequest($request, $response, $args);
   });
 })->add(function ($request, $handler) use ($table) {
   return verifyTokenMiddleware($request, $handler, $table);
