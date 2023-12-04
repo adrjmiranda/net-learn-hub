@@ -26,7 +26,7 @@ class QuizModel extends Model
     }
   }
 
-  public function update(int $id, string $title, int $visibility): bool
+  public function update(int $id, string $title, int $visibility = 0): bool
   {
     $stmt = $this->connect->prepare('UPDATE ' . $this->table . ' SET title = :title, visibility = :visibility WHERE id = :id');
 

@@ -708,10 +708,7 @@ class CourseController extends Controller
         $this->data['err_title'] = false;
         $this->data['err_content'] = false;
 
-        // TODO: treat after
-        $visibility = 0;
-
-        if ($quizModel->update($quizId, $title, $visibility)) {
+        if ($quizModel->update($quizId, $title)) {
           $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::SUCCESS_UPDATE_QUIZ;
           $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_SUCCESS;
           return $response->withHeader('Location', '/admin/course/quizzes/' . $courseId)->withHeader('Allow', 'GET')->withStatus(302);
