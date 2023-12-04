@@ -6,6 +6,42 @@
     {{ session_message }}
   </p>
   {% endif %}
-
+  <h1>Dados de Perfil:</h1>
+  <form action="{{ base_url }}/admin/settings/edit" method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <input type="hidden" name="admin_id" value="{{ admin_id }}">
+    <div class="image">
+      <img src="{{ base_url }}/public/images/{{ image }}" alt="Profile Image" class="current-image">
+      <label for="image"><ion-icon name="camera"></ion-icon></label>
+      <input type="hidden" name="image" id="image" value="{{ image }}">
+    </div>
+    <div class="avatars"></div>
+    <div class="input-field">
+      <label for="first_name">Nome:</label>
+      <input type="text" name="first_name" id="first_name" placeholder="Seu nome"
+        class="{{ err_first_name ? 'input-error' : '' }}" value="{{ first_name }}">
+    </div>
+    <div class="input-field">
+      <label for="last_name">Sobrenome:</label>
+      <input type="text" name="last_name" id="last_name" placeholder="Seu sobrenome"
+        class="{{ err_last_name ? 'input-error' : '' }}" value="{{ last_name }}">
+    </div>
+    <div class="input-field">
+      <label for="email">Email:</label>
+      <input type="email" name="email" id="email" placeholder="Seu sobrenome"
+        class="{{ err_email ? 'input-error' : '' }}" value="{{ email }}" disabled>
+    </div>
+    <div class="input-field">
+      <label for="password">Email:</label>
+      <input type="password" name="password" id="password" placeholder="Seu email"
+        class="{{ err_password ? 'input-error' : '' }}" value="{{ password }}">
+    </div>
+    <div class="input-field">
+      <label for="description">Descrição</label>
+      <textarea name="description" id="description" class="{{ err_description ? 'input-error' : '' }}"
+        rows="10">{{ description }}</textarea>
+    </div>
+    <button class="btn btn-color" type="button">Atualizar Dados</button>
+  </form>
 </div>
 {% endblock %}
