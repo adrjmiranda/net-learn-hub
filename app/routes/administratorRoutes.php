@@ -25,6 +25,10 @@ $app->group('/admin', function (RouteCollectorProxy $group) use ($administratorC
     return $administratorController->dashboard($request, $response, $args);
   });
 
+  $group->get('/settings', function ($request, $response, $args) use ($administratorController) {
+    return $administratorController->settings($request, $response, $args);
+  });
+
   $group->get('/logout', function ($request, $response, $args) use ($administratorController) {
     return $administratorController->logout($request, $response, $args);
   });

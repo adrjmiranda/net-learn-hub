@@ -1,0 +1,11 @@
+{% extends '/components/administrators/base.html.twig' %}
+{% block content %}
+<div id="admin-settings" class="content">
+  {% if session_message %}
+  <p class="session-message {{ message_type }}">
+    {{ session_message }}
+  </p>
+  {% endif %}
+
+</div>
+{% endblock %}

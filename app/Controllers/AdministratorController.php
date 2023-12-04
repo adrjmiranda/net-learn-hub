@@ -142,4 +142,18 @@ class AdministratorController extends Controller
 
     return $response->withHeader('Location', '/admin/login')->withHeader('Allow', 'GET')->withStatus(302);
   }
+
+  public function settings(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
+  {
+    $courseModel = new CourseModel();
+    $courses = $courseModel->all();
+
+    $this->path .= 'dashboard.html.twig';
+    $this->data['page_title'] = 'NetLearnHub | Aprenda de graça TI';
+    $this->data['session_message'] = $_SESSION[GlobalValues::SESSION_MESSAGE] ?? '';
+    $this->data['message_type'] = $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] ?? '';
+    $this->data['courses'] = $courses;
+
+    return $this->twig->render($response, $this->path, $this->data);
+  }
 }
