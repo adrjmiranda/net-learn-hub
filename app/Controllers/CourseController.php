@@ -729,13 +729,13 @@ class CourseController extends Controller
     $quizId = (int) ($args['quiz_id'] ?? '');
 
     if (!isValidId($courseId) || !isValidId($quizId)) {
-      $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::ERR_COURSE_INEXISTENT;
+      $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::ERR_QUIZ_INEXISTENT;
       $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_ERROR;
       return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
     } else {
-      $courseById = $this->model->getById($courseId);
       $quizModel = new QuizModel();
 
+      $courseById = $this->model->getById($courseId);
       $quizByIdAndCourseId = $quizModel->getByIdAndCourseId($quizId, $courseId);
 
       if (empty($courseById) || empty($quizByIdAndCourseId)) {
@@ -1168,5 +1168,58 @@ class CourseController extends Controller
     $this->data['session_message'] = $message;
 
     return $this->twig->render($response, $this->path, $this->data);
+  }
+
+  public function processQuestionDeleteRequest(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
+  {
+    $courseId = (int) ($args['course_id'] ?? '');
+    $quizId = (int) ($args['quiz_id'] ?? '');
+    $questionId = (int) ($args['question_id'] ?? '');
+
+    if (!isValidId($courseId) || !isValidId($quizId) || !isValidId($questionId)) {
+      $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::ERR_QUESTION_INEXISTENT;
+      $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_ERROR;
+      return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
+    } else {
+      $quizModel = new QuizModel();
+      $questionModel = new QuestionModel();
+
+      $courseById = $this->model->getById($courseId);
+      $quizByIdAndCourseId = $quizModel->getByIdAndCourseId($quizId, $courseId);
+      $questionByIdAndQuizId = $questionModel->getByIdAndQuizId($questionId, $quizId);
+
+      if (empty($courseById) || empty($quizByIdAndCourseId) || empty($questionByIdAndQuizId)) {
+        $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::ERR_QUESTION_INEXISTENT;
+        $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_ERROR;
+        return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
+      } else {
+        $alternativeModel = new AlternativeModel();
+
+        $alternativesByQuestionId = $alternativeModel->getByQuestionId($questionId);
+
+        $errorWhenRemovingAnAlternative = false;
+
+        foreach ($alternativesByQuestionId as $alternative) {
+          if (!$alternativeModel->delete($alternative->id, 'id')) {
+            $errorWhenRemovingAnAlternative = true;
+          }
+        }
+
+        if ($errorWhenRemovingAnAlternative) {
+          $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::ERR_WHEN_REMOVING_ONE_OF_ALTERNATIVES;
+          $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_ERROR;
+        } else {
+          if ($questionModel->delete($questionByIdAndQuizId->id, 'id')) {
+            $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::SUCCESS_DELETE_QUESTION;
+            $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_SUCCESS;
+          } else {
+            $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::ERR_FAIL_DELETE_QUESTION;
+            $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_ERROR;
+          }
+        }
+      }
+    }
+
+    return $response->withHeader('Location', '/admin/course/quizzes/questions/' . $courseId . '/' . $quizId)->withHeader('Allow', 'GET')->withStatus(302);
   }
 }

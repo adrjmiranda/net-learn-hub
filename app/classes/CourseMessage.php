@@ -51,6 +51,7 @@ class CourseMessage
   const ERR_INVALID_QUESTION_NUMBER = 'Número da alternativa selecionada não é válido.';
   const ERR_INVALID_ALTERNATIVE = 'Texto para alternativa inválido (máximo de ' . GlobalValues::MAXIMUM_SIZE_OF_THE_ALTERNATIVE . ' caracteres.';
   const ERR_WHEN_SAVING_ONE_OF_ALTERNATIVES = 'Houve um erro ao salvar uma das alternativas da questão.';
+  const ERR_WHEN_REMOVING_ONE_OF_ALTERNATIVES = 'Houve um erro ao remover uma das alternativas da questão.';
 
   // successes messages to users
   const SUCCESS_CREATE_COURSE = 'Curso criado com sucesso!';
