@@ -14,7 +14,7 @@
   {% if questions %}
   <ul id="resources">
     {% for question in questions %}
-    <li><b>{{ loop.index }}</b>
+    <li><b>Questão {{ questions|length - loop.index0 }}</b>
       <span class="actions">
         <a href="{{ base_url }}/admin/course/quizzes/questions/edit/{{ course_id }}/{{ quiz_id }}/{{ question.id }}"
           class="btn btn-warning"><ion-icon name="create"></ion-icon></a>
