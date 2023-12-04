@@ -854,37 +854,51 @@ class CourseController extends Controller
     $quizId = (int) ($args['quiz_id'] ?? '');
 
     if (!isValidId($courseId) || !isValidId($quizId)) {
+      $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::ERR_QUIZ_INEXISTENT;
+      $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_ERROR;
       return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
     } else {
       $quizModel = new QuizModel();
+      $questionModel = new QuestionModel();
 
       $courseById = $this->model->getById($courseId);
       $quizByIdAndCourseId = $quizModel->getByIdAndCourseId($quizId, $courseId);
+      $questionsByQuizId = $questionModel->getByQuizId($quizId);
+
+      $questionsNumber = count($questionsByQuizId);
 
       if (empty($courseById) || empty($quizByIdAndCourseId)) {
+        $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::ERR_QUIZ_INEXISTENT;
+        $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_ERROR;
         return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
       } else {
-        $this->path .= 'create_quiz_question.html.twig';
-        $this->data['page_title'] = 'NetLearnHub | Aprenda de graça TI';
-        $this->data['course_id'] = $courseById->id;
-        $this->data['quiz_id'] = $quizByIdAndCourseId->id;
-        $this->data['quiz_name'] = $quizByIdAndCourseId->title;
-        $this->data['question'] = '';
-        $this->data['correct'] = '';
-        $this->data['alternative_1'] = '';
-        $this->data['alternative_2'] = '';
-        $this->data['alternative_3'] = '';
-        $this->data['alternative_4'] = '';
-        $this->data['alternative_5'] = '';
-        $this->data['err_question'] = false;
-        $this->data['err_correct'] = false;
-        $this->data['err_alternative_1'] = false;
-        $this->data['err_alternative_2'] = false;
-        $this->data['err_alternative_3'] = false;
-        $this->data['err_alternative_4'] = false;
-        $this->data['err_alternative_5'] = false;
-        $this->data['session_message'] = '';
-        $this->data['message_type'] = '';
+        if ($questionsNumber == GlobalValues::MAXIMUM_QUANTITY_QUESTIONS) {
+          $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::ERR_MAXIMUM_QUESTIONS_FOR_ONE_QUIZ;
+          $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_ERROR;
+          return $response->withHeader('Location', '/admin/course/quizzes/questions/' . $courseId . '/' . $quizId)->withHeader('Allow', 'GET')->withStatus(302);
+        } elseif ($questionsNumber < GlobalValues::MAXIMUM_QUANTITY_QUESTIONS) {
+          $this->path .= 'create_quiz_question.html.twig';
+          $this->data['page_title'] = 'NetLearnHub | Aprenda de graça TI';
+          $this->data['course_id'] = $courseById->id;
+          $this->data['quiz_id'] = $quizByIdAndCourseId->id;
+          $this->data['quiz_name'] = $quizByIdAndCourseId->title;
+          $this->data['question'] = '';
+          $this->data['correct'] = '';
+          $this->data['alternative_1'] = '';
+          $this->data['alternative_2'] = '';
+          $this->data['alternative_3'] = '';
+          $this->data['alternative_4'] = '';
+          $this->data['alternative_5'] = '';
+          $this->data['err_question'] = false;
+          $this->data['err_correct'] = false;
+          $this->data['err_alternative_1'] = false;
+          $this->data['err_alternative_2'] = false;
+          $this->data['err_alternative_3'] = false;
+          $this->data['err_alternative_4'] = false;
+          $this->data['err_alternative_5'] = false;
+          $this->data['session_message'] = '';
+          $this->data['message_type'] = '';
+        }
       }
     }
 
@@ -978,26 +992,33 @@ class CourseController extends Controller
       $questionModel = new QuestionModel();
       $alternativeModel = new AlternativeModel();
 
-      $newQuestion = $questionModel->store($question, $correct, $courseId, $quizId);
+      $questionsByQuizId = $questionModel->getByQuizId($quizId);
+      $questionsNumber = count($questionsByQuizId);
 
-      if (!empty($newQuestion)) {
-        $errorSavingAlternative = false;
+      if ($questionsNumber == GlobalValues::MAXIMUM_QUANTITY_QUESTIONS) {
+        $message = CourseMessage::ERR_MAXIMUM_QUESTIONS_FOR_ONE_QUIZ;
+      } elseif ($questionsNumber < GlobalValues::MAXIMUM_QUANTITY_QUESTIONS) {
+        $newQuestion = $questionModel->store($question, $correct, $courseId, $quizId);
 
-        foreach ($alternatives as $alternative) {
-          if (!$alternativeModel->store($alternative[1], $alternative[0], $courseId, $newQuestion->id)) {
-            $errorSavingAlternative = true;
+        if (!empty($newQuestion)) {
+          $errorSavingAlternative = false;
+
+          foreach ($alternatives as $alternative) {
+            if (!$alternativeModel->store($alternative[1], $alternative[0], $courseId, $newQuestion->id)) {
+              $errorSavingAlternative = true;
+            }
           }
-        }
 
-        if ($errorSavingAlternative) {
-          $message = CourseMessage::ERR_WHEN_SAVING_ONE_OF_ALTERNATIVES;
+          if ($errorSavingAlternative) {
+            $message = CourseMessage::ERR_WHEN_SAVING_ONE_OF_ALTERNATIVES;
+          } else {
+            $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::SUCCESS_CREATE_QUESTION;
+            $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_SUCCESS;
+            return $response->withHeader('Location', '/admin/course/quizzes/questions/' . $courseId . '/' . $quizId)->withHeader('Allow', 'GET')->withStatus(302);
+          }
         } else {
-          $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::SUCCESS_CREATE_QUESTION;
-          $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_SUCCESS;
-          return $response->withHeader('Location', '/admin/course/quizzes/questions/' . $courseId . '/' . $quizId)->withHeader('Allow', 'GET')->withStatus(302);
+          $message = CourseMessage::ERR_FAIL_CREATE_QUESTION;
         }
-      } else {
-        $message = CourseMessage::ERR_FAIL_CREATE_QUESTION;
       }
     }
 
