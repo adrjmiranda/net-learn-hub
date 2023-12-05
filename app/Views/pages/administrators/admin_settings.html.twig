@@ -10,12 +10,28 @@
   <form action="{{ base_url }}/admin/settings/edit" method="post">
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
     <input type="hidden" name="admin_id" value="{{ admin_id }}">
-    <div class="image">
-      <img src="{{ base_url }}/public/images/{{ image }}" alt="Profile Image" class="current-image">
-      <label for="image"><ion-icon name="camera"></ion-icon></label>
-      <input type="hidden" name="image" id="image" value="{{ image }}">
+    <div id="box-profile-image">
+      <img id="preview-profile-image" src="{{ base_url }}/public/images/{{ image }}" alt="Profile Image"
+        data-base-url="{{ base_url }}">
+      <label id="label-profile-image"><ion-icon name="camera"></ion-icon></label>
+      <input type="hidden" name="image" id="profile-image" value="{{ image }}">
     </div>
-    <div class="avatars"></div>
+    <div id="avatars" class="hide">
+      <img src="{{ base_url }}/public/images/avatar_1.png" alt="Avatar 1" data-image="avatar_1.png">
+      <img src="{{ base_url }}/public/images/avatar_2.png" alt="Avatar 2" data-image="avatar_2.png">
+      <img src="{{ base_url }}/public/images/avatar_3.png" alt="Avatar 3" data-image="avatar_3.png">
+      <img src="{{ base_url }}/public/images/avatar_4.png" alt="Avatar 4" data-image="avatar_4.png">
+      <img src="{{ base_url }}/public/images/avatar_5.png" alt="Avatar 5" data-image="avatar_5.png">
+      <img src="{{ base_url }}/public/images/avatar_6.png" alt="Avatar 6" data-image="avatar_6.png">
+      <img src="{{ base_url }}/public/images/avatar_7.png" alt="Avatar 7" data-image="avatar_7.png">
+      <img src="{{ base_url }}/public/images/avatar_8.png" alt="Avatar 8" data-image="avatar_8.png">
+      <img src="{{ base_url }}/public/images/avatar_9.png" alt="Avatar 9" data-image="avatar_9.png">
+      <img src="{{ base_url }}/public/images/avatar_10.png" alt="Avatar 10" data-image="avatar_10.png">
+      <img src="{{ base_url }}/public/images/avatar_11.png" alt="Avatar 11" data-image="avatar_11.png">
+      <img src="{{ base_url }}/public/images/avatar_12.png" alt="Avatar 12" data-image="avatar_12.png">
+      <img src="{{ base_url }}/public/images/avatar_13.png" alt="Avatar 13" data-image="avatar_13.png">
+      <img src="{{ base_url }}/public/images/avatar_14.png" alt="Avatar 14" data-image="avatar_14.png">
+    </div>
     <div class="input-field">
       <label for="first_name">Nome:</label>
       <input type="text" name="first_name" id="first_name" placeholder="Seu nome"
