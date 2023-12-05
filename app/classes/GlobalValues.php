@@ -78,6 +78,12 @@ class GlobalValues
   const USER_TOKEN = 'user_token';
 
   /**
+   * Name of the indentifier id.
+   */
+  const ADMIN_ID_IDENTIFIER = 'admin_id_idetifier';
+  const USER_ID_IDENTIFIER = 'user_id_identifier';
+
+  /**
    * Name of the session message.
    */
   const SESSION_MESSAGE_CONTENT = 'session_message_content';

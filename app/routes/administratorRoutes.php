@@ -84,6 +84,12 @@ $app->group('/admin', function (RouteCollectorProxy $group) use ($administratorC
     return verifyCSRFToken($request, $handler);
   });
 
+  $group->post('/settings/edit', function ($request, $response, $args) use ($administratorController) {
+    return $administratorController->processUpdateRequest($request, $response, $args);
+  })->add(function ($request, $handler) {
+    return verifyCSRFToken($request, $handler);
+  });
+
   $group->post('/course/create', function ($request, $response, $args) use ($courseController) {
     return $courseController->processStoreRequest($request, $response, $args);
   })->add(function ($request, $handler) {

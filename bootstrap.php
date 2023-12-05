@@ -22,6 +22,8 @@ if (!isset($_SESSION)) {
   session_start();
 }
 
+$_SESSION[GlobalValues::ADMIN_ID_IDENTIFIER] ??= '';
+
 if (!isset($_SESSION[GlobalValues::CSRF_TOKEN])) {
   $csrf_token = bin2hex(random_bytes(32));
   $_SESSION[GlobalValues::CSRF_TOKEN] = $csrf_token;

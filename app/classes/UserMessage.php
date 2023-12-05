@@ -11,6 +11,8 @@ use app\classes\GlobalValues;
  */
 class UserMessage
 {
+  const ERR_FAIL_UPDATE = 'Falha ao atualizar dados do usuário.';
+
   // Error messages related to invalid csrf token
   const INVALID_CSRF_TOKEN = 'Houve um problema de segurança na sua solicitação.';
 
@@ -29,9 +31,8 @@ class UserMessage
   const ERR_INVALID_EMAIL = 'E-mail não pode ser vazio e deve ter um formato válido.';
   const ERR_INVALID_PASS = 'Senha incorreta e/ou o formato é inválido (deve ter de ' . GlobalValues::MINIMUM_PASSWORD_SIZE . ' a ' . GlobalValues::MAXIMUM_PASSWORD_SIZE . ' caracteres).';
   const ERR_INVALID_PASS_CONFIRMATION = 'A confirmação da senha não corresponde.';
-  const ERR_INVALID_IMAGE_TYPE = 'Tipo de imagem inválido. Somente jpg, jpeg ou png.';
-  const ERR_INVALID_IMAGE_LENGTH = 'Tamanho da imagem inválido. Deve ter no máximo ' . GlobalValues::MAXIMUM_SIZE_OF_THE_IMAGE_BLOB . ' bytes.';
-  const ERR_INVALID_DESCRIPTION = 'Descrição inválida. Somente texto com no máximo ' . GlobalValues::MAXIMUM_SIZE_OF_THE_DESCRIPTION . 'caracteres.';
+  const ERR_INVALID_IMAGE_TYPE = 'A imagem escolhida para o perfil não existe.';
+  const ERR_INVALID_DESCRIPTION = 'Descrição inválida. Somente texto com no máximo ' . GlobalValues::MAXIMUM_SIZE_OF_THE_DESCRIPTION . ' caracteres.';
 
   // Error message related to comment
   const ERR_INVALID_COMMENT = 'Comentário inválido. Somente texto com no máximo ' . GlobalValues::MAXIMUM_SIZE_OF_THE_COMMENT . ' caracteres.';
@@ -39,4 +40,5 @@ class UserMessage
   // successes messages to users
   const SUCCESS_LOGIN = 'Login feito com sucesso!';
   const SUCCESS_REGISTER = 'Registro na plataforma feito com sucesso!';
+  const SUCCESS_UPDATE = 'Atualização dos dados feita com sucesso!';
 }

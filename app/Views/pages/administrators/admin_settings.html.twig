@@ -20,28 +20,38 @@
       <label for="first_name">Nome:</label>
       <input type="text" name="first_name" id="first_name" placeholder="Seu nome"
         class="{{ err_first_name ? 'input-error' : '' }}" value="{{ first_name }}">
+      <ion-icon name="person"></ion-icon>
     </div>
     <div class="input-field">
       <label for="last_name">Sobrenome:</label>
       <input type="text" name="last_name" id="last_name" placeholder="Seu sobrenome"
         class="{{ err_last_name ? 'input-error' : '' }}" value="{{ last_name }}">
+      <ion-icon name="person"></ion-icon>
     </div>
     <div class="input-field">
       <label for="email">Email:</label>
       <input type="email" name="email" id="email" placeholder="Seu sobrenome"
         class="{{ err_email ? 'input-error' : '' }}" value="{{ email }}" disabled>
+      <ion-icon name="mail"></ion-icon>
     </div>
     <div class="input-field">
-      <label for="password">Email:</label>
-      <input type="password" name="password" id="password" placeholder="Seu email"
+      <label for="password">Nova Senha:</label>
+      <input type="password" name="password" id="password" placeholder="Sua nova senha"
         class="{{ err_password ? 'input-error' : '' }}" value="{{ password }}">
+      <ion-icon name="key"></ion-icon>
+    </div>
+    <div class="input-field">
+      <label for="password_confirmation">Confirme Nova Senha:</label>
+      <input type="password" name="password_confirmation" id="password_confirmation" placeholder="Sua nova senha"
+        class="{{ err_password_confirmation ? 'input-error' : '' }}" value="{{ password_confirmation }}">
+      <ion-icon name="key"></ion-icon>
     </div>
     <div class="input-field">
       <label for="description">Descrição</label>
-      <textarea name="description" id="description" class="{{ err_description ? 'input-error' : '' }}"
-        rows="10">{{ description }}</textarea>
+      <textarea name="description" id="description" class="{{ err_description ? 'input-error' : '' }}" rows="10"
+        placeholder="Fale um pouco sobre você...">{{ description }}</textarea>
     </div>
-    <button class="btn btn-color" type="button">Atualizar Dados</button>
+    <button class="btn btn-color" type="submit">Atualizar Dados</button>
   </form>
 </div>
 {% endblock %}
