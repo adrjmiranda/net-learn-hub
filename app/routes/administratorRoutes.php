@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/../functions/authentication.php';
+require_once __DIR__.'/../functions/authentication.php';
 
 use app\Controllers\CourseController;
 use Slim\Routing\RouteCollectorProxy;
@@ -75,6 +75,10 @@ $app->group('/admin', function (RouteCollectorProxy $group) use ($administratorC
 
   $group->get('/course/quizzes/questions/edit/{course_id}/{quiz_id}/{question_id}', function ($request, $response, $args) use ($courseController) {
     return $courseController->editQuestion($request, $response, $args);
+  });
+
+  $group->get('/users/dashboard', function ($request, $response, $args) use ($administratorController) {
+    return $administratorController->userDashboard($request, $response, $args);
   });
 
   // send form

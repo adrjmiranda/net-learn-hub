@@ -1,0 +1,24 @@
+{% extends '/components/administrators/base.html.twig' %}
+{% block content %}
+<div id="user-dashboard" class="content">
+  {% if session_message %}
+  <p class="session-message {{ message_type }}">
+    {{ session_message }}
+  </p>
+  {% endif %}
+  {% if users %}
+  <ul id="resources">
+    {% for user in users %}
+    <li>{{ user.first_name }}
+      <span class="actions">
+        <a href="#" data-modal="delete-user" data-id="{{ user.id }}" class="btn btn-danger"><ion-icon
+            name="trash"></ion-icon></a>
+      </span>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p>Ainda não há usuários cadastrados na plataforma!</p>
+  {% endif %}
+</div>
+{% endblock %}
