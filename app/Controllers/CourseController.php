@@ -18,15 +18,13 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Views\Twig;
 
-class CourseController extends Controller
-{
+class CourseController extends Controller {
   protected ResponseFactoryInterface $responseFactory;
   protected Twig $twig;
   private array $data;
   private string $path;
 
-  public function __construct(ResponseFactoryInterface $responseFactory, Twig $twig, string $baseURL, string $csrfToken)
-  {
+  public function __construct(ResponseFactoryInterface $responseFactory, Twig $twig, string $baseURL, string $csrfToken) {
     $this->responseFactory = $responseFactory;
     $this->twig = $twig;
 
@@ -39,8 +37,7 @@ class CourseController extends Controller
     $this->data['csrf_token'] = $csrfToken;
   }
 
-  public function create(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
-  {
+  public function create(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface {
     $this->path .= 'create_course.html.twig';
     $this->data['page_title'] = 'NetLearnHub | Aprenda de graça TI';
     $this->data['title'] = '';
@@ -56,8 +53,7 @@ class CourseController extends Controller
     return $this->twig->render($response, $this->path, $this->data);
   }
 
-  public function processStoreRequest(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
-  {
+  public function processStoreRequest(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface {
     $params = $request->getParsedBody();
 
     $uploadedImage = $_FILES['image'] ?? [];
@@ -81,21 +77,21 @@ class CourseController extends Controller
     $this->data['session_message'] = '';
     $this->data['message_type'] = GlobalValues::TYPE_MSG_ERROR;
 
-    if ($_SESSION[GlobalValues::CSRF_TOKEN_IS_INVALID]) {
+    if($_SESSION[GlobalValues::CSRF_TOKEN_IS_INVALID]) {
       $message = UserMessage::INVALID_CSRF_TOKEN;
-    } elseif ($uploadedImage === null || $uploadedImage['error'] !== UPLOAD_ERR_OK || !in_array($imageType, $imagesTypes)) {
+    } elseif($uploadedImage === null || $uploadedImage['error'] !== UPLOAD_ERR_OK || !in_array($imageType, $imagesTypes)) {
       $this->data['err_image'] = true;
       $message = CourseMessage::ERR_INVALID_IMAGE_TYPE;
-    } elseif (!isValidBlob(file_get_contents($uploadedImage['tmp_name']), 'image')) {
+    } elseif(!isValidBlob(file_get_contents($uploadedImage['tmp_name']), 'image')) {
       $this->data['err_image'] = true;
       $message = CourseMessage::ERR_INVALID_IMAGE_LENGTH;
-    } elseif (!isValidText($title, 'title')) {
+    } elseif(!isValidText($title, 'title')) {
       $this->data['err_title'] = true;
       $message = CourseMessage::ERR_INVALID_TITLE;
-    } elseif (!isValidWorkLoad($workload)) {
+    } elseif(!isValidWorkLoad($workload)) {
       $this->data['err_workload'] = true;
       $message = CourseMessage::ERR_INVALID_WORKLOAD;
-    } elseif (!isValidText($description, 'description')) {
+    } elseif(!isValidText($description, 'description')) {
       $this->data['err_description'] = true;
       $message = CourseMessage::ERR_INVALID_DESCRIPTION;
     } else {
@@ -107,10 +103,10 @@ class CourseController extends Controller
       $courseByTitle = $this->model->getByTitle($title);
       $image = file_get_contents($uploadedImage['tmp_name']);
 
-      if ($courseByTitle) {
+      if($courseByTitle) {
         $this->data['err_title'] = true;
         $message = CourseMessage::ERR_TITLE_ALREADY_EXISTS;
-      } elseif ($this->model->store($image, $title, $workload, $description)) {
+      } elseif($this->model->store($image, $title, $workload, $description)) {
         $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::SUCCESS_CREATE_COURSE;
         $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_SUCCESS;
         return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
@@ -124,16 +120,15 @@ class CourseController extends Controller
     return $this->twig->render($response, $this->path, $this->data);
   }
 
-  public function edit(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
-  {
-    $id = (int) ($args['id'] ?? '');
+  public function edit(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface {
+    $id = (int)($args['id'] ?? '');
 
-    if (!isValidId($id)) {
+    if(!isValidId($id)) {
       return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
     } else {
       $courseById = $this->model->getById($id);
 
-      if (empty($courseById)) {
+      if(empty($courseById)) {
         return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
       } else {
         $this->path .= 'edit_course.html.twig';
@@ -154,12 +149,11 @@ class CourseController extends Controller
     return $this->twig->render($response, $this->path, $this->data);
   }
 
-  public function processUpdateRequest(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
-  {
+  public function processUpdateRequest(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface {
     $params = $request->getParsedBody();
 
     $uploadedImage = $_FILES['image'] ?? [];
-    $id = (int) ($params['id'] ?? '');
+    $id = (int)($params['id'] ?? '');
     $title = $params['title'];
     $workload = $params['workload'];
     $description = $params['description'];
@@ -181,20 +175,20 @@ class CourseController extends Controller
     $this->data['session_message'] = '';
     $this->data['message_type'] = GlobalValues::TYPE_MSG_ERROR;
 
-    if ($_SESSION[GlobalValues::CSRF_TOKEN_IS_INVALID]) {
+    if($_SESSION[GlobalValues::CSRF_TOKEN_IS_INVALID]) {
       $message = UserMessage::INVALID_CSRF_TOKEN;
     } else {
       $courseById = $this->model->getById($id);
 
-      if (empty($courseById)) {
+      if(empty($courseById)) {
         $message = CourseMessage::ERR_COURSE_INEXISTENT;
-      } elseif (!isValidText($title, 'title')) {
+      } elseif(!isValidText($title, 'title')) {
         $this->data['err_title'] = true;
         $message = CourseMessage::ERR_INVALID_TITLE;
-      } elseif (!isValidWorkLoad($workload)) {
+      } elseif(!isValidWorkLoad($workload)) {
         $this->data['err_workload'] = true;
         $message = CourseMessage::ERR_INVALID_WORKLOAD;
-      } elseif (!isValidText($description, 'description')) {
+      } elseif(!isValidText($description, 'description')) {
         $this->data['err_description'] = true;
         $message = CourseMessage::ERR_INVALID_DESCRIPTION;
       } else {
@@ -205,11 +199,11 @@ class CourseController extends Controller
 
         $image = null;
 
-        if ($uploadedImage['size'] !== 0 || $uploadedImage['error'] !== UPLOAD_ERR_NO_FILE) {
-          if ($uploadedImage['error'] !== UPLOAD_ERR_OK || !in_array($imageType, $imagesTypes)) {
+        if($uploadedImage['size'] !== 0 || $uploadedImage['error'] !== UPLOAD_ERR_NO_FILE) {
+          if($uploadedImage['error'] !== UPLOAD_ERR_OK || !in_array($imageType, $imagesTypes)) {
             $this->data['err_image'] = true;
             $message = CourseMessage::ERR_INVALID_IMAGE_TYPE;
-          } elseif (!isValidBlob(file_get_contents($uploadedImage['tmp_name']), 'image')) {
+          } elseif(!isValidBlob(file_get_contents($uploadedImage['tmp_name']), 'image')) {
             $this->data['err_image'] = true;
             $message = CourseMessage::ERR_INVALID_IMAGE_LENGTH;
           } else {
@@ -217,8 +211,8 @@ class CourseController extends Controller
           }
         }
 
-        if ($this->data['err_image'] === false) {
-          if ($this->model->update($id, $image, $title, $workload, $description)) {
+        if($this->data['err_image'] === false) {
+          if($this->model->update($id, $image, $title, $workload, $description)) {
             $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::SUCCESS_UPDATE_COURSE;
             $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_SUCCESS;
             return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
@@ -234,13 +228,12 @@ class CourseController extends Controller
     return $this->twig->render($response, $this->path, $this->data);
   }
 
-  public function processDeleteRequest(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
-  {
-    $courseId = (int) ($args['course_id'] ?? '');
+  public function processDeleteRequest(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface {
+    $courseId = (int)($args['course_id'] ?? '');
 
     $courseById = $this->model->getById($courseId);
 
-    if (empty($courseById)) {
+    if(empty($courseById)) {
       $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::ERR_COURSE_INEXISTENT;
       $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_ERROR;
       return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
@@ -253,7 +246,7 @@ class CourseController extends Controller
       $topicModel = new TopicModel();
       $userCourseRelationModel = new UserCourseRelationModel();
 
-      if (
+      if(
         $alternativeModel->delete($courseId, 'course_id') &&
         $questionModel->delete($courseId, 'course_id') &&
         $userQuizRelationModel->delete($courseId, 'course_id') &&
@@ -262,7 +255,7 @@ class CourseController extends Controller
         $topicModel->delete($courseId, 'course_id') &&
         $userCourseRelationModel->delete($courseId, 'course_id')
       ) {
-        if ($this->model->delete($courseId, 'id')) {
+        if($this->model->delete($courseId, 'id')) {
           $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::SUCCESS_DELETE_COURSE;
           $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_SUCCESS;
         } else {
@@ -278,9 +271,8 @@ class CourseController extends Controller
     return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
   }
 
-  public function topics(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
-  {
-    $courseId = (int) ($args['course_id'] ?? '');
+  public function topics(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface {
+    $courseId = (int)($args['course_id'] ?? '');
 
     $this->path .= 'course_topics.html.twig';
     $this->data['page_title'] = 'NetLearnHub | Aprenda de graça TI';
@@ -290,12 +282,12 @@ class CourseController extends Controller
     $this->data['session_message'] = $_SESSION[GlobalValues::SESSION_MESSAGE] ?? '';
     $this->data['message_type'] = $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] ?? '';
 
-    if (!isValidId($courseId)) {
+    if(!isValidId($courseId)) {
       return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
     } else {
       $courseById = $this->model->getById($courseId);
 
-      if (empty($courseById)) {
+      if(empty($courseById)) {
         return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
       } else {
         $topicModel = new TopicModel();
@@ -311,16 +303,15 @@ class CourseController extends Controller
     return $this->twig->render($response, $this->path, $this->data);
   }
 
-  public function createTopic(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
-  {
-    $courseId = (int) ($args['course_id'] ?? '');
+  public function createTopic(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface {
+    $courseId = (int)($args['course_id'] ?? '');
 
-    if (!isValidId($courseId)) {
+    if(!isValidId($courseId)) {
       return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
     } else {
       $courseById = $this->model->getById($courseId);
 
-      if (empty($courseById)) {
+      if(empty($courseById)) {
         return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
       } else {
         $this->path .= 'create_topic.html.twig';
@@ -339,11 +330,10 @@ class CourseController extends Controller
     return $this->twig->render($response, $this->path, $this->data);
   }
 
-  public function processTopicStoreRequest(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
-  {
+  public function processTopicStoreRequest(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface {
     $params = $request->getParsedBody();
 
-    $courseId = (int) ($params['course_id'] ?? '');
+    $courseId = (int)($params['course_id'] ?? '');
     $title = $params['title'];
     $content = $params['content'];
 
@@ -357,12 +347,12 @@ class CourseController extends Controller
     $this->data['session_message'] = '';
     $this->data['message_type'] = GlobalValues::TYPE_MSG_ERROR;
 
-    if ($_SESSION[GlobalValues::CSRF_TOKEN_IS_INVALID]) {
+    if($_SESSION[GlobalValues::CSRF_TOKEN_IS_INVALID]) {
       $message = UserMessage::INVALID_CSRF_TOKEN;
-    } elseif (!isValidText($title, 'title')) {
+    } elseif(!isValidText($title, 'title')) {
       $this->data['err_title'] = true;
       $message = CourseMessage::ERR_INVALID_TITLE;
-    } elseif (!isValidBlob($content, 'document')) {
+    } elseif(!isValidBlob($content, 'document')) {
       $this->data['err_content'] = true;
       $message = CourseMessage::ERR_INVALID_TOPIC_CONTENT;
     } else {
@@ -371,19 +361,19 @@ class CourseController extends Controller
 
       $courseById = $this->model->getById($courseId);
 
-      if (empty($courseById)) {
+      if(empty($courseById)) {
         $message = CourseMessage::ERR_COURSE_INEXISTENT;
       } else {
         $topicModel = new TopicModel();
         $topicByTitleAndCourseId = $topicModel->getByTitleAndCourseId($title, $courseId);
 
-        if ($topicByTitleAndCourseId) {
+        if($topicByTitleAndCourseId) {
           $this->data['err_title'] = true;
           $message = CourseMessage::ERR_TITLE_ALREADY_EXISTS;
-        } elseif ($topicModel->store($title, $content, $courseId)) {
+        } elseif($topicModel->store($title, $content, $courseId)) {
           $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::SUCCESS_CREATE_TOPIC;
           $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_SUCCESS;
-          return $response->withHeader('Location', '/admin/course/topics/' . $courseId)->withHeader('Allow', 'GET')->withStatus(302);
+          return $response->withHeader('Location', '/admin/course/topics/'.$courseId)->withHeader('Allow', 'GET')->withStatus(302);
         } else {
           $message = CourseMessage::ERR_FAIL_CREATE_TOPIC;
         }
@@ -395,13 +385,12 @@ class CourseController extends Controller
     return $this->twig->render($response, $this->path, $this->data);
   }
 
-  public function editTopic(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
-  {
+  public function editTopic(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface {
 
-    $courseId = (int) ($args['course_id'] ?? '');
-    $topicId = (int) ($args['topic_id'] ?? '');
+    $courseId = (int)($args['course_id'] ?? '');
+    $topicId = (int)($args['topic_id'] ?? '');
 
-    if (!isValidId($courseId) || !isValidId($topicId)) {
+    if(!isValidId($courseId) || !isValidId($topicId)) {
       return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
     } else {
       $courseById = $this->model->getById($courseId);
@@ -409,7 +398,7 @@ class CourseController extends Controller
 
       $topicByIdAndCourseId = $topicModel->getByIdAndCourseId($topicId, $courseId);
 
-      if (empty($courseById) || empty($topicByIdAndCourseId)) {
+      if(empty($courseById) || empty($topicByIdAndCourseId)) {
         return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
       } else {
         $title = $topicByIdAndCourseId->title;
@@ -432,12 +421,11 @@ class CourseController extends Controller
     return $this->twig->render($response, $this->path, $this->data);
   }
 
-  public function processTopicUpdateRequest(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
-  {
+  public function processTopicUpdateRequest(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface {
     $params = $request->getParsedBody();
 
-    $courseId = (int) ($params['course_id'] ?? '');
-    $topicId = (int) ($params['topic_id'] ?? '');
+    $courseId = (int)($params['course_id'] ?? '');
+    $topicId = (int)($params['topic_id'] ?? '');
     $title = $params['title'];
     $content = $params['content'];
 
@@ -452,7 +440,7 @@ class CourseController extends Controller
     $this->data['session_message'] = '';
     $this->data['message_type'] = GlobalValues::TYPE_MSG_ERROR;
 
-    if ($_SESSION[GlobalValues::CSRF_TOKEN_IS_INVALID]) {
+    if($_SESSION[GlobalValues::CSRF_TOKEN_IS_INVALID]) {
       $message = UserMessage::INVALID_CSRF_TOKEN;
     } else {
       $courseById = $this->model->getById($courseId);
@@ -461,27 +449,27 @@ class CourseController extends Controller
       $topicByIdAndCourseId = $topicModel->getByIdAndCourseId($topicId, $courseId);
       $topicByTitleAndCourseId = $topicModel->getByTitleAndCourseId($title, $courseId);
 
-      if (empty($courseById) || empty($topicByIdAndCourseId)) {
+      if(empty($courseById) || empty($topicByIdAndCourseId)) {
         $message = CourseMessage::ERR_TOPIC_INEXISTENT;
-      } elseif (!isValidText($title, 'title')) {
+      } elseif(!isValidText($title, 'title')) {
         $this->data['course_name'] = $courseById->title;
 
         $this->data['err_title'] = true;
         $message = CourseMessage::ERR_INVALID_TITLE;
-      } elseif ($topicByTitleAndCourseId) {
+      } elseif($topicByTitleAndCourseId) {
         $this->data['err_title'] = true;
         $message = CourseMessage::ERR_TITLE_ALREADY_EXISTS;
-      } elseif (!isValidBlob($content, 'document')) {
+      } elseif(!isValidBlob($content, 'document')) {
         $this->data['err_content'] = true;
         $message = CourseMessage::ERR_INVALID_TOPIC_CONTENT;
       } else {
         $this->data['err_title'] = false;
         $this->data['err_content'] = false;
 
-        if ($topicModel->update($topicId, $title, $content)) {
+        if($topicModel->update($topicId, $title, $content)) {
           $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::SUCCESS_UPDATE_TOPIC;
           $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_SUCCESS;
-          return $response->withHeader('Location', '/admin/course/topics/' . $courseId)->withHeader('Allow', 'GET')->withStatus(302);
+          return $response->withHeader('Location', '/admin/course/topics/'.$courseId)->withHeader('Allow', 'GET')->withStatus(302);
         } else {
           $message = CourseMessage::ERR_FAIL_UPDATE_TOPIC;
         }
@@ -493,12 +481,11 @@ class CourseController extends Controller
     return $this->twig->render($response, $this->path, $this->data);
   }
 
-  public function processTopicDeleteRequest(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
-  {
-    $courseId = (int) ($args['course_id'] ?? '');
-    $topicId = (int) ($args['topic_id'] ?? '');
+  public function processTopicDeleteRequest(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface {
+    $courseId = (int)($args['course_id'] ?? '');
+    $topicId = (int)($args['topic_id'] ?? '');
 
-    if (!isValidId($courseId) || !isValidId($topicId)) {
+    if(!isValidId($courseId) || !isValidId($topicId)) {
       $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::ERR_COURSE_INEXISTENT;
       $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_ERROR;
       return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
@@ -508,12 +495,12 @@ class CourseController extends Controller
 
       $topicByIdAndCourseId = $topicModel->getByIdAndCourseId($topicId, $courseId);
 
-      if (empty($courseById) || empty($topicByIdAndCourseId)) {
+      if(empty($courseById) || empty($topicByIdAndCourseId)) {
         $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::ERR_TOPIC_INEXISTENT;
         $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_ERROR;
         return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
       } else {
-        if ($topicModel->delete($topicId, 'id')) {
+        if($topicModel->delete($topicId, 'id')) {
           $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::SUCCESS_DELETE_TOPIC;
           $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_SUCCESS;
         } else {
@@ -523,12 +510,11 @@ class CourseController extends Controller
       }
     }
 
-    return $response->withHeader('Location', '/admin/course/topics/' . $courseId)->withHeader('Allow', 'GET')->withStatus(302);
+    return $response->withHeader('Location', '/admin/course/topics/'.$courseId)->withHeader('Allow', 'GET')->withStatus(302);
   }
 
-  public function quizzes(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
-  {
-    $courseId = (int) ($args['course_id'] ?? '');
+  public function quizzes(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface {
+    $courseId = (int)($args['course_id'] ?? '');
 
     $this->path .= 'course_quizzes.html.twig';
     $this->data['page_title'] = 'NetLearnHub | Aprenda de graça TI';
@@ -538,12 +524,12 @@ class CourseController extends Controller
     $this->data['session_message'] = $_SESSION[GlobalValues::SESSION_MESSAGE] ?? '';
     $this->data['message_type'] = $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] ?? '';
 
-    if (!isValidId($courseId)) {
+    if(!isValidId($courseId)) {
       return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
     } else {
       $courseById = $this->model->getById($courseId);
 
-      if (empty($courseById)) {
+      if(empty($courseById)) {
         return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
       } else {
         $quizModel = new QuizModel();
@@ -559,16 +545,15 @@ class CourseController extends Controller
     return $this->twig->render($response, $this->path, $this->data);
   }
 
-  public function createQuiz(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
-  {
-    $courseId = (int) ($args['course_id'] ?? '');
+  public function createQuiz(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface {
+    $courseId = (int)($args['course_id'] ?? '');
 
-    if (!isValidId($courseId)) {
+    if(!isValidId($courseId)) {
       return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
     } else {
       $courseById = $this->model->getById($courseId);
 
-      if (empty($courseById)) {
+      if(empty($courseById)) {
         return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
       } else {
         $this->path .= 'create_quiz.html.twig';
@@ -585,11 +570,10 @@ class CourseController extends Controller
     return $this->twig->render($response, $this->path, $this->data);
   }
 
-  public function processQuizStoreRequest(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
-  {
+  public function processQuizStoreRequest(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface {
     $params = $request->getParsedBody();
 
-    $courseId = (int) ($params['course_id'] ?? '');
+    $courseId = (int)($params['course_id'] ?? '');
     $title = $params['title'];
 
     $this->path .= 'create_quiz.html.twig';
@@ -600,9 +584,9 @@ class CourseController extends Controller
     $this->data['session_message'] = '';
     $this->data['message_type'] = GlobalValues::TYPE_MSG_ERROR;
 
-    if ($_SESSION[GlobalValues::CSRF_TOKEN_IS_INVALID]) {
+    if($_SESSION[GlobalValues::CSRF_TOKEN_IS_INVALID]) {
       $message = UserMessage::INVALID_CSRF_TOKEN;
-    } elseif (!isValidText($title, 'title')) {
+    } elseif(!isValidText($title, 'title')) {
       $this->data['err_title'] = true;
       $message = CourseMessage::ERR_INVALID_TITLE;
     } else {
@@ -610,19 +594,19 @@ class CourseController extends Controller
 
       $courseById = $this->model->getById($courseId);
 
-      if (empty($courseById)) {
+      if(empty($courseById)) {
         $message = CourseMessage::ERR_COURSE_INEXISTENT;
       } else {
         $quizModel = new QuizModel();
         $quizByTitleAndCourseId = $quizModel->getByTitleAndCourseId($title, $courseId);
 
-        if ($quizByTitleAndCourseId) {
+        if($quizByTitleAndCourseId) {
           $this->data['err_title'] = true;
           $message = CourseMessage::ERR_TITLE_ALREADY_EXISTS;
-        } elseif ($quizModel->store($title, $courseId)) {
+        } elseif($quizModel->store($title, $courseId)) {
           $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::SUCCESS_CREATE_QUIZ;
           $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_SUCCESS;
-          return $response->withHeader('Location', '/admin/course/quizzes/' . $courseId)->withHeader('Allow', 'GET')->withStatus(302);
+          return $response->withHeader('Location', '/admin/course/quizzes/'.$courseId)->withHeader('Allow', 'GET')->withStatus(302);
         } else {
           $message = CourseMessage::ERR_FAIL_CREATE_QUIZ;
         }
@@ -634,13 +618,12 @@ class CourseController extends Controller
     return $this->twig->render($response, $this->path, $this->data);
   }
 
-  public function editQuiz(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
-  {
+  public function editQuiz(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface {
 
-    $courseId = (int) ($args['course_id'] ?? '');
-    $quizId = (int) ($args['quiz_id'] ?? '');
+    $courseId = (int)($args['course_id'] ?? '');
+    $quizId = (int)($args['quiz_id'] ?? '');
 
-    if (!isValidId($courseId) || !isValidId($quizId)) {
+    if(!isValidId($courseId) || !isValidId($quizId)) {
       return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
     } else {
       $courseById = $this->model->getById($courseId);
@@ -648,7 +631,7 @@ class CourseController extends Controller
 
       $quizByTitleAndCourseId = $quizModel->getByIdAndCourseId($quizId, $courseId);
 
-      if (empty($courseById) || empty($quizByTitleAndCourseId)) {
+      if(empty($courseById) || empty($quizByTitleAndCourseId)) {
         return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
       } else {
         $title = $quizByTitleAndCourseId->title;
@@ -668,12 +651,11 @@ class CourseController extends Controller
     return $this->twig->render($response, $this->path, $this->data);
   }
 
-  public function processQuizUpdateRequest(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
-  {
+  public function processQuizUpdateRequest(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface {
     $params = $request->getParsedBody();
 
-    $courseId = (int) ($params['course_id'] ?? '');
-    $quizId = (int) ($params['quiz_id'] ?? '');
+    $courseId = (int)($params['course_id'] ?? '');
+    $quizId = (int)($params['quiz_id'] ?? '');
     $title = $params['title'];
 
     $this->path .= 'edit_quiz.html.twig';
@@ -685,7 +667,7 @@ class CourseController extends Controller
     $this->data['session_message'] = '';
     $this->data['message_type'] = GlobalValues::TYPE_MSG_ERROR;
 
-    if ($_SESSION[GlobalValues::CSRF_TOKEN_IS_INVALID]) {
+    if($_SESSION[GlobalValues::CSRF_TOKEN_IS_INVALID]) {
       $message = UserMessage::INVALID_CSRF_TOKEN;
     } else {
       $courseById = $this->model->getById($courseId);
@@ -694,24 +676,24 @@ class CourseController extends Controller
       $quizByIdAndCourseId = $quizModel->getByIdAndCourseId($quizId, $courseId);
       $quizByTitleAndCourseId = $quizModel->getByTitleAndCourseId($title, $courseId);
 
-      if (empty($courseById) || empty($quizByIdAndCourseId)) {
+      if(empty($courseById) || empty($quizByIdAndCourseId)) {
         $message = CourseMessage::ERR_QUIZ_INEXISTENT;
-      } elseif (!isValidText($title, 'title')) {
+      } elseif(!isValidText($title, 'title')) {
         $this->data['course_name'] = $courseById->title;
 
         $this->data['err_title'] = true;
         $message = CourseMessage::ERR_INVALID_TITLE;
-      } elseif ($quizByTitleAndCourseId) {
+      } elseif($quizByTitleAndCourseId) {
         $this->data['err_title'] = true;
         $message = CourseMessage::ERR_TITLE_ALREADY_EXISTS;
       } else {
         $this->data['err_title'] = false;
         $this->data['err_content'] = false;
 
-        if ($quizModel->update($quizId, $title)) {
+        if($quizModel->update($quizId, $title)) {
           $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::SUCCESS_UPDATE_QUIZ;
           $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_SUCCESS;
-          return $response->withHeader('Location', '/admin/course/quizzes/' . $courseId)->withHeader('Allow', 'GET')->withStatus(302);
+          return $response->withHeader('Location', '/admin/course/quizzes/'.$courseId)->withHeader('Allow', 'GET')->withStatus(302);
         } else {
           $message = CourseMessage::ERR_FAIL_UPDATE_QUIZ;
         }
@@ -723,12 +705,11 @@ class CourseController extends Controller
     return $this->twig->render($response, $this->path, $this->data);
   }
 
-  public function processQuizDeleteRequest(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
-  {
-    $courseId = (int) ($args['course_id'] ?? '');
-    $quizId = (int) ($args['quiz_id'] ?? '');
+  public function processQuizDeleteRequest(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface {
+    $courseId = (int)($args['course_id'] ?? '');
+    $quizId = (int)($args['quiz_id'] ?? '');
 
-    if (!isValidId($courseId) || !isValidId($quizId)) {
+    if(!isValidId($courseId) || !isValidId($quizId)) {
       $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::ERR_QUIZ_INEXISTENT;
       $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_ERROR;
       return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
@@ -738,7 +719,7 @@ class CourseController extends Controller
       $courseById = $this->model->getById($courseId);
       $quizByIdAndCourseId = $quizModel->getByIdAndCourseId($quizId, $courseId);
 
-      if (empty($courseById) || empty($quizByIdAndCourseId)) {
+      if(empty($courseById) || empty($quizByIdAndCourseId)) {
         $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::ERR_QUIZ_INEXISTENT;
         $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_ERROR;
         return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
@@ -746,11 +727,11 @@ class CourseController extends Controller
         $questionModel = new QuestionModel();
         $userQuizRelationModel = new UserQuizRelationModel();
 
-        if (
+        if(
           $questionModel->delete($courseId, 'course_id') &&
           $userQuizRelationModel->delete($courseId, 'course_id')
         ) {
-          if ($quizModel->delete($quizId, 'id')) {
+          if($quizModel->delete($quizId, 'id')) {
             $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::SUCCESS_DELETE_QUIZ;
             $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_SUCCESS;
           } else {
@@ -764,21 +745,20 @@ class CourseController extends Controller
       }
     }
 
-    return $response->withHeader('Location', '/admin/course/quizzes/' . $courseId)->withHeader('Allow', 'GET')->withStatus(302);
+    return $response->withHeader('Location', '/admin/course/quizzes/'.$courseId)->withHeader('Allow', 'GET')->withStatus(302);
   }
 
-  public function processVisibilityRequest(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
-  {
-    $courseId = (int) ($args['course_id'] ?? '');
+  public function processVisibilityRequest(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface {
+    $courseId = (int)($args['course_id'] ?? '');
 
     $courseById = $this->model->getById($courseId);
 
 
-    if (!isValidId($courseId)) {
+    if(!isValidId($courseId)) {
       $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::ERR_COURSE_INEXISTENT;
       $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_ERROR;
       return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
-    } elseif (empty($courseById)) {
+    } elseif(empty($courseById)) {
       $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::ERR_COURSE_INEXISTENT;
       $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_ERROR;
       return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
@@ -787,15 +767,15 @@ class CourseController extends Controller
 
       $allTopicByCourseId = $topicModel->getByCourseId($courseId);
 
-      $courseVisibility = (int) $courseById->visibility;
+      $courseVisibility = (int)$courseById->visibility;
 
-      if (empty($allTopicByCourseId)) {
+      if(empty($allTopicByCourseId)) {
         $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::ERR_COURSE_NOT_POSSIBLE_TOPIC;
         $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_ERROR;
       } else {
         $newVisibility = $courseVisibility == 0 ? 1 : 0;
 
-        if ($this->model->setVisibility($courseId, $newVisibility)) {
+        if($this->model->setVisibility($courseId, $newVisibility)) {
           $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::SUCCESS_TO_CHANGE_COURSE_VISIBILITY;
           $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_SUCCESS;
         } else {
@@ -808,10 +788,9 @@ class CourseController extends Controller
     return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
   }
 
-  public function questions(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
-  {
-    $courseId = (int) ($args['course_id'] ?? '');
-    $quizId = (int) ($args['quiz_id'] ?? '');
+  public function questions(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface {
+    $courseId = (int)($args['course_id'] ?? '');
+    $quizId = (int)($args['quiz_id'] ?? '');
 
     $this->path .= 'course_quiz_questions.html.twig';
     $this->data['page_title'] = 'NetLearnHub | Aprenda de graça TI';
@@ -822,7 +801,7 @@ class CourseController extends Controller
     $this->data['session_message'] = $_SESSION[GlobalValues::SESSION_MESSAGE] ?? '';
     $this->data['message_type'] = $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] ?? '';
 
-    if (!isValidId($courseId) || !isValidId($quizId)) {
+    if(!isValidId($courseId) || !isValidId($quizId)) {
       return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
     } else {
       $quizModel = new QuizModel();
@@ -830,7 +809,7 @@ class CourseController extends Controller
       $courseById = $this->model->getById($courseId);
       $quizByIdAndCourseId = $quizModel->getByIdAndCourseId($quizId, $courseId);
 
-      if (empty($courseById) || empty($quizByIdAndCourseId)) {
+      if(empty($courseById) || empty($quizByIdAndCourseId)) {
         return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
       } else {
         $questionModel = new QuestionModel();
@@ -845,12 +824,11 @@ class CourseController extends Controller
     return $this->twig->render($response, $this->path, $this->data);
   }
 
-  public function createQuestion(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
-  {
-    $courseId = (int) ($args['course_id'] ?? '');
-    $quizId = (int) ($args['quiz_id'] ?? '');
+  public function createQuestion(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface {
+    $courseId = (int)($args['course_id'] ?? '');
+    $quizId = (int)($args['quiz_id'] ?? '');
 
-    if (!isValidId($courseId) || !isValidId($quizId)) {
+    if(!isValidId($courseId) || !isValidId($quizId)) {
       $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::ERR_QUIZ_INEXISTENT;
       $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_ERROR;
       return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
@@ -860,20 +838,20 @@ class CourseController extends Controller
 
       $courseById = $this->model->getById($courseId);
       $quizByIdAndCourseId = $quizModel->getByIdAndCourseId($quizId, $courseId);
-      $questionsByQuizId = $questionModel->getByQuizId($quizId);
+      $questionsByQuizId = $questionModel->getByQuizId($quizId) ?? [];
 
       $questionsNumber = count($questionsByQuizId);
 
-      if (empty($courseById) || empty($quizByIdAndCourseId)) {
+      if(empty($courseById) || empty($quizByIdAndCourseId)) {
         $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::ERR_QUIZ_INEXISTENT;
         $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_ERROR;
         return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
       } else {
-        if ($questionsNumber == GlobalValues::MAXIMUM_QUANTITY_QUESTIONS) {
+        if($questionsNumber == GlobalValues::MAXIMUM_QUANTITY_QUESTIONS) {
           $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::ERR_MAXIMUM_QUESTIONS_FOR_ONE_QUIZ;
           $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_ERROR;
-          return $response->withHeader('Location', '/admin/course/quizzes/questions/' . $courseId . '/' . $quizId)->withHeader('Allow', 'GET')->withStatus(302);
-        } elseif ($questionsNumber < GlobalValues::MAXIMUM_QUANTITY_QUESTIONS) {
+          return $response->withHeader('Location', '/admin/course/quizzes/questions/'.$courseId.'/'.$quizId)->withHeader('Allow', 'GET')->withStatus(302);
+        } elseif($questionsNumber < GlobalValues::MAXIMUM_QUANTITY_QUESTIONS) {
           $this->path .= 'create_quiz_question.html.twig';
           $this->data['page_title'] = 'NetLearnHub | Aprenda de graça TI';
           $this->data['course_id'] = $courseById->id;
@@ -902,14 +880,13 @@ class CourseController extends Controller
     return $this->twig->render($response, $this->path, $this->data);
   }
 
-  public function processQuestionStoreRequest(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
-  {
+  public function processQuestionStoreRequest(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface {
     $params = $request->getParsedBody();
 
-    $courseId = (int) ($params['course_id'] ?? '');
-    $quizId = (int) ($params['quiz_id'] ?? '');
+    $courseId = (int)($params['course_id'] ?? '');
+    $quizId = (int)($params['quiz_id'] ?? '');
     $question = $params['question'];
-    $correct = (int) ($params['correct'] ?? '');
+    $correct = (int)($params['correct'] ?? '');
     $alternative1 = $params['alternative_1'];
     $alternative2 = $params['alternative_2'];
     $alternative3 = $params['alternative_3'];
@@ -942,29 +919,29 @@ class CourseController extends Controller
     $courseById = $this->model->getById($courseId);
     $quizByIdAndCourseId = $quizModel->getByIdAndCourseId($quizId, $courseId);
 
-    if ($_SESSION[GlobalValues::CSRF_TOKEN_IS_INVALID]) {
+    if($_SESSION[GlobalValues::CSRF_TOKEN_IS_INVALID]) {
       $message = UserMessage::INVALID_CSRF_TOKEN;
-    } elseif (empty($courseById) || empty($quizByIdAndCourseId)) {
+    } elseif(empty($courseById) || empty($quizByIdAndCourseId)) {
       $message = CourseMessage::ERR_QUIZ_INEXISTENT;
-    } elseif (!isValidText($question, 'question')) {
+    } elseif(!isValidText($question, 'question')) {
       $this->data['err_question'] = true;
       $message = CourseMessage::ERR_INVALID_QUESTION_TEXT;
-    } elseif (!isValidQuestionNumber($correct)) {
+    } elseif(!isValidQuestionNumber($correct)) {
       $this->data['err_correct'] = true;
       $message = CourseMessage::ERR_INVALID_QUESTION_NUMBER;
-    } elseif (!isValidText($alternative1, 'alternative')) {
+    } elseif(!isValidText($alternative1, 'alternative')) {
       $this->data['err_alternative_1'] = true;
       $message = CourseMessage::ERR_INVALID_ALTERNATIVE;
-    } elseif (!isValidText($alternative2, 'alternative')) {
+    } elseif(!isValidText($alternative2, 'alternative')) {
       $this->data['err_alternative_2'] = true;
       $message = CourseMessage::ERR_INVALID_ALTERNATIVE;
-    } elseif (!isValidText($alternative3, 'alternative')) {
+    } elseif(!isValidText($alternative3, 'alternative')) {
       $this->data['err_alternative_3'] = true;
       $message = CourseMessage::ERR_INVALID_ALTERNATIVE;
-    } elseif (!isValidText($alternative4, 'alternative')) {
+    } elseif(!isValidText($alternative4, 'alternative')) {
       $this->data['err_alternative_4'] = true;
       $message = CourseMessage::ERR_INVALID_ALTERNATIVE;
-    } elseif (!isValidText($alternative5, 'alternative')) {
+    } elseif(!isValidText($alternative5, 'alternative')) {
       $this->data['err_alternative_5'] = true;
       $message = CourseMessage::ERR_INVALID_ALTERNATIVE;
     } else {
@@ -978,10 +955,10 @@ class CourseController extends Controller
 
       $alternatives = [];
 
-      for ($i = 1; $i <= 5; $i++) {
-        $variableName = 'alternative' . $i;
+      for($i = 1; $i <= 5; $i++) {
+        $variableName = 'alternative'.$i;
 
-        if (isset($$variableName)) {
+        if(isset($$variableName)) {
           $alternatives[] = [$i, $$variableName];
         }
       }
@@ -989,29 +966,29 @@ class CourseController extends Controller
       $questionModel = new QuestionModel();
       $alternativeModel = new AlternativeModel();
 
-      $questionsByQuizId = $questionModel->getByQuizId($quizId);
+      $questionsByQuizId = $questionModel->getByQuizId($quizId) ?? [];
       $questionsNumber = count($questionsByQuizId);
 
-      if ($questionsNumber == GlobalValues::MAXIMUM_QUANTITY_QUESTIONS) {
+      if($questionsNumber == GlobalValues::MAXIMUM_QUANTITY_QUESTIONS) {
         $message = CourseMessage::ERR_MAXIMUM_QUESTIONS_FOR_ONE_QUIZ;
-      } elseif ($questionsNumber < GlobalValues::MAXIMUM_QUANTITY_QUESTIONS) {
+      } elseif($questionsNumber < GlobalValues::MAXIMUM_QUANTITY_QUESTIONS) {
         $newQuestion = $questionModel->store($question, $correct, $courseId, $quizId);
 
-        if (!empty($newQuestion)) {
+        if(!empty($newQuestion)) {
           $errorSavingAlternative = false;
 
-          foreach ($alternatives as $alternative) {
-            if (!$alternativeModel->store($alternative[1], $alternative[0], $courseId, $newQuestion->id)) {
+          foreach($alternatives as $alternative) {
+            if(!$alternativeModel->store($alternative[1], $alternative[0], $courseId, $newQuestion->id)) {
               $errorSavingAlternative = true;
             }
           }
 
-          if ($errorSavingAlternative) {
+          if($errorSavingAlternative) {
             $message = CourseMessage::ERR_WHEN_SAVING_ONE_OF_ALTERNATIVES;
           } else {
             $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::SUCCESS_CREATE_QUESTION;
             $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_SUCCESS;
-            return $response->withHeader('Location', '/admin/course/quizzes/questions/' . $courseId . '/' . $quizId)->withHeader('Allow', 'GET')->withStatus(302);
+            return $response->withHeader('Location', '/admin/course/quizzes/questions/'.$courseId.'/'.$quizId)->withHeader('Allow', 'GET')->withStatus(302);
           }
         } else {
           $message = CourseMessage::ERR_FAIL_CREATE_QUESTION;
@@ -1024,13 +1001,12 @@ class CourseController extends Controller
     return $this->twig->render($response, $this->path, $this->data);
   }
 
-  public function editQuestion(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
-  {
-    $courseId = (int) ($args['course_id'] ?? '');
-    $quizId = (int) ($args['quiz_id'] ?? '');
-    $questionId = (int) ($args['question_id'] ?? '');
+  public function editQuestion(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface {
+    $courseId = (int)($args['course_id'] ?? '');
+    $quizId = (int)($args['quiz_id'] ?? '');
+    $questionId = (int)($args['question_id'] ?? '');
 
-    if (!isValidId($courseId) || !isValidId($quizId) || !isValidId($questionId)) {
+    if(!isValidId($courseId) || !isValidId($quizId) || !isValidId($questionId)) {
       return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
     } else {
       $quizModel = new QuizModel();
@@ -1041,7 +1017,7 @@ class CourseController extends Controller
       $quizByIdAndCourseId = $quizModel->getByIdAndCourseId($quizId, $courseId);
       $questionByIdAndCourseId = $questionModel->getByIdAndCourseId($questionId, $courseId);
 
-      if (empty($courseById) || empty($quizByIdAndCourseId) || empty($questionByIdAndCourseId)) {
+      if(empty($courseById) || empty($quizByIdAndCourseId) || empty($questionByIdAndCourseId)) {
         return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
       } else {
         $this->path .= 'edit_quiz_question.html.twig';
@@ -1066,8 +1042,8 @@ class CourseController extends Controller
 
         $alternativesByQuestionId = $alternativeModel->getByQuestionId($questionId);
 
-        foreach ($alternativesByQuestionId as $index => $alternative) {
-          $this->data['alternative_' . ($index + 1)] = $alternative->alternative;
+        foreach($alternativesByQuestionId as $index => $alternative) {
+          $this->data['alternative_'.($index + 1)] = $alternative->alternative;
         }
       }
     }
@@ -1075,15 +1051,14 @@ class CourseController extends Controller
     return $this->twig->render($response, $this->path, $this->data);
   }
 
-  public function processQuestionUpdateRequest(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
-  {
+  public function processQuestionUpdateRequest(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface {
     $params = $request->getParsedBody();
 
-    $courseId = (int) ($params['course_id'] ?? '');
-    $quizId = (int) ($params['quiz_id'] ?? '');
-    $questionId = (int) ($params['question_id'] ?? '');
+    $courseId = (int)($params['course_id'] ?? '');
+    $quizId = (int)($params['quiz_id'] ?? '');
+    $questionId = (int)($params['question_id'] ?? '');
     $question = $params['question'];
-    $correct = (int) ($params['correct'] ?? '');
+    $correct = (int)($params['correct'] ?? '');
     $alternative1 = $params['alternative_1'];
     $alternative2 = $params['alternative_2'];
     $alternative3 = $params['alternative_3'];
@@ -1119,29 +1094,29 @@ class CourseController extends Controller
     $quizByIdAndCourseId = $quizModel->getByIdAndCourseId($quizId, $courseId);
     $questionByIdAndQuizId = $questionModel->getByIdAndQuizId($questionId, $quizId);
 
-    if ($_SESSION[GlobalValues::CSRF_TOKEN_IS_INVALID]) {
+    if($_SESSION[GlobalValues::CSRF_TOKEN_IS_INVALID]) {
       $message = UserMessage::INVALID_CSRF_TOKEN;
-    } elseif (empty($courseById) || empty($quizByIdAndCourseId) || empty($questionByIdAndQuizId)) {
+    } elseif(empty($courseById) || empty($quizByIdAndCourseId) || empty($questionByIdAndQuizId)) {
       $message = CourseMessage::ERR_QUESTION_INEXISTENT;
-    } elseif (!isValidText($question, 'question')) {
+    } elseif(!isValidText($question, 'question')) {
       $this->data['err_question'] = true;
       $message = CourseMessage::ERR_INVALID_QUESTION_TEXT;
-    } elseif (!isValidQuestionNumber($correct)) {
+    } elseif(!isValidQuestionNumber($correct)) {
       $this->data['err_correct'] = true;
       $message = CourseMessage::ERR_INVALID_QUESTION_NUMBER;
-    } elseif (!isValidText($alternative1, 'alternative')) {
+    } elseif(!isValidText($alternative1, 'alternative')) {
       $this->data['err_alternative_1'] = true;
       $message = CourseMessage::ERR_INVALID_ALTERNATIVE;
-    } elseif (!isValidText($alternative2, 'alternative')) {
+    } elseif(!isValidText($alternative2, 'alternative')) {
       $this->data['err_alternative_2'] = true;
       $message = CourseMessage::ERR_INVALID_ALTERNATIVE;
-    } elseif (!isValidText($alternative3, 'alternative')) {
+    } elseif(!isValidText($alternative3, 'alternative')) {
       $this->data['err_alternative_3'] = true;
       $message = CourseMessage::ERR_INVALID_ALTERNATIVE;
-    } elseif (!isValidText($alternative4, 'alternative')) {
+    } elseif(!isValidText($alternative4, 'alternative')) {
       $this->data['err_alternative_4'] = true;
       $message = CourseMessage::ERR_INVALID_ALTERNATIVE;
-    } elseif (!isValidText($alternative5, 'alternative')) {
+    } elseif(!isValidText($alternative5, 'alternative')) {
       $this->data['err_alternative_5'] = true;
       $message = CourseMessage::ERR_INVALID_ALTERNATIVE;
     } else {
@@ -1155,10 +1130,10 @@ class CourseController extends Controller
 
       $alternatives = [];
 
-      for ($i = 1; $i <= 5; $i++) {
-        $variableName = 'alternative' . $i;
+      for($i = 1; $i <= 5; $i++) {
+        $variableName = 'alternative'.$i;
 
-        if (isset($$variableName)) {
+        if(isset($$variableName)) {
           $alternatives[] = [$i, $$variableName];
         }
       }
@@ -1166,25 +1141,25 @@ class CourseController extends Controller
       $questionModel = new QuestionModel();
       $alternativeModel = new AlternativeModel();
 
-      if ($questionModel->update($questionId, $question, $correct, $courseId, $quizId)) {
+      if($questionModel->update($questionId, $question, $correct, $courseId, $quizId)) {
         $errorSavingAlternative = false;
 
         $alternativeModel = new AlternativeModel();
 
         $alternativesByQuestionId = $alternativeModel->getByQuestionId($questionId);
 
-        foreach ($alternatives as $index => $alternative) {
-          if (!$alternativeModel->update($alternativesByQuestionId[$index]->id, $alternative[1], $alternative[0], $courseId, $questionId)) {
+        foreach($alternatives as $index => $alternative) {
+          if(!$alternativeModel->update($alternativesByQuestionId[$index]->id, $alternative[1], $alternative[0], $courseId, $questionId)) {
             $errorSavingAlternative = true;
           }
         }
 
-        if ($errorSavingAlternative) {
+        if($errorSavingAlternative) {
           $message = CourseMessage::ERR_WHEN_SAVING_ONE_OF_ALTERNATIVES;
         } else {
           $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::SUCCESS_UPDATE_QUESTION;
           $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_SUCCESS;
-          return $response->withHeader('Location', '/admin/course/quizzes/questions/' . $courseId . '/' . $quizId)->withHeader('Allow', 'GET')->withStatus(302);
+          return $response->withHeader('Location', '/admin/course/quizzes/questions/'.$courseId.'/'.$quizId)->withHeader('Allow', 'GET')->withStatus(302);
         }
       } else {
         $message = CourseMessage::ERR_FAIL_UPDATE_QUESTION;
@@ -1196,13 +1171,12 @@ class CourseController extends Controller
     return $this->twig->render($response, $this->path, $this->data);
   }
 
-  public function processQuestionDeleteRequest(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
-  {
-    $courseId = (int) ($args['course_id'] ?? '');
-    $quizId = (int) ($args['quiz_id'] ?? '');
-    $questionId = (int) ($args['question_id'] ?? '');
+  public function processQuestionDeleteRequest(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface {
+    $courseId = (int)($args['course_id'] ?? '');
+    $quizId = (int)($args['quiz_id'] ?? '');
+    $questionId = (int)($args['question_id'] ?? '');
 
-    if (!isValidId($courseId) || !isValidId($quizId) || !isValidId($questionId)) {
+    if(!isValidId($courseId) || !isValidId($quizId) || !isValidId($questionId)) {
       $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::ERR_QUESTION_INEXISTENT;
       $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_ERROR;
       return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
@@ -1214,7 +1188,7 @@ class CourseController extends Controller
       $quizByIdAndCourseId = $quizModel->getByIdAndCourseId($quizId, $courseId);
       $questionByIdAndQuizId = $questionModel->getByIdAndQuizId($questionId, $quizId);
 
-      if (empty($courseById) || empty($quizByIdAndCourseId) || empty($questionByIdAndQuizId)) {
+      if(empty($courseById) || empty($quizByIdAndCourseId) || empty($questionByIdAndQuizId)) {
         $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::ERR_QUESTION_INEXISTENT;
         $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_ERROR;
         return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
@@ -1225,17 +1199,17 @@ class CourseController extends Controller
 
         $errorWhenRemovingAnAlternative = false;
 
-        foreach ($alternativesByQuestionId as $alternative) {
-          if (!$alternativeModel->delete($alternative->id, 'id')) {
+        foreach($alternativesByQuestionId as $alternative) {
+          if(!$alternativeModel->delete($alternative->id, 'id')) {
             $errorWhenRemovingAnAlternative = true;
           }
         }
 
-        if ($errorWhenRemovingAnAlternative) {
+        if($errorWhenRemovingAnAlternative) {
           $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::ERR_WHEN_REMOVING_ONE_OF_ALTERNATIVES;
           $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_ERROR;
         } else {
-          if ($questionModel->delete($questionByIdAndQuizId->id, 'id')) {
+          if($questionModel->delete($questionByIdAndQuizId->id, 'id')) {
             $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::SUCCESS_DELETE_QUESTION;
             $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_SUCCESS;
           } else {
@@ -1246,40 +1220,39 @@ class CourseController extends Controller
       }
     }
 
-    return $response->withHeader('Location', '/admin/course/quizzes/questions/' . $courseId . '/' . $quizId)->withHeader('Allow', 'GET')->withStatus(302);
+    return $response->withHeader('Location', '/admin/course/quizzes/questions/'.$courseId.'/'.$quizId)->withHeader('Allow', 'GET')->withStatus(302);
   }
 
-  public function processQuizVisibilityRequest(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
-  {
-    $courseId = (int) ($args['course_id'] ?? '');
-    $quizId = (int) ($args['quiz_id'] ?? '');
+  public function processQuizVisibilityRequest(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface {
+    $courseId = (int)($args['course_id'] ?? '');
+    $quizId = (int)($args['quiz_id'] ?? '');
 
     $quizModel = new QuizModel();
 
     $courseById = $this->model->getById($courseId);
     $quizByIdAndCourseId = $quizModel->getByIdAndCourseId($quizId, $courseId);
 
-    if (!isValidId($courseId) || !isValidId($quizId)) {
+    if(!isValidId($courseId) || !isValidId($quizId)) {
       $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::ERR_QUIZ_INEXISTENT;
       $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_ERROR;
       return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
-    } elseif (empty($courseById) || empty($quizByIdAndCourseId)) {
+    } elseif(empty($courseById) || empty($quizByIdAndCourseId)) {
       $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::ERR_QUIZ_INEXISTENT;
       $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_ERROR;
       return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
     } else {
       $questionModel = new QuestionModel();
 
-      $questionByQuizId = $questionModel->getByQuizId($quizId);
+      $questionByQuizId = $questionModel->getByQuizId($quizId) ?? [];
 
       $questionsNumber = count($questionByQuizId);
 
-      if ($questionsNumber >= GlobalValues::MINIMUM_QUANTITY_QUESTIONS) {
-        $visibility = (int) $quizByIdAndCourseId->visibility;
+      if($questionsNumber >= GlobalValues::MINIMUM_QUANTITY_QUESTIONS) {
+        $visibility = (int)$quizByIdAndCourseId->visibility;
 
         $visibility = ($visibility == 0 ? 1 : 0);
 
-        if ($quizModel->update($quizByIdAndCourseId->id, $quizByIdAndCourseId->title, $visibility)) {
+        if($quizModel->update($quizByIdAndCourseId->id, $quizByIdAndCourseId->title, $visibility)) {
           $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::SUCCESS_TO_CHANGE_QUIZ_VISIBILITY;
           $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_SUCCESS;
         } else {
@@ -1292,6 +1265,6 @@ class CourseController extends Controller
       }
     }
 
-    return $response->withHeader('Location', '/admin/course/quizzes/' . $courseId)->withHeader('Allow', 'GET')->withStatus(302);
+    return $response->withHeader('Location', '/admin/course/quizzes/'.$courseId)->withHeader('Allow', 'GET')->withStatus(302);
   }
 }
