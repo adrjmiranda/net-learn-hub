@@ -18,8 +18,7 @@ class UserMessage
 
   // Error messages related to email lookup
   const ERR_EMAIL_NOT_FOUND = 'Usuário não encontrado.';
-  const ERR_INCORRECT_PASS = 'A seenha está incorreta.';
-  const ERR_LOGIN = 'Senha ou email incorreto.';
+  const ERR_LOGIN = 'Falha ao fazer login.';
 
   // Error messages related to email registration
   const ERR_EMAIL_ALREADY_REGISTERED = 'Este e-mail já está registrado.';

@@ -12,14 +12,16 @@ use Psr\Http\Message\ResponseInterface;
 use Slim\Views\Twig;
 use Google\Client;
 
-class UserController extends Controller {
+class UserController extends Controller
+{
   protected ResponseFactoryInterface $responseFactory;
   protected Twig $twig;
   private array $data;
   private string $path;
   private string $googleClientId;
 
-  public function __construct(ResponseFactoryInterface $responseFactory, Twig $twig, string $baseURL, string $csrfToken, string $googleClientId) {
+  public function __construct(ResponseFactoryInterface $responseFactory, Twig $twig, string $baseURL, string $csrfToken, string $googleClientId)
+  {
     $this->responseFactory = $responseFactory;
     $this->twig = $twig;
 
@@ -34,7 +36,8 @@ class UserController extends Controller {
     $this->googleClientId = $googleClientId;
   }
 
-  public function login(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface {
+  public function login(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
+  {
     $this->path .= 'login.html.twig';
     $this->data['page_title'] = 'NetLearnHub | Aprenda de graça TI';
     $this->data['google_client_id'] = $this->googleClientId;
@@ -44,7 +47,8 @@ class UserController extends Controller {
     return $this->twig->render($response, $this->path, $this->data);
   }
 
-  public function auth(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface {
+  public function auth(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
+  {
     $params = $request->getParsedBody() ?? [];
 
     $credential = $params['credential'] ?? '';
@@ -55,22 +59,27 @@ class UserController extends Controller {
     $this->data['session_message'] = $_SESSION[GlobalValues::SESSION_MESSAGE] ?? '';
     $this->data['message_type'] = $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] ?? '';
 
-    if(empty($credential) || empty($gCsrfToken)) {
+    if (empty($credential) || empty($gCsrfToken)) {
     } else {
       $client = new Client(['client_id' => $_ENV['GOOGLE_CLIENT_ID']]);
       $payload = $client->verifyIdToken($credential);
 
-      if(isset($payload['email'])) {
+      if (isset($payload['email'])) {
         // convert to object
         $payload = json_encode($payload);
         $payload = json_decode($payload);
-
-        print_r($payload);
 
         $email = $payload->email;
         $firstName = $payload->given_name ?? '';
         $lastName = $payload->family_name ?? '';
         $image = $payload->picture ?? '';
+
+        $userByEmail = $this->model->getUserByEmail($email);
+
+        if (empty($userByEmail)) {
+
+        } else {
+        }
       } else {
         $message = UserMessage::ERR_LOGIN;
       }
