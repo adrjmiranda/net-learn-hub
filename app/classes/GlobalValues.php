@@ -6,8 +6,7 @@ namespace app\classes;
  * Class GlobalValues
  * This class contains constants representing table names and tokens used throughout the codebase.
  */
-class GlobalValues
-{
+class GlobalValues {
   // Table names in the database
 
   /**
@@ -66,6 +65,11 @@ class GlobalValues
    * Name of the CSRF token.
    */
   const CSRF_TOKEN = 'csrf_token';
+
+  /**
+   * Name of the G_CSRF token.
+   */
+  const G_CSRF_TOKEN = 'g_csrf_token';
 
   /**
    * Name of the admin token.
@@ -146,6 +150,11 @@ class GlobalValues
    * CSRF token is invalid NAME
    */
   const CSRF_TOKEN_IS_INVALID = 'csrf_token_is_invalid';
+
+  /**
+   * GCSRF token is invalid NAME
+   */
+  const G_CSRF_TOKEN_IS_INVALID = 'g_csrf_token_is_invalid';
 
   /** 
    * Minimum qunatity questions
