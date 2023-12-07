@@ -50,6 +50,11 @@ class UserController extends Controller {
     $credential = $params['credential'] ?? '';
     $gCsrfToken = $params['g_csrf_token'] ?? '';
 
+    $this->path .= 'login.html.twig';
+    $this->data['page_title'] = 'NetLearnHub | Aprenda de graça TI';
+    $this->data['session_message'] = $_SESSION[GlobalValues::SESSION_MESSAGE] ?? '';
+    $this->data['message_type'] = $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] ?? '';
+
     if(empty($credential) || empty($gCsrfToken)) {
     } else {
       $client = new Client(['client_id' => $_ENV['GOOGLE_CLIENT_ID']]);
@@ -63,18 +68,15 @@ class UserController extends Controller {
         print_r($payload);
 
         $email = $payload->email;
-        $firstName = $payload->given_name;
-        $lastName = $payload->family_name;
-        $image = $payload->picture;
+        $firstName = $payload->given_name ?? '';
+        $lastName = $payload->family_name ?? '';
+        $image = $payload->picture ?? '';
       } else {
-        exit;
+        $message = UserMessage::ERR_LOGIN;
       }
     }
 
-    $this->path .= 'login.html.twig';
-    $this->data['page_title'] = 'NetLearnHub | Aprenda de graça TI';
-    $this->data['session_message'] = $_SESSION[GlobalValues::SESSION_MESSAGE] ?? '';
-    $this->data['message_type'] = $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] ?? '';
+    $this->data['session_message'] = $message;
 
     return $this->twig->render($response, $this->path, $this->data);
   }
