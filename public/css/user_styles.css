@@ -11,28 +11,8 @@
 }
 
 #login form .g_id_signin {
-	width: 100% !important;
-	/* border: 1px solid red; */
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	flex: 1;
-	text-align: center;
 }
-
-/* #login form .g_id_signin iframe {
-	width: 100% !important;
-	min-width: 100% !important;
-	flex: 1;
-	justify-content: center;
-	align-items: center;
-	display: flex;
-}
-
-#login form iframe div {
-	width: 100% !important;
-}
-
-#login form img {
-	width: 100%;
-} */
