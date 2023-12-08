@@ -26,17 +26,11 @@ if (!isset($_SESSION)) {
 $_SESSION[GlobalValues::ADMIN_ID_IDENTIFIER] ??= '';
 
 // CSRF TOKEN
-if (!isset($_SESSION[GlobalValues::CSRF_TOKEN])) {
-  $csrf_token = bin2hex(random_bytes(32));
-  $_SESSION[GlobalValues::CSRF_TOKEN] = $csrf_token;
-}
-
-$_SESSION[GlobalValues::CSRF_TOKEN_IS_INVALID] ??= true;
+$_SESSION[GlobalValues::CSRF_TOKEN] ??= bin2hex(random_bytes(32));
 
 // GCSRF TOKEN
-$_SESSION[GlobalValues::G_CSRF_TOKEN] ??= '';
+$_SESSION[GlobalValues::G_CSRF_TOKEN] ??= bin2hex(random_bytes(32));
 
-$_SESSION[GlobalValues::G_CSRF_TOKEN_IS_INVALID] ??= true;
 
 // message config
 $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] ??= '';
@@ -75,5 +69,6 @@ return [
   'slim_app' => $app,
   'twig' => $twig,
   'response_factory' => $app->getResponseFactory(),
-  'csrf_token' => $_SESSION[GlobalValues::CSRF_TOKEN]
+  GlobalValues::CSRF_TOKEN => $_SESSION[GlobalValues::CSRF_TOKEN],
+  GlobalValues::G_CSRF_TOKEN => $_SESSION[GlobalValues::G_CSRF_TOKEN]
 ];

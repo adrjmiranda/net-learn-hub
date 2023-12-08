@@ -2,6 +2,7 @@
 
 require_once __DIR__ . '/../functions/authentication.php';
 
+use app\classes\GlobalValues;
 use app\Controllers\CourseController;
 use Slim\Routing\RouteCollectorProxy;
 use app\Controllers\AdministratorController;
@@ -9,7 +10,7 @@ use app\Controllers\AdministratorController;
 $responseFactory = $dependencies['response_factory'];
 $twig = $dependencies['twig'];
 $baseURL = $dependencies['base_url'];
-$csrfToken = $dependencies['csrf_token'];
+$csrfToken = $dependencies[GlobalValues::CSRF_TOKEN];
 
 $administratorController = new AdministratorController($responseFactory, $twig, $baseURL, $csrfToken);
 $courseController = new CourseController($responseFactory, $twig, $baseURL, $csrfToken);

@@ -2,6 +2,7 @@
 
 require_once __DIR__ . '/../functions/authentication.php';
 
+use app\classes\GlobalValues;
 use app\Controllers\UserController;
 use app\Controllers\CourseController;
 use Slim\Routing\RouteCollectorProxy;
@@ -11,11 +12,10 @@ $googleClientId = $_ENV['GOOGLE_CLIENT_ID'];
 $responseFactory = $dependencies['response_factory'];
 $twig = $dependencies['twig'];
 $baseURL = $dependencies['base_url'];
-$csrfToken = $dependencies['csrf_token'];
+$gCsrfToken = $dependencies[GlobalValues::G_CSRF_TOKEN];
 
-$userController = new UserController($responseFactory, $twig, $baseURL, $csrfToken, $googleClientId);
+$userController = new UserController($responseFactory, $twig, $baseURL, $gCsrfToken, $googleClientId);
 $courseController = new CourseController($responseFactory, $twig, $baseURL, $csrfToken);
-$userTable = $userController->getTable();
 
 $app->group('/', function (RouteCollectorProxy $group) use ($twig, $courseController) {
   $group->get('terms-and-conditions', function ($request, $response, $args) use ($twig) {

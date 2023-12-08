@@ -6,7 +6,8 @@ namespace app\classes;
  * Class GlobalValues
  * This class contains constants representing table names and tokens used throughout the codebase.
  */
-class GlobalValues {
+class GlobalValues
+{
   // Table names in the database
 
   /**

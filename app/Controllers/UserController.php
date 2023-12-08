@@ -20,7 +20,7 @@ class UserController extends Controller
   private string $path;
   private string $googleClientId;
 
-  public function __construct(ResponseFactoryInterface $responseFactory, Twig $twig, string $baseURL, string $csrfToken, string $googleClientId)
+  public function __construct(ResponseFactoryInterface $responseFactory, Twig $twig, string $baseURL, string $gCsrfToken, string $googleClientId)
   {
     $this->responseFactory = $responseFactory;
     $this->twig = $twig;
@@ -31,7 +31,7 @@ class UserController extends Controller
 
     $this->data = [];
     $this->data['base_url'] = $baseURL;
-    $this->data['csrf_token'] = $csrfToken;
+    $this->data[GlobalValues::G_CSRF_TOKEN] = $gCsrfToken;
 
     $this->googleClientId = $googleClientId;
   }
@@ -52,14 +52,14 @@ class UserController extends Controller
     $params = $request->getParsedBody() ?? [];
 
     $credential = $params['credential'] ?? '';
-    $gCsrfToken = $params['g_csrf_token'] ?? '';
+    $googleCsrfToken = $params['g_csrf_token'] ?? '';
 
     $this->path .= 'login.html.twig';
     $this->data['page_title'] = 'NetLearnHub | Aprenda de graça TI';
     $this->data['session_message'] = '';
     $this->data['message_type'] = GlobalValues::TYPE_MSG_ERROR;
 
-    if (empty($credential) || empty($gCsrfToken)) {
+    if (empty($credential) || empty($googleCsrfToken)) {
       $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = UserMessage::ERR_LOGIN;
       $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_ERROR;
 

@@ -67,10 +67,10 @@ function verifyCSRFToken(Request $request, RequestHandler $handler)
   $session = $_SESSION ?? [];
   $params = $request->getParsedBody();
 
-  $_SESSION[GlobalValues::CSRF_TOKEN_IS_INVALID] = true;
+  $_SESSION[GlobalValues::CSRF_TOKEN_IS_INVALID] ??= true;
 
-  if (isset($params['csrf_token'])) {
-    $csrfToken = $params['csrf_token'];
+  if (isset($params[GlobalValues::CSRF_TOKEN])) {
+    $csrfToken = $params[GlobalValues::CSRF_TOKEN];
 
     if ($csrfToken === $session[GlobalValues::CSRF_TOKEN]) {
       $_SESSION[GlobalValues::CSRF_TOKEN_IS_INVALID] = false;
@@ -85,10 +85,10 @@ function verifyGCSRFToken(Request $request, RequestHandler $handler)
   $session = $_SESSION ?? [];
   $params = $request->getParsedBody();
 
-  $_SESSION[GlobalValues::G_CSRF_TOKEN_IS_INVALID] = true;
+  $_SESSION[GlobalValues::G_CSRF_TOKEN_IS_INVALID] ??= true;
 
-  if (isset($params['g_csrf_token'])) {
-    $csrfToken = $params['g_csrf_token'];
+  if (isset($params[GlobalValues::G_CSRF_TOKEN])) {
+    $csrfToken = $params[GlobalValues::G_CSRF_TOKEN];
 
     if ($csrfToken === $session[GlobalValues::G_CSRF_TOKEN]) {
       $_SESSION[GlobalValues::G_CSRF_TOKEN_IS_INVALID] = false;

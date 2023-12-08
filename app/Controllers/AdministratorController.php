@@ -33,7 +33,7 @@ class AdministratorController extends Controller
 
     $this->data = [];
     $this->data['base_url'] = $baseURL;
-    $this->data['csrf_token'] = $csrfToken;
+    $this->data[GlobalValues::CSRF_TOKEN] = $csrfToken;
   }
 
   public function index(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
@@ -204,7 +204,9 @@ class AdministratorController extends Controller
       }
     }
 
-    if (!isValidId($adminId)) {
+    if ($_SESSION[GlobalValues::CSRF_TOKEN_IS_INVALID]) {
+      $message = UserMessage::INVALID_CSRF_TOKEN;
+    } elseif (!isValidId($adminId)) {
       $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = UserMessage::ERR_EMAIL_NOT_FOUND;
       $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_ERROR;
       return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
