@@ -1,0 +1,38 @@
+#login form {
+	padding: 1rem;
+	box-shadow: 1px 1px 23px 3px rgba(0, 0, 0, 0.1);
+	border-radius: 3px;
+}
+
+#login form h1 {
+	text-align: center;
+	font-size: 1.5rem;
+	font-weight: 500;
+}
+
+#login form .g_id_signin {
+	width: 100% !important;
+	/* border: 1px solid red; */
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex: 1;
+	text-align: center;
+}
+
+/* #login form .g_id_signin iframe {
+	width: 100% !important;
+	min-width: 100% !important;
+	flex: 1;
+	justify-content: center;
+	align-items: center;
+	display: flex;
+}
+
+#login form iframe div {
+	width: 100% !important;
+}
+
+#login form img {
+	width: 100%;
+} */

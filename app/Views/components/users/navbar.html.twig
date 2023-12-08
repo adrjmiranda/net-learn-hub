@@ -1,3 +1,14 @@
 <nav>
-  <div id="navbar" class="container">Navbar</div>
+  <div id="navbar" class="container">
+    <ion-icon name="reorder-three" id="navbar-drop"></ion-icon>
+    <a href="{{ base_url }}/home">
+      {% include '/components/others/logo.html.twig' %}
+    </a>
+    {% include '/components/users/bar.html.twig' %}
+    {% if user_is_connected %}
+    <a href="{{ base_url }}/user/logout" class="btn btn-color wauto">Logout</a>
+    {% else %}
+    <a href="{{ base_url }}/user/login" class="btn btn-color wauto">Login</a>
+    {% endif %}
+  </div>
 </nav>

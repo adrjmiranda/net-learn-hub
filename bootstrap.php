@@ -22,7 +22,7 @@ if (!isset($_SESSION)) {
   session_start();
 }
 
-// user id
+// admin id
 $_SESSION[GlobalValues::ADMIN_ID_IDENTIFIER] ??= '';
 
 // CSRF TOKEN
@@ -31,6 +31,8 @@ $_SESSION[GlobalValues::CSRF_TOKEN] ??= bin2hex(random_bytes(32));
 // GCSRF TOKEN
 $_SESSION[GlobalValues::G_CSRF_TOKEN] ??= bin2hex(random_bytes(32));
 
+//  user is connected
+$_SESSION[GlobalValues::USER_IS_CONNECTED] ??= false;
 
 // message config
 $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] ??= '';

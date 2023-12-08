@@ -89,6 +89,11 @@ class GlobalValues
   const USER_ID_IDENTIFIER = 'user_id_identifier';
 
   /**
+   * Name of the indentifier id.
+   */
+  const USER_IS_CONNECTED = 'user_is_connected';
+
+  /**
    * Name of the session message.
    */
   const SESSION_MESSAGE_CONTENT = 'session_message_content';

@@ -44,8 +44,8 @@ class AdministratorController extends Controller
     $this->data['password'] = '';
     $this->data['err_email'] = false;
     $this->data['err_password'] = false;
-    $this->data['session_message'] = $_SESSION[GlobalValues::SESSION_MESSAGE] ?? '';
-    $this->data['message_type'] = $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] ?? '';
+    $this->data[GlobalValues::SESSION_MESSAGE] = $_SESSION[GlobalValues::SESSION_MESSAGE] ?? '';
+    $this->data[GlobalValues::SESSION_MESSAGE_TYPE] = $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] ?? '';
 
     return $this->twig->render($response, $this->path, $this->data);
   }
@@ -62,8 +62,8 @@ class AdministratorController extends Controller
     $this->data['password'] = $password;
     $this->data['err_email'] = false;
     $this->data['err_password'] = false;
-    $this->data['session_message'] = '';
-    $this->data['message_type'] = GlobalValues::TYPE_MSG_ERROR;
+    $this->data[GlobalValues::SESSION_MESSAGE] = '';
+    $this->data[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_ERROR;
 
     if ($_SESSION[GlobalValues::CSRF_TOKEN_IS_INVALID]) {
       $message = UserMessage::INVALID_CSRF_TOKEN;
@@ -96,7 +96,7 @@ class AdministratorController extends Controller
       }
     }
 
-    $this->data['session_message'] = $message;
+    $this->data[GlobalValues::SESSION_MESSAGE] = $message;
 
     return $this->twig->render($response, $this->path, $this->data);
   }
@@ -109,23 +109,14 @@ class AdministratorController extends Controller
     $this->path .= 'dashboard.html.twig';
     $this->data['page_title'] = 'NetLearnHub | Aprenda de graça TI';
     $this->data['courses'] = $courses;
-    $this->data['session_message'] = $_SESSION[GlobalValues::SESSION_MESSAGE] ?? '';
-    $this->data['message_type'] = $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] ?? '';
+    $this->data[GlobalValues::SESSION_MESSAGE] = $_SESSION[GlobalValues::SESSION_MESSAGE] ?? '';
+    $this->data[GlobalValues::SESSION_MESSAGE_TYPE] = $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] ?? '';
 
     return $this->twig->render($response, $this->path, $this->data);
   }
 
   public function logout(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
   {
-    $this->path .= 'login.html.twig';
-    $this->data['page_title'] = 'NetLearnHub | Aprenda de graça TI';
-    $this->data['email'] = '';
-    $this->data['password'] = '';
-    $this->data['err_email'] = false;
-    $this->data['err_password'] = false;
-    $this->data['session_message'] = $_SESSION[GlobalValues::SESSION_MESSAGE] ?? '';
-    $this->data['message_type'] = $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] ?? '';
-
     $_SESSION = array();
 
     if (ini_get("session.use_cookies")) {
@@ -171,8 +162,8 @@ class AdministratorController extends Controller
       $this->data['err_password'] = false;
       $this->data['err_password_confirmation'] = false;
       $this->data['err_description'] = false;
-      $this->data['session_message'] = $_SESSION[GlobalValues::SESSION_MESSAGE] ?? '';
-      $this->data['message_type'] = $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] ?? '';
+      $this->data[GlobalValues::SESSION_MESSAGE] = $_SESSION[GlobalValues::SESSION_MESSAGE] ?? '';
+      $this->data[GlobalValues::SESSION_MESSAGE_TYPE] = $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] ?? '';
     }
 
     return $this->twig->render($response, $this->path, $this->data);
@@ -236,8 +227,8 @@ class AdministratorController extends Controller
         $this->data['err_password'] = false;
         $this->data['err_password_confirmation'] = false;
         $this->data['err_description'] = false;
-        $this->data['session_message'] = $_SESSION[GlobalValues::SESSION_MESSAGE] ?? '';
-        $this->data['message_type'] = GlobalValues::TYPE_MSG_ERROR;
+        $this->data[GlobalValues::SESSION_MESSAGE] = $_SESSION[GlobalValues::SESSION_MESSAGE] ?? '';
+        $this->data[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_ERROR;
 
         if (!in_array($image, $imageFiles)) {
           $message = UserMessage::ERR_INVALID_IMAGE_TYPE;
@@ -280,7 +271,7 @@ class AdministratorController extends Controller
 
             if ($this->model->update($adminId, $firstName, $lastName, $passwordHash, $image, $description)) {
               $message = UserMessage::SUCCESS_UPDATE;
-              $this->data['message_type'] = GlobalValues::TYPE_MSG_SUCCESS;
+              $this->data[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_SUCCESS;
             } else {
               $message = UserMessage::ERR_FAIL_UPDATE;
             }
@@ -289,7 +280,7 @@ class AdministratorController extends Controller
       }
     }
 
-    $this->data['session_message'] = $message;
+    $this->data[GlobalValues::SESSION_MESSAGE] = $message;
 
     return $this->twig->render($response, $this->path, $this->data);
   }
@@ -301,8 +292,8 @@ class AdministratorController extends Controller
 
     $this->path .= 'user_dashboard.html.twig';
     $this->data['page_title'] = 'NetLearnHub | Aprenda de graça TI';
-    $this->data['session_message'] = $_SESSION[GlobalValues::SESSION_MESSAGE] ?? '';
-    $this->data['message_type'] = $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] ?? '';
+    $this->data[GlobalValues::SESSION_MESSAGE] = $_SESSION[GlobalValues::SESSION_MESSAGE] ?? '';
+    $this->data[GlobalValues::SESSION_MESSAGE_TYPE] = $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] ?? '';
     $this->data['users'] = $users;
 
     return $this->twig->render($response, $this->path, $this->data);

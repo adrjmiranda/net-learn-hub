@@ -8,12 +8,19 @@
     </p>
     {% endif %}
     <script src="https://accounts.google.com/gsi/client" async></script>
-    <div id="g_id_onload" data-client_id="{{ google_client_id }}" data-login_uri="{{ base_url }}/user/auth"
-      data-auto_prompt="false">
-    </div>
-    <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline" data-text="sign_in_with"
-      data-shape="rectangular" data-logo_alignment="left">
-    </div>
+    <form>
+      <div class="animate-logo">
+        <img src="{{ base_url }}/public/images/logo_acronym.png" class="logo-acronym" alt="NLH Logo Acronym">
+        <img src="{{ base_url }}/public/images/logo_icon.png" class="logo-icon" alt="NLH Logo Icon">
+      </div>
+      <h1>Faça login para acessar os cursos da <b>Plataforma</b> <span>NetLearnHub</span></h1>
+      <div id="g_id_onload" data-client_id="{{ google_client_id }}" data-login_uri="{{ base_url }}/user/auth"
+        data-auto_prompt="false">
+      </div>
+      <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline" data-text="sign_in_with"
+        data-shape="rectangular" data-logo_alignment="left">
+      </div>
+    </form>
   </div>
 </div>
 {% endblock %}

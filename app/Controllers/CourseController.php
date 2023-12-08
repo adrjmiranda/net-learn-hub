@@ -46,8 +46,8 @@ class CourseController extends Controller
     $this->path .= 'home.html.twig';
     $this->data['page_title'] = 'NetLearnHub | Aprenda de graça TI';
     $this->data['courses'] = $courses;
-    $this->data['session_message'] = $_SESSION[GlobalValues::SESSION_MESSAGE] ?? '';
-    $this->data['message_type'] = $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] ?? '';
+    $this->data[GlobalValues::SESSION_MESSAGE] = $_SESSION[GlobalValues::SESSION_MESSAGE] ?? '';
+    $this->data[GlobalValues::SESSION_MESSAGE_TYPE] = $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] ?? '';
 
     return $this->twig->render($response, $this->path, $this->data);
   }
@@ -63,8 +63,8 @@ class CourseController extends Controller
     $this->data['err_title'] = false;
     $this->data['err_workload'] = false;
     $this->data['err_description'] = false;
-    $this->data['session_message'] = '';
-    $this->data['message_type'] = '';
+    $this->data[GlobalValues::SESSION_MESSAGE] = '';
+    $this->data[GlobalValues::SESSION_MESSAGE_TYPE] = '';
 
     return $this->twig->render($response, $this->path, $this->data);
   }
@@ -91,8 +91,8 @@ class CourseController extends Controller
     $this->data['err_title'] = false;
     $this->data['err_workload'] = false;
     $this->data['err_description'] = false;
-    $this->data['session_message'] = '';
-    $this->data['message_type'] = GlobalValues::TYPE_MSG_ERROR;
+    $this->data[GlobalValues::SESSION_MESSAGE] = '';
+    $this->data[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_ERROR;
 
     if ($_SESSION[GlobalValues::CSRF_TOKEN_IS_INVALID]) {
       $message = UserMessage::INVALID_CSRF_TOKEN;
@@ -132,7 +132,7 @@ class CourseController extends Controller
       }
     }
 
-    $this->data['session_message'] = $message;
+    $this->data[GlobalValues::SESSION_MESSAGE] = $message;
 
     return $this->twig->render($response, $this->path, $this->data);
   }
@@ -159,8 +159,8 @@ class CourseController extends Controller
         $this->data['err_title'] = false;
         $this->data['err_workload'] = false;
         $this->data['err_description'] = false;
-        $this->data['session_message'] = '';
-        $this->data['message_type'] = '';
+        $this->data[GlobalValues::SESSION_MESSAGE] = '';
+        $this->data[GlobalValues::SESSION_MESSAGE_TYPE] = '';
       }
     }
 
@@ -191,8 +191,8 @@ class CourseController extends Controller
     $this->data['err_title'] = false;
     $this->data['err_workload'] = false;
     $this->data['err_description'] = false;
-    $this->data['session_message'] = '';
-    $this->data['message_type'] = GlobalValues::TYPE_MSG_ERROR;
+    $this->data[GlobalValues::SESSION_MESSAGE] = '';
+    $this->data[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_ERROR;
 
     if ($_SESSION[GlobalValues::CSRF_TOKEN_IS_INVALID]) {
       $message = UserMessage::INVALID_CSRF_TOKEN;
@@ -242,7 +242,7 @@ class CourseController extends Controller
       }
     }
 
-    $this->data['session_message'] = $message;
+    $this->data[GlobalValues::SESSION_MESSAGE] = $message;
 
     return $this->twig->render($response, $this->path, $this->data);
   }
@@ -300,8 +300,8 @@ class CourseController extends Controller
     $this->data['course_id'] = $courseId;
     $this->data['course_name'] = '';
     $this->data['topics'] = [];
-    $this->data['session_message'] = $_SESSION[GlobalValues::SESSION_MESSAGE] ?? '';
-    $this->data['message_type'] = $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] ?? '';
+    $this->data[GlobalValues::SESSION_MESSAGE] = $_SESSION[GlobalValues::SESSION_MESSAGE] ?? '';
+    $this->data[GlobalValues::SESSION_MESSAGE_TYPE] = $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] ?? '';
 
     if (!isValidId($courseId)) {
       return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
@@ -344,8 +344,8 @@ class CourseController extends Controller
         $this->data['content'] = null;
         $this->data['err_title'] = false;
         $this->data['err_content'] = false;
-        $this->data['session_message'] = '';
-        $this->data['message_type'] = '';
+        $this->data[GlobalValues::SESSION_MESSAGE] = '';
+        $this->data[GlobalValues::SESSION_MESSAGE_TYPE] = '';
       }
     }
 
@@ -367,8 +367,8 @@ class CourseController extends Controller
     $this->data['content'] = $content;
     $this->data['err_title'] = false;
     $this->data['err_content'] = false;
-    $this->data['session_message'] = '';
-    $this->data['message_type'] = GlobalValues::TYPE_MSG_ERROR;
+    $this->data[GlobalValues::SESSION_MESSAGE] = '';
+    $this->data[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_ERROR;
 
     if ($_SESSION[GlobalValues::CSRF_TOKEN_IS_INVALID]) {
       $message = UserMessage::INVALID_CSRF_TOKEN;
@@ -403,7 +403,7 @@ class CourseController extends Controller
       }
     }
 
-    $this->data['session_message'] = $message;
+    $this->data[GlobalValues::SESSION_MESSAGE] = $message;
 
     return $this->twig->render($response, $this->path, $this->data);
   }
@@ -437,8 +437,8 @@ class CourseController extends Controller
         $this->data['content'] = $content;
         $this->data['err_title'] = false;
         $this->data['err_content'] = false;
-        $this->data['session_message'] = '';
-        $this->data['message_type'] = '';
+        $this->data[GlobalValues::SESSION_MESSAGE] = '';
+        $this->data[GlobalValues::SESSION_MESSAGE_TYPE] = '';
       }
     }
 
@@ -462,8 +462,8 @@ class CourseController extends Controller
     $this->data['content'] = $content;
     $this->data['err_title'] = false;
     $this->data['err_content'] = false;
-    $this->data['session_message'] = '';
-    $this->data['message_type'] = GlobalValues::TYPE_MSG_ERROR;
+    $this->data[GlobalValues::SESSION_MESSAGE] = '';
+    $this->data[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_ERROR;
 
     if ($_SESSION[GlobalValues::CSRF_TOKEN_IS_INVALID]) {
       $message = UserMessage::INVALID_CSRF_TOKEN;
@@ -501,7 +501,7 @@ class CourseController extends Controller
       }
     }
 
-    $this->data['session_message'] = $message;
+    $this->data[GlobalValues::SESSION_MESSAGE] = $message;
 
     return $this->twig->render($response, $this->path, $this->data);
   }
@@ -548,8 +548,8 @@ class CourseController extends Controller
     $this->data['course_id'] = $courseId;
     $this->data['course_name'] = '';
     $this->data['quizzes'] = [];
-    $this->data['session_message'] = $_SESSION[GlobalValues::SESSION_MESSAGE] ?? '';
-    $this->data['message_type'] = $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] ?? '';
+    $this->data[GlobalValues::SESSION_MESSAGE] = $_SESSION[GlobalValues::SESSION_MESSAGE] ?? '';
+    $this->data[GlobalValues::SESSION_MESSAGE_TYPE] = $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] ?? '';
 
     if (!isValidId($courseId)) {
       return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
@@ -590,8 +590,8 @@ class CourseController extends Controller
         $this->data['course_name'] = $courseById->title;
         $this->data['title'] = '';
         $this->data['err_title'] = false;
-        $this->data['session_message'] = '';
-        $this->data['message_type'] = '';
+        $this->data[GlobalValues::SESSION_MESSAGE] = '';
+        $this->data[GlobalValues::SESSION_MESSAGE_TYPE] = '';
       }
     }
 
@@ -610,8 +610,8 @@ class CourseController extends Controller
     $this->data['course_id'] = $courseId;
     $this->data['title'] = $title;
     $this->data['err_title'] = false;
-    $this->data['session_message'] = '';
-    $this->data['message_type'] = GlobalValues::TYPE_MSG_ERROR;
+    $this->data[GlobalValues::SESSION_MESSAGE] = '';
+    $this->data[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_ERROR;
 
     if ($_SESSION[GlobalValues::CSRF_TOKEN_IS_INVALID]) {
       $message = UserMessage::INVALID_CSRF_TOKEN;
@@ -642,7 +642,7 @@ class CourseController extends Controller
       }
     }
 
-    $this->data['session_message'] = $message;
+    $this->data[GlobalValues::SESSION_MESSAGE] = $message;
 
     return $this->twig->render($response, $this->path, $this->data);
   }
@@ -673,8 +673,8 @@ class CourseController extends Controller
         $this->data['course_name'] = $courseById->title;
         $this->data['title'] = $title;
         $this->data['err_title'] = false;
-        $this->data['session_message'] = '';
-        $this->data['message_type'] = '';
+        $this->data[GlobalValues::SESSION_MESSAGE] = '';
+        $this->data[GlobalValues::SESSION_MESSAGE_TYPE] = '';
       }
     }
 
@@ -695,8 +695,8 @@ class CourseController extends Controller
     $this->data['quiz_id'] = $quizId;
     $this->data['title'] = $title;
     $this->data['err_title'] = false;
-    $this->data['session_message'] = '';
-    $this->data['message_type'] = GlobalValues::TYPE_MSG_ERROR;
+    $this->data[GlobalValues::SESSION_MESSAGE] = '';
+    $this->data[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_ERROR;
 
     if ($_SESSION[GlobalValues::CSRF_TOKEN_IS_INVALID]) {
       $message = UserMessage::INVALID_CSRF_TOKEN;
@@ -731,7 +731,7 @@ class CourseController extends Controller
       }
     }
 
-    $this->data['session_message'] = $message;
+    $this->data[GlobalValues::SESSION_MESSAGE] = $message;
 
     return $this->twig->render($response, $this->path, $this->data);
   }
@@ -832,8 +832,8 @@ class CourseController extends Controller
     $this->data['quiz_id'] = $quizId;
     $this->data['quiz_name'] = '';
     $this->data['questions'] = [];
-    $this->data['session_message'] = $_SESSION[GlobalValues::SESSION_MESSAGE] ?? '';
-    $this->data['message_type'] = $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] ?? '';
+    $this->data[GlobalValues::SESSION_MESSAGE] = $_SESSION[GlobalValues::SESSION_MESSAGE] ?? '';
+    $this->data[GlobalValues::SESSION_MESSAGE_TYPE] = $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] ?? '';
 
     if (!isValidId($courseId) || !isValidId($quizId)) {
       return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
@@ -906,8 +906,8 @@ class CourseController extends Controller
           $this->data['err_alternative_3'] = false;
           $this->data['err_alternative_4'] = false;
           $this->data['err_alternative_5'] = false;
-          $this->data['session_message'] = '';
-          $this->data['message_type'] = '';
+          $this->data[GlobalValues::SESSION_MESSAGE] = '';
+          $this->data[GlobalValues::SESSION_MESSAGE_TYPE] = '';
         }
       }
     }
@@ -947,8 +947,8 @@ class CourseController extends Controller
     $this->data['err_alternative_3'] = false;
     $this->data['err_alternative_4'] = false;
     $this->data['err_alternative_5'] = false;
-    $this->data['session_message'] = '';
-    $this->data['message_type'] = GlobalValues::TYPE_MSG_ERROR;
+    $this->data[GlobalValues::SESSION_MESSAGE] = '';
+    $this->data[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_ERROR;
 
     $quizModel = new QuizModel();
 
@@ -1032,7 +1032,7 @@ class CourseController extends Controller
       }
     }
 
-    $this->data['session_message'] = $message;
+    $this->data[GlobalValues::SESSION_MESSAGE] = $message;
 
     return $this->twig->render($response, $this->path, $this->data);
   }
@@ -1072,8 +1072,8 @@ class CourseController extends Controller
         $this->data['err_alternative_3'] = false;
         $this->data['err_alternative_4'] = false;
         $this->data['err_alternative_5'] = false;
-        $this->data['session_message'] = '';
-        $this->data['message_type'] = '';
+        $this->data[GlobalValues::SESSION_MESSAGE] = '';
+        $this->data[GlobalValues::SESSION_MESSAGE_TYPE] = '';
 
         $alternativeModel = new AlternativeModel();
 
@@ -1122,8 +1122,8 @@ class CourseController extends Controller
     $this->data['err_alternative_3'] = false;
     $this->data['err_alternative_4'] = false;
     $this->data['err_alternative_5'] = false;
-    $this->data['session_message'] = '';
-    $this->data['message_type'] = GlobalValues::TYPE_MSG_ERROR;
+    $this->data[GlobalValues::SESSION_MESSAGE] = '';
+    $this->data[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_ERROR;
 
     $quizModel = new QuizModel();
     $questionModel = new QuestionModel();
@@ -1204,7 +1204,7 @@ class CourseController extends Controller
       }
     }
 
-    $this->data['session_message'] = $message;
+    $this->data[GlobalValues::SESSION_MESSAGE] = $message;
 
     return $this->twig->render($response, $this->path, $this->data);
   }

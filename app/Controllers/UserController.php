@@ -41,8 +41,8 @@ class UserController extends Controller
     $this->path .= 'login.html.twig';
     $this->data['page_title'] = 'NetLearnHub | Aprenda de graça TI';
     $this->data['google_client_id'] = $this->googleClientId;
-    $this->data['session_message'] = $_SESSION[GlobalValues::SESSION_MESSAGE] ?? '';
-    $this->data['message_type'] = $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] ?? '';
+    $this->data[GlobalValues::SESSION_MESSAGE] = $_SESSION[GlobalValues::SESSION_MESSAGE] ?? '';
+    $this->data[GlobalValues::SESSION_MESSAGE_TYPE] = $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] ?? '';
 
     return $this->twig->render($response, $this->path, $this->data);
   }
@@ -56,8 +56,8 @@ class UserController extends Controller
 
     $this->path .= 'login.html.twig';
     $this->data['page_title'] = 'NetLearnHub | Aprenda de graça TI';
-    $this->data['session_message'] = '';
-    $this->data['message_type'] = GlobalValues::TYPE_MSG_ERROR;
+    $this->data[GlobalValues::SESSION_MESSAGE] = '';
+    $this->data[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_ERROR;
 
     if (empty($credential) || empty($googleCsrfToken)) {
       $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = UserMessage::ERR_LOGIN;
@@ -91,6 +91,8 @@ class UserController extends Controller
               $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = UserMessage::SUCCESS_LOGIN;
               $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_SUCCESS;
 
+              $_SESSION[GlobalValues::USER_IS_CONNECTED] = true;
+
               return $response->withHeader('Location', '/home')->withHeader('Allow', 'GET')->withStatus(302);
             } else {
               $message = UserMessage::ERR_LOGIN;
@@ -107,6 +109,8 @@ class UserController extends Controller
             $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = UserMessage::SUCCESS_LOGIN;
             $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_SUCCESS;
 
+            $_SESSION[GlobalValues::USER_IS_CONNECTED] = true;
+
             return $response->withHeader('Location', '/home')->withHeader('Allow', 'GET')->withStatus(302);
           } else {
             $message = UserMessage::ERR_LOGIN;
@@ -117,8 +121,33 @@ class UserController extends Controller
       }
     }
 
-    $this->data['session_message'] = $message;
+    $this->data[GlobalValues::SESSION_MESSAGE] = $message;
+    $this->data[GlobalValues::USER_IS_CONNECTED] = $_SESSION[GlobalValues::USER_IS_CONNECTED];
 
     return $this->twig->render($response, $this->path, $this->data);
+  }
+
+  public function logout(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
+  {
+    $_SESSION[GlobalValues::USER_IS_CONNECTED] = false;
+
+    $_SESSION = array();
+
+    if (ini_get("session.use_cookies")) {
+      $params = session_get_cookie_params();
+      setcookie(
+        session_name(),
+        '',
+        time() - 3600,
+        $params["path"],
+        $params["domain"],
+        $params["secure"],
+        $params["httponly"]
+      );
+    }
+
+    session_destroy();
+
+    return $response->withHeader('Location', '/home')->withHeader('Allow', 'GET')->withStatus(302);
   }
 }
