@@ -1,18 +1,21 @@
 {% extends '/components/users/base.html.twig' %}
 {% block content %}
-<div id="course-home">
-  <img src="{{ base_url }}/public/images/NetLearnHubLogo.png" alt="Logo">
+<div id="course-home" class="content">
+  {% if session_message %}
+  <p class="session-message {{ message_type }}">
+    {{ session_message }}
+  </p>
+  {% endif %}
   {% if courses %}
   <div>
     {% for course in courses %}
     <span>{{ course.title }}</span>
     <span>{{ course.description }}</span>
-    <span>{{ course.image }}</span>
     <br>
     {% endfor %}
   </div>
   {% else %}
-  <p>Sem cursos ainda!</p>
+  <p>Ainda não há cursos ativos para exibir!</p>
   {% endif %}
 </div>
 {% endblock %}

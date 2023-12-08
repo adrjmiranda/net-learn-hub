@@ -3,6 +3,7 @@
 namespace app\Models;
 
 use app\classes\GlobalValues;
+use app\classes\SearchQueryOptions;
 use PDO;
 use PDOException;
 
@@ -68,5 +69,41 @@ class CourseModel extends Model
       echo $pDOException->getMessage();
       return false;
     }
+  }
+
+  public function getActiveVisibility(): ?array
+  {
+    $data = null;
+
+    try {
+      $searchQueryOptions = new SearchQueryOptions();
+
+      $searchQueryOptions->type = SearchQueryOptions::SPECIFIC;
+      $searchQueryOptions->conditions = [
+        'column_name' => 'visibility',
+        'operator' => SearchQueryOptions::EQUAL_OPERATOR,
+        'values' => 1
+      ];
+      $searchQueryOptions->order = SearchQueryOptions::ASC;
+
+      $stmt = prepareSearchStatement($this->connect, $this->table, $searchQueryOptions);
+      $stmt->execute();
+
+      if ($stmt->rowCount() > 0) {
+        $data = $stmt->fetchAll();
+
+        if (!empty($data)) {
+          foreach ($data as $object) {
+            if (property_exists($object, 'image')) {
+              $object->image = base64_encode($object->image);
+            }
+          }
+        }
+      }
+    } catch (PDOException $pDOException) {
+      echo $pDOException->getMessage();
+    }
+
+    return $data;
   }
 }

@@ -56,10 +56,14 @@ class UserController extends Controller
 
     $this->path .= 'login.html.twig';
     $this->data['page_title'] = 'NetLearnHub | Aprenda de graça TI';
-    $this->data['session_message'] = $_SESSION[GlobalValues::SESSION_MESSAGE] ?? '';
-    $this->data['message_type'] = $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] ?? '';
+    $this->data['session_message'] = '';
+    $this->data['message_type'] = GlobalValues::TYPE_MSG_ERROR;
 
     if (empty($credential) || empty($gCsrfToken)) {
+      $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = UserMessage::ERR_LOGIN;
+      $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_ERROR;
+
+      return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
     } else {
       $client = new Client(['client_id' => $_ENV['GOOGLE_CLIENT_ID']]);
       $payload = $client->verifyIdToken($credential);
@@ -77,8 +81,36 @@ class UserController extends Controller
         $userByEmail = $this->model->getUserByEmail($email);
 
         if (empty($userByEmail)) {
+          if ($this->model->store($email, $firstName, $lastName, $image)) {
+            $userCreatedByEmail = $this->model->getUserByEmail($email);
 
+            if (!empty($userCreatedByEmail)) {
+              $_SESSION[GlobalValues::USER_TOKEN] = $credential;
+              $_SESSION[GlobalValues::USER_ID_IDENTIFIER] = $userCreatedByEmail->id;
+
+              $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = UserMessage::SUCCESS_LOGIN;
+              $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_SUCCESS;
+
+              return $response->withHeader('Location', '/home')->withHeader('Allow', 'GET')->withStatus(302);
+            } else {
+              $message = UserMessage::ERR_LOGIN;
+            }
+          } else {
+            $message = UserMessage::ERR_LOGIN;
+          }
         } else {
+          $id = $userByEmail->id;
+
+          if ($this->model->update($id, $firstName, $lastName, $image)) {
+            $_SESSION[GlobalValues::USER_ID_IDENTIFIER] = $id;
+
+            $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = UserMessage::SUCCESS_LOGIN;
+            $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_SUCCESS;
+
+            return $response->withHeader('Location', '/home')->withHeader('Allow', 'GET')->withStatus(302);
+          } else {
+            $message = UserMessage::ERR_LOGIN;
+          }
         }
       } else {
         $message = UserMessage::ERR_LOGIN;

@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__.'/../functions/authentication.php';
+require_once __DIR__ . '/../functions/authentication.php';
 
 use app\Controllers\CourseController;
 use Slim\Routing\RouteCollectorProxy;
@@ -14,7 +14,7 @@ $csrfToken = $dependencies['csrf_token'];
 $administratorController = new AdministratorController($responseFactory, $twig, $baseURL, $csrfToken);
 $courseController = new CourseController($responseFactory, $twig, $baseURL, $csrfToken);
 
-$table = $administratorController->getTable();
+$administratorTable = $administratorController->getTable();
 
 $app->group('/admin', function (RouteCollectorProxy $group) use ($administratorController, $courseController) {
   $group->get('/login', function ($request, $response, $args) use ($administratorController) {
@@ -167,6 +167,6 @@ $app->group('/admin', function (RouteCollectorProxy $group) use ($administratorC
   $group->get('/course/quiz/visibility/{course_id}/{quiz_id}', function ($request, $response, $args) use ($courseController) {
     return $courseController->processQuizVisibilityRequest($request, $response, $args);
   });
-})->add(function ($request, $handler) use ($table) {
-  return verifyTokenMiddleware($request, $handler, $table);
+})->add(function ($request, $handler) use ($administratorTable) {
+  return verifyTokenMiddleware($request, $handler, $administratorTable);
 });

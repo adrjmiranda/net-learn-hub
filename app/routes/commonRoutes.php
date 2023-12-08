@@ -1,8 +1,9 @@
 <?php
 
-require_once __DIR__.'/../functions/authentication.php';
+require_once __DIR__ . '/../functions/authentication.php';
 
 use app\Controllers\UserController;
+use app\Controllers\CourseController;
 use Slim\Routing\RouteCollectorProxy;
 
 $googleClientId = $_ENV['GOOGLE_CLIENT_ID'];
@@ -13,15 +14,20 @@ $baseURL = $dependencies['base_url'];
 $csrfToken = $dependencies['csrf_token'];
 
 $userController = new UserController($responseFactory, $twig, $baseURL, $csrfToken, $googleClientId);
-$table = $userController->getTable();
+$courseController = new CourseController($responseFactory, $twig, $baseURL, $csrfToken);
+$userTable = $userController->getTable();
 
-$app->group('/', function (RouteCollectorProxy $group) use ($twig) {
+$app->group('/', function (RouteCollectorProxy $group) use ($twig, $courseController) {
   $group->get('terms-and-conditions', function ($request, $response, $args) use ($twig) {
     return $twig->render($response, '/pages/others/terms_and_conditions.html.twig', []);
   });
 
   $group->get('privacy-policy', function ($request, $response, $args) use ($twig) {
     return $twig->render($response, '/pages/others/privacy_policy.html.twig', []);
+  });
+
+  $group->get('home', function ($request, $response, $args) use ($courseController) {
+    return $courseController->index($request, $response, $args);
   });
 });
 

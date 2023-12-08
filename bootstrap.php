@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__.'/vendor/autoload.php';
+require_once __DIR__ . '/vendor/autoload.php';
 
 use app\classes\GlobalValues;
 use Slim\Views\Twig;
@@ -9,7 +9,7 @@ use Dotenv\Dotenv;
 use Slim\Factory\AppFactory;
 
 // session config
-if(!isset($_SESSION)) {
+if (!isset($_SESSION)) {
   // TODO: define in the production enviroment
   // session_set_cookie_params([
   //   'lifetime' => 7200,
@@ -22,10 +22,12 @@ if(!isset($_SESSION)) {
   session_start();
 }
 
+// user id
 $_SESSION[GlobalValues::ADMIN_ID_IDENTIFIER] ??= '';
+$_SESSION[GlobalValues::USER_ID_IDENTIFIER] ??= '';
 
 // CSRF TOKEN
-if(!isset($_SESSION[GlobalValues::CSRF_TOKEN])) {
+if (!isset($_SESSION[GlobalValues::CSRF_TOKEN])) {
   $csrf_token = bin2hex(random_bytes(32));
   $_SESSION[GlobalValues::CSRF_TOKEN] = $csrf_token;
 }
@@ -44,14 +46,14 @@ $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] ??= '';
 
 $_SESSION[GlobalValues::SESSION_MESSAGE] = $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT];
 
-if($_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] !== '') {
+if ($_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] !== '') {
   $_SESSION[GlobalValues::SESSION_MESSAGE] = $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT];
   $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = '';
 }
 
 // TODO: define the environment
 // in development environment
-$baseURL = 'http://'.$_SERVER['SERVER_NAME'];
+$baseURL = 'http://' . $_SERVER['SERVER_NAME'];
 // in production environment
 // $baseURL = 'https://' . $_SERVER['SERVER_NAME'];
 
@@ -64,7 +66,7 @@ $dotenv->load();
 $app = AppFactory::create();
 
 // Twig Configuration
-$twig = Twig::create($path.'/app/Views/', []);
+$twig = Twig::create($path . '/app/Views/', []);
 
 // Added Twig-View middleware
 $app->add(TwigMiddleware::create($app, $twig));
