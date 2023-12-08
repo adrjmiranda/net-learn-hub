@@ -24,7 +24,6 @@ if (!isset($_SESSION)) {
 
 // user id
 $_SESSION[GlobalValues::ADMIN_ID_IDENTIFIER] ??= '';
-$_SESSION[GlobalValues::USER_ID_IDENTIFIER] ??= '';
 
 // CSRF TOKEN
 if (!isset($_SESSION[GlobalValues::CSRF_TOKEN])) {

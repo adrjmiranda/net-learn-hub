@@ -14,8 +14,6 @@ $csrfToken = $dependencies['csrf_token'];
 $administratorController = new AdministratorController($responseFactory, $twig, $baseURL, $csrfToken);
 $courseController = new CourseController($responseFactory, $twig, $baseURL, $csrfToken);
 
-$administratorTable = $administratorController->getTable();
-
 $app->group('/admin', function (RouteCollectorProxy $group) use ($administratorController, $courseController) {
   $group->get('/login', function ($request, $response, $args) use ($administratorController) {
     return $administratorController->index($request, $response, $args);
@@ -167,6 +165,6 @@ $app->group('/admin', function (RouteCollectorProxy $group) use ($administratorC
   $group->get('/course/quiz/visibility/{course_id}/{quiz_id}', function ($request, $response, $args) use ($courseController) {
     return $courseController->processQuizVisibilityRequest($request, $response, $args);
   });
-})->add(function ($request, $handler) use ($administratorTable) {
-  return verifyTokenMiddleware($request, $handler, $administratorTable);
+})->add(function ($request, $handler) {
+  return checkAdminTokenMiddleware($request, $handler);
 });

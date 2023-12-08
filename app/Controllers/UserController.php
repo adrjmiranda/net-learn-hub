@@ -85,8 +85,8 @@ class UserController extends Controller
             $userCreatedByEmail = $this->model->getUserByEmail($email);
 
             if (!empty($userCreatedByEmail)) {
-              $_SESSION[GlobalValues::USER_TOKEN] = $credential;
-              $_SESSION[GlobalValues::USER_ID_IDENTIFIER] = $userCreatedByEmail->id;
+              $_SESSION[GlobalValues::USER_TOKEN] ??= $credential;
+              $_SESSION[GlobalValues::USER_ID_IDENTIFIER] ??= $userCreatedByEmail->id;
 
               $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = UserMessage::SUCCESS_LOGIN;
               $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_SUCCESS;

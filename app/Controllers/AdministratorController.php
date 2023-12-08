@@ -77,7 +77,7 @@ class AdministratorController extends Controller
       $administratorByEmail = $this->model->getUserByEmail($email);
 
       if ($administratorByEmail) {
-        $auth = authentication($password, $administratorByEmail->password, $this->model->getTable());
+        $auth = administratorAuthentication($password, $administratorByEmail->password, $this->model->getTable());
 
         if ($auth) {
           $_SESSION[GlobalValues::ADMIN_ID_IDENTIFIER] = $administratorByEmail->id;
