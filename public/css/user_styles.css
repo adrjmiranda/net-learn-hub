@@ -1,3 +1,15 @@
+/* general */
+.section h2 {
+	text-align: center;
+	margin-bottom: 3.5rem;
+}
+
+/* headers */
+h2 span {
+	color: var(--secondary-color);
+}
+
+/* login */
 #login form {
 	padding: 1rem;
 	box-shadow: 1px 1px 23px 3px rgba(0, 0, 0, 0.1);
@@ -15,4 +27,54 @@
 	justify-content: center;
 	align-items: center;
 	flex: 1;
+}
+
+/* banner */
+#banner {
+	background-color: var(--quinary-color);
+}
+
+#banner .container {
+	display: flex;
+	gap: 1.5rem;
+	min-height: 70vh;
+}
+
+#banner .container .info {
+	padding: 3rem 0;
+	flex: 1;
+}
+
+#banner .container .info h1 {
+	font-size: 2rem;
+	color: var(--secondary-color);
+}
+
+#banner .container .info h2 {
+	font-size: 1.2rem;
+	font-weight: 300;
+	margin-bottom: 1.5rem;
+}
+
+#banner .container .image {
+	flex: 1;
+	display: flex;
+	align-items: flex-end;
+}
+
+/* media queries */
+@media screen and (max-width: 768px) {
+	#banner .container {
+		flex-direction: column;
+	}
+}
+
+@media screen and (max-width: 576px) {
+	#banner .container .info h1 {
+		font-size: 1.5rem;
+	}
+
+	#banner .container .info h2 {
+		font-size: 1rem;
+	}
 }
