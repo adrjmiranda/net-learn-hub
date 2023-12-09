@@ -2,19 +2,46 @@
 {% block content %}
 <div id="course-home">
   {% include '/components/others/banner.html.twig' %}
-  <div class="container content">
-    {% if courses %}
-    <div id="courses" class="section">
-      <h2>Cursos Gratuitos Para <span>Começar Hoje Mesmo</span></h2>
-      {% for course in courses %}
-      <p>{{ course.title }}</p>
-      <p>{{ course.description }}</p>
-      <br>
-      {% endfor %}
+  <div class="container">
+    <div class="content">
+      <div id="presentation" class="section">
+        <h2>Conectando Futuros Profissionais à Excelência Tecnológica para Alçar Voo em <span>Redes de
+            Computadores</span>!</h2>
+        <p>Explore nossa ampla variedade de cursos gratuitos para aprimorar suas habilidades em Redes de Computadores e
+          se destacar no mercado de TI. Encontre o caminho para o conhecimento especializado em Linux, Networking e
+          mais!</p>
+        <div class="row">
+          <div class="col">
+            <i class="bi bi-1-circle-fill"></i>
+            <h4>Faça Login</h4>
+            <p>Acesse a plataforma e comece imediatamente!</p>
+          </div>
+          <div class="col">
+            <i class="bi bi-2-circle-fill"></i>
+            <h4>Acesse os Cursos</h4>
+            <p>Tenha acesso aos cursos de onde quiser!</p>
+          </div>
+          <div class="col">
+            <i class="bi bi-3-circle-fill"></i>
+            <h4>Aumente seus Conhecimentos</h4>
+            <p>Comece a estudar agora e aprenda mais sobre Redes de Computadores.</p>
+          </div>
+        </div>
+      </div>
+      {% if courses %}
+      <div id="courses" class="section">
+        <h2>Cursos Gratuitos Para <span>Começar Hoje Mesmo</span></h2>
+        <div class="row">
+          {% for course in courses %}
+          {% include '/components/users/course_card.html.twig' with {'course': course} %}
+          {% endfor %}
+        </div>
+      </div>
+      {% else %}
+      <p>Ainda não há cursos ativos para exibir!</p>
+      {% endif %}
+      <div id="comments"></div>
     </div>
-    {% else %}
-    <p>Ainda não há cursos ativos para exibir!</p>
-    {% endif %}
   </div>
 </div>
 {% endblock %}

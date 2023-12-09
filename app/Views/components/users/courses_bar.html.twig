@@ -1,3 +1,7 @@
 <div class="courses-bar">
-  Todos os cursos
+  {% if courses %}
+  {% for course in courses %}
+  <a href="{{ base_url }}">{{ course.title }}</a>
+  {% endfor %}
+  {% endif %}
 </div>

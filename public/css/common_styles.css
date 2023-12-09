@@ -6,6 +6,7 @@
 	--tertiary-color: #07def9;
 	--quaternary-color: #ffffff;
 	--quinary-color: #f3f6f9;
+	--senary-color: #ffd200;
 	--bg-light-color: #fbfafa;
 	--bg-dark-color: #252627;
 	--danger-color: #eb0000;
@@ -157,13 +158,6 @@ button {
 	flex: 1;
 }
 
-.btn ion-icon {
-	position: absolute;
-	left: 0.5rem;
-	font-size: 1.8rem;
-	color: var(--bg-light-color);
-}
-
 .btn-color {
 	color: var(--quaternary-color);
 	background-image: linear-gradient(
@@ -294,13 +288,10 @@ footer {
 
 #navbar #navbar-drop {
 	position: absolute;
-	right: 0.2rem;
-	font-size: 4rem;
 	color: var(--secondary-color);
 	transition: 0.3s ease;
 	cursor: pointer;
 	display: none;
-	top: 1rem;
 }
 
 #navbar #navbar-drop:hover {
@@ -392,14 +383,6 @@ form .input-field label {
 	font-weight: 600;
 }
 
-form .input-field ion-icon {
-	position: absolute;
-	font-size: 1.5rem;
-	color: var(--secondary-color);
-	left: 0.5rem;
-	top: 2.3rem;
-}
-
 input,
 textarea,
 select {
@@ -435,10 +418,6 @@ textarea {
 input::placeholder,
 textarea::placeholder {
 	font-weight: 300;
-}
-
-input:focus + ion-icon {
-	color: var(--tertiary-color);
 }
 
 /* login and register form */

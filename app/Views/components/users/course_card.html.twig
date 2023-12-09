@@ -1,0 +1,11 @@
+<div class="course-card col">
+  <img src="data:image;base64,{{ course.image }}" alt="{{ course.title }}" class="image">
+  <div class="info">
+    <div class="course-header">
+      <h3 class="title"><i class="bi bi-award-fill"></i>{{ course.title }}</h3>
+      <p class="workload"><i class="bi bi-clock-fill"></i>Carga Horária: <span>{{ course.workload }}h</span>
+      </p>
+    </div>
+    <a href="{{ base_url }}" class="btn btn-color">Acessar</a>
+  </div>
+</div>
