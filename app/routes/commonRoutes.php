@@ -40,4 +40,6 @@ $app->group('/user', function (RouteCollectorProxy $group) use ($userController)
   $group->post('/auth', function ($request, $response, $args) use ($userController) {
     return $userController->auth($request, $response, $args);
   });
+})->add(function ($request, $handler) {
+  return checkUserTokenMiddleware($request, $handler);
 });

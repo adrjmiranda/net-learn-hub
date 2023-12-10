@@ -13,13 +13,18 @@ $responseFactory = $dependencies['response_factory'];
 $twig = $dependencies['twig'];
 $baseURL = $dependencies['base_url'];
 $gCsrfToken = $dependencies[GlobalValues::G_CSRF_TOKEN];
+$csrfToken = $dependencies[GlobalValues::CSRF_TOKEN];
 
-$administratorController = new UserController($responseFactory, $twig, $baseURL, $gCsrfToken, $googleClientId);
+$userController = new UserController($responseFactory, $twig, $baseURL, $gCsrfToken, $googleClientId);
 $courseController = new CourseController($responseFactory, $twig, $baseURL, $csrfToken);
 
-$app->group('/user', function (RouteCollectorProxy $group) use ($courseController) {
+$app->group('/user', function (RouteCollectorProxy $group) use ($userController, $courseController) {
   $group->get('/course/{course_id}', function ($request, $response, $args) use ($courseController) {
     return $courseController->coursePage($request, $response, $args);
+  });
+
+  $group->get('/logout', function ($request, $response, $args) use ($userController) {
+    return $userController->logout($request, $response, $args);
   });
 })->add(function ($request, $handler) {
   return checkUserTokenMiddleware($request, $handler);

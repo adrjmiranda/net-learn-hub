@@ -105,7 +105,8 @@ class UserController extends Controller
           $id = $userByEmail->id;
 
           if ($this->model->update($id, $firstName, $lastName, $image)) {
-            $_SESSION[GlobalValues::USER_ID_IDENTIFIER] = $id;
+            $_SESSION[GlobalValues::USER_TOKEN] ??= $credential;
+            $_SESSION[GlobalValues::USER_ID_IDENTIFIER] ??= $id;
 
             $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = UserMessage::SUCCESS_LOGIN;
             $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_SUCCESS;
