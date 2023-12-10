@@ -45,6 +45,7 @@ class CourseController extends Controller
 
     $this->path .= 'home.html.twig';
     $this->data['page_title'] = 'NetLearnHub | Aprenda de graça TI';
+    $this->data[GlobalValues::USER_IS_CONNECTED] = $_SESSION[GlobalValues::USER_IS_CONNECTED];
     $this->data['courses'] = $courses;
     $this->data[GlobalValues::SESSION_MESSAGE] = $_SESSION[GlobalValues::SESSION_MESSAGE] ?? '';
     $this->data[GlobalValues::SESSION_MESSAGE_TYPE] = $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] ?? '';
@@ -1306,5 +1307,43 @@ class CourseController extends Controller
     }
 
     return $response->withHeader('Location', '/admin/course/quizzes/' . $courseId)->withHeader('Allow', 'GET')->withStatus(302);
+  }
+
+  public function coursePage(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
+  {
+    $courseId = (int) ($args['course_id'] ?? '');
+
+    $this->path .= 'course_page.html.twig';
+    $this->data['page_title'] = 'NetLearnHub | Aprenda de graça TI';
+    $this->data[GlobalValues::USER_IS_CONNECTED] = $_SESSION[GlobalValues::USER_IS_CONNECTED];
+    $this->data['course_id'] = $courseId;
+    $this->data['topics'] = [];
+    $this->data['quizzes'] = [];
+
+    $topicModel = new TopicModel();
+    $quizModel = new QuizModel();
+
+    $courseById = $this->model->getById($courseId);
+
+    if (!isValidId($courseId) || empty($courseById)) {
+      return $response->withHeader('Location', '/home')->withHeader('Allow', 'GET')->withStatus(302);
+    } else {
+      $topicsByCourseId = $topicModel->getByCourseId($courseId) ?? [];
+      $quizzesByCourseId = $quizModel->getByCourseId($courseId) ?? [];
+
+      $quizzesByVisibility = [];
+
+      // remove quiz not visible
+      foreach ($quizzesByCourseId as $quiz) {
+        if ($quiz->visibility == 1) {
+          $quizzesByVisibility[] = $quiz;
+        }
+      }
+
+      $this->data['topics'] = $topicsByCourseId;
+      $this->data['quizzes'] = $quizzesByVisibility;
+    }
+
+    return $this->twig->render($response, $this->path, $this->data);
   }
 }

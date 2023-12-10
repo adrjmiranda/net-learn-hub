@@ -4,7 +4,7 @@
   <div id="login" class="content">
     <form action="{{ base_url }}/admin/login" method="post">
       {% if session_message %}
-      <p class="session-message {{ message_type }}">
+      <p class="session-message {{ session_message_type }}">
         {{ session_message }}
       </p>
       {% endif %}

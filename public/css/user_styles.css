@@ -22,6 +22,10 @@ h2 span {
 }
 
 /* login */
+#login {
+	min-height: 100vh;
+}
+
 #login form {
 	padding: 1rem;
 	box-shadow: 1px 1px 23px 3px rgba(0, 0, 0, 0.1);

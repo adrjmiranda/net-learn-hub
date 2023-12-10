@@ -1,0 +1,17 @@
+{% extends '/components/users/base.html.twig' %}
+{% block content %}
+<div id="course-page" class="container">
+  <div class="content">
+    {% if topics %}
+    {% for topic in topics %}
+    <p>{{ topic.title }}</p>
+    {% endfor %}
+    {% endif %}
+    {% if quizzes %}
+    {% for quiz in quizzes %}
+    <p>{{ quiz.title }}</p>
+    {% endfor %}
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

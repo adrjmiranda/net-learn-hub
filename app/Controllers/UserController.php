@@ -56,6 +56,7 @@ class UserController extends Controller
 
     $this->path .= 'login.html.twig';
     $this->data['page_title'] = 'NetLearnHub | Aprenda de graça TI';
+    $this->data[GlobalValues::USER_IS_CONNECTED] = $_SESSION[GlobalValues::USER_IS_CONNECTED];
     $this->data[GlobalValues::SESSION_MESSAGE] = '';
     $this->data[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_ERROR;
 
@@ -122,15 +123,12 @@ class UserController extends Controller
     }
 
     $this->data[GlobalValues::SESSION_MESSAGE] = $message;
-    $this->data[GlobalValues::USER_IS_CONNECTED] = $_SESSION[GlobalValues::USER_IS_CONNECTED];
 
     return $this->twig->render($response, $this->path, $this->data);
   }
 
   public function logout(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
   {
-    $_SESSION[GlobalValues::USER_IS_CONNECTED] = false;
-
     $_SESSION = array();
 
     if (ini_get("session.use_cookies")) {

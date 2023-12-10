@@ -2,7 +2,7 @@
 {% block content %}
 <div id="course-quiz-questions" class="content">
   {% if session_message %}
-  <p class="session-message {{ message_type }}">
+  <p class="session-message {{ session_message_type }}">
     {{ session_message }}
   </p>
   {% endif %}

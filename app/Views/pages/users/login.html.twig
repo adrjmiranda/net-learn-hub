@@ -1,9 +1,9 @@
 {% extends '/components/users/header.html.twig' %}
 {% block inner %}
-<div class="container">
-  <div id="login" class="content">
+<div class="content">
+  <div id="login" class="container">
     {% if session_message %}
-    <p class="session-message {{ message_type }}">
+    <p class="session-message {{ session_message_type }}">
       {{ session_message }}
     </p>
     {% endif %}
