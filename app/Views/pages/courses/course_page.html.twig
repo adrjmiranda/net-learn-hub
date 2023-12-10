@@ -2,15 +2,44 @@
 {% block content %}
 <div id="course-page" class="container">
   <div class="content">
+    <h1>{{ course.title }}</h1>
+    <img src="data:image;base64,{{ course.image }}" alt="{{ course.title }}" class="image">
+    <div class="description">
+      <p>{{ course.description }}</p>
+    </div>
     {% if topics %}
-    {% for topic in topics %}
-    <p>{{ topic.title }}</p>
-    {% endfor %}
+    <div class="topics">
+      <h2>Tópicos do Curso:</h2>
+      <p>Explore nossos cursos estruturados em tópicos precisos e absorva conhecimento de forma organizada e
+        direcionada.
+        Cada tópico oferece uma abordagem detalhada e específica, permitindo que você mergulhe no conteúdo de
+        <strong>{{ course.title }}</strong> de maneira progressiva. Dos conceitos básicos às técnicas avançadas, nossa
+        divisão por
+        tópicos permite um aprendizado focado, proporcionando a você a oportunidade de assimilar o conteúdo de forma
+        gradual e aplicável, mantendo-o engajado e motivado ao longo do curso.
+      </p>
+      <ul>
+        {% for topic in topics %}
+        <li><i class="bi bi-book-half"></i><a href="#">{{ course.title }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
     {% endif %}
     {% if quizzes %}
-    {% for quiz in quizzes %}
-    <p>{{ quiz.title }}</p>
-    {% endfor %}
+    <div class="quizzes">
+      <h2>Testes do Curso:</h2>
+      <p>Experimente nossos testes avaliativos cuidadosamente elaborados para reforçar seu aprendizado e medir seu
+        progresso de forma eficaz. Nossos testes são projetados para desafiar seus conhecimentos adquiridos em cada
+        etapa do curso, oferecendo uma oportunidade valiosa para aplicar o que foi aprendido e identificar áreas que
+        possam precisar de mais atenção. Ao completar esses testes, você não apenas consolida seu conhecimento, mas
+        também se prepara de maneira eficiente para enfrentar futuros desafios, garantindo uma compreensão sólida e
+        confiança em suas habilidades em Redes de Computadores.</p>
+      <ul>
+        {% for quiz in quizzes %}
+        <li><i class="bi bi-patch-question-fill"></i><a href="#">{{ quiz.title }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
     {% endif %}
   </div>
 </div>

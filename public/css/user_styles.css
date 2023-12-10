@@ -1,5 +1,5 @@
 /* general */
-.content {
+#course-home .content {
 	display: flex;
 	flex-direction: column;
 	gap: 7rem;

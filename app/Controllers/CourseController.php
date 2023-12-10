@@ -1340,6 +1340,9 @@ class CourseController extends Controller
         }
       }
 
+      $courseById->image = base64_encode($courseById->image);
+
+      $this->data['course'] = $courseById;
       $this->data['topics'] = $topicsByCourseId;
       $this->data['quizzes'] = $quizzesByVisibility;
     }
