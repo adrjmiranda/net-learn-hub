@@ -165,6 +165,14 @@ h2 span {
 	gap: 1.7rem;
 }
 
+#course-page .content h1 {
+	text-transform: uppercase;
+	font-weight: 800;
+	text-align: center;
+	color: var(--secondary-color);
+	text-shadow: 1px 1px 15px rgba(0, 0, 0, 0.3);
+}
+
 #course-page .content img {
 	border-radius: 5px;
 	box-shadow: 1px 1px 25px 5px rgba(0, 0, 0, 0.2);
@@ -191,7 +199,7 @@ h2 span {
 	margin-top: 2rem;
 	list-style: none;
 	display: flex;
-	flex-direction: column;
+	flex-direction: column-reverse;
 	gap: 1rem;
 }
 

@@ -20,7 +20,8 @@
       </p>
       <ul>
         {% for topic in topics %}
-        <li><a href="#"><i class="bi bi-book-half"></i>{{ course.title }}</a></li>
+        <li><a href="{{ base_url }}/usr/course/topic/{{ course.id }}/{{ topic.id }}"><i class="bi bi-book-half"></i>{{
+            topic.title }}</a></li>
         {% endfor %}
       </ul>
     </div>
@@ -36,7 +37,8 @@
         confiança em suas habilidades em Redes de Computadores.</p>
       <ul>
         {% for quiz in quizzes %}
-        <li><a href="#"><i class="bi bi-patch-question-fill"></i>{{ quiz.title }}</a></li>
+        <li><a href="{{ base_url }}/usr/course/topic/{{ course.id }}/{{ quiz.id }}"><i
+              class="bi bi-patch-question-fill"></i>{{ quiz.title }}</a></li>
         {% endfor %}
       </ul>
     </div>
