@@ -59,6 +59,7 @@ function checkUserTokenMiddleware(Request $request, RequestHandler $handler)
     return $response->withHeader('Location', '/home')->withHeader('Allow', 'GET')->withStatus(302);
   }
 
+
   return $handler->handle($request);
 }
 

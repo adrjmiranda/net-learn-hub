@@ -37,7 +37,7 @@ $app->group('/user', function (RouteCollectorProxy $group) use ($userController)
     return $userController->login($request, $response, $args);
   });
 
-  $group->post('/auth', function ($request, $response, $args) use ($userController) {
+  $group->post('/login', function ($request, $response, $args) use ($userController) {
     return $userController->auth($request, $response, $args);
   });
 })->add(function ($request, $handler) {
