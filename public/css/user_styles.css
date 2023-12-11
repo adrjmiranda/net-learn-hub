@@ -158,6 +158,74 @@ h2 span {
 	color: var(--tertiary-color);
 }
 
+/* course page */
+#course-page .content {
+	display: flex;
+	flex-direction: column;
+	gap: 1.7rem;
+}
+
+#course-page .content img {
+	border-radius: 5px;
+	box-shadow: 1px 1px 25px 5px rgba(0, 0, 0, 0.2);
+}
+
+#course-page .content h2 {
+	margin-bottom: 1.5rem;
+}
+
+#course-page .content p {
+	line-height: 1.8rem;
+	text-align: justify;
+}
+
+#course-page .content p strong {
+	color: var(--secondary-color);
+}
+
+#course-page .content p::first-letter {
+	margin-left: 2rem;
+}
+
+#course-page .content ul {
+	margin-top: 2rem;
+	list-style: none;
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+
+#course-page .content ul li {
+	box-shadow: 1px 1px 5px 5px rgba(0, 0, 0, 0.1);
+	border-radius: 3px;
+}
+
+#course-page .content ul li a {
+	display: flex;
+	gap: 1rem;
+	align-items: center;
+	padding: 0.5rem;
+	text-transform: uppercase;
+	font-weight: 800;
+}
+
+#course-page .content ul li a .bi {
+	font-size: 1.5rem;
+}
+
+#course-page .content ul li:hover {
+	transform: scale(1.02);
+	transition: 0.3s ease;
+}
+
+#course-page .bi-book-half {
+	color: var(--success-color);
+}
+
+#course-page .bi-patch-question-fill {
+	color: var(--warning-color);
+}
+
 /* media queries */
 @media screen and (max-width: 768px) {
 	#banner .container {
