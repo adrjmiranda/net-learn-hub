@@ -234,6 +234,77 @@ h2 span {
 	color: var(--warning-color);
 }
 
+/* course topic and quiz */
+#course-topic h1,
+#course-quiz h1 {
+	text-transform: uppercase;
+	text-align: center;
+}
+
+#course-topic h1,
+#course-quiz h1,
+#course-topic h2,
+#course-quiz h2,
+#course-topic h3,
+#course-quiz h3 {
+	color: var(--secondary-color);
+	font-weight: bold;
+}
+
+#course-topic p,
+#course-quiz p {
+	text-align: justify;
+	line-height: 1.8rem;
+}
+
+#course-topic p::first-letter,
+#course-quiz p::first-letter {
+	margin-left: 2rem;
+}
+
+#course-topic img,
+#course-quiz img {
+	display: block;
+	margin: 0 auto;
+	border-radius: 3px;
+	box-shadow: 1px 1px 25px 5px rgba(0, 0, 0, 0.1);
+}
+
+#course-topic ul,
+#course-quiz ul {
+	list-style: none;
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+
+#course-topic ul li,
+#course-quiz ul li {
+	font-weight: 500;
+}
+
+#course-topic .actions {
+	display: flex;
+	justify-content: space-between;
+	margin-top: 3rem;
+	margin-bottom: 3rem;
+}
+
+#course-topic .actions a {
+	box-shadow: 1px 1px 25px 5px rgba(0, 0, 0, 0.1);
+	padding: 0.5rem;
+	border-radius: 3px;
+	transition: 0.3s ease;
+}
+
+#course-topic .actions a:hover {
+	transform: scale(1.1);
+}
+
+#course-topic .actions a.next {
+	margin-left: auto;
+}
+
 /* media queries */
 @media screen and (max-width: 768px) {
 	#banner .container {

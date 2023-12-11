@@ -3,6 +3,22 @@
 <div id="course-topic" class="container">
   <div class="content">
     <h1>{{ topic.title }}</h1>
+    <div class="topic-body">
+      {{ topic.content | raw }}
+    </div>
+    <div class="actions">
+      {% if previous_topic_id %}
+      <a class="previous" href="{{ base_url }}/user/course/topic/{{ course.id }}/{{ previous_topic_id }}"><i
+          class="bi bi-caret-left-fill"></i>Anterior</a>
+      {% endif %}
+      {% if next_topic_id %}
+      <a class="next" href="{{ base_url }}/user/course/topic/{{ course.id }}/{{ next_topic_id }}">Próximo<i
+          class="bi bi-caret-right-fill"></i></a>
+      {% endif %}
+    </div>
+    <div class="back">
+      <a class="btn btn-color" href="{{ base_url }}/user/course/{{ course.id }}">Voltar A Página do Curso</a>
+    </div>
   </div>
 </div>
 {% endblock %}

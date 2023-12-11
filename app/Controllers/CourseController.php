@@ -1317,8 +1317,6 @@ class CourseController extends Controller
     $this->data['page_title'] = 'NetLearnHub | Aprenda de graça TI';
     $this->data[GlobalValues::USER_IS_CONNECTED] = $_SESSION[GlobalValues::USER_IS_CONNECTED];
     $this->data['course_id'] = $courseId;
-    $this->data['topics'] = [];
-    $this->data['quizzes'] = [];
 
     $topicModel = new TopicModel();
     $quizModel = new QuizModel();
@@ -1345,6 +1343,56 @@ class CourseController extends Controller
       $this->data['course'] = $courseById;
       $this->data['topics'] = $topicsByCourseId;
       $this->data['quizzes'] = $quizzesByVisibility;
+    }
+
+    return $this->twig->render($response, $this->path, $this->data);
+  }
+
+  public function courseTopicPage(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
+  {
+    $courseId = (int) ($args['course_id'] ?? '');
+    $topicId = (int) ($args['topic_id'] ?? '');
+
+    $this->path .= 'course_topic_page.html.twig';
+    $this->data['page_title'] = 'NetLearnHub | Aprenda de graça TI';
+    $this->data[GlobalValues::USER_IS_CONNECTED] = $_SESSION[GlobalValues::USER_IS_CONNECTED];
+    $this->data['course_id'] = $courseId;
+    $this->data['topic_id'] = $topicId;
+
+    $topicModel = new TopicModel();
+
+    $courseById = $this->model->getById($courseId);
+    $topicByIdAndCourseId = $topicModel->getByIdAndCourseId($topicId, $courseId);
+
+    if (!isValidId($courseId) || empty($courseById) || !isValidId($topicId) || empty($topicByIdAndCourseId)) {
+      return $response->withHeader('Location', '/home')->withHeader('Allow', 'GET')->withStatus(302);
+    } else {
+      $this->data['course'] = $courseById;
+      $this->data['topic'] = $topicByIdAndCourseId;
+
+      // next and previous
+      $topicsByCourseId = $topicModel->getByCourseId($courseId) ?? [];
+      $topicIds = [];
+
+      $previousTopicId = null;
+      $nextTopicId = null;
+
+      foreach ($topicsByCourseId as $topic) {
+        $topicIds[] = $topic->id;
+      }
+
+      $key = array_search($topicId, $topicIds, true);
+      if ($key !== false) {
+        if ($key < sizeof($topicIds) - 1) {
+          $previousTopicId = $topicIds[$key + 1];
+          $this->data['previous_topic_id'] = $previousTopicId;
+        }
+
+        if ($key > 0) {
+          $nextTopicId = $topicIds[$key - 1];
+          $this->data['next_topic_id'] = $nextTopicId;
+        }
+      }
     }
 
     return $this->twig->render($response, $this->path, $this->data);

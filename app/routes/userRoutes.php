@@ -26,6 +26,10 @@ $app->group('/user', function (RouteCollectorProxy $group) use ($userController,
   $group->get('/logout', function ($request, $response, $args) use ($userController) {
     return $userController->logout($request, $response, $args);
   });
+
+  $group->get('/course/topic/{course_id}/{topic_id}', function ($request, $response, $args) use ($courseController) {
+    return $courseController->courseTopicPage($request, $response, $args);
+  });
 })->add(function ($request, $handler) {
   return checkUserTokenMiddleware($request, $handler);
 });
