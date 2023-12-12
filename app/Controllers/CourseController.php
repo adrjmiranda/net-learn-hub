@@ -1311,11 +1311,14 @@ class CourseController extends Controller
 
   public function coursePage(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
   {
+    $courses = $this->model->getActiveVisibility() ?? [];
+
     $courseId = (int) ($args['course_id'] ?? '');
 
     $this->path .= 'course_page.html.twig';
     $this->data['page_title'] = 'NetLearnHub | Aprenda de graça TI';
     $this->data[GlobalValues::USER_IS_CONNECTED] = $_SESSION[GlobalValues::USER_IS_CONNECTED];
+    $this->data['courses'] = $courses;
     $this->data['course_id'] = $courseId;
 
     $topicModel = new TopicModel();
@@ -1350,12 +1353,15 @@ class CourseController extends Controller
 
   public function courseTopicPage(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
   {
+    $courses = $this->model->getActiveVisibility() ?? [];
+
     $courseId = (int) ($args['course_id'] ?? '');
     $topicId = (int) ($args['topic_id'] ?? '');
 
     $this->path .= 'course_topic_page.html.twig';
     $this->data['page_title'] = 'NetLearnHub | Aprenda de graça TI';
     $this->data[GlobalValues::USER_IS_CONNECTED] = $_SESSION[GlobalValues::USER_IS_CONNECTED];
+    $this->data['courses'] = $courses;
     $this->data['course_id'] = $courseId;
     $this->data['topic_id'] = $topicId;
 
@@ -1392,6 +1398,56 @@ class CourseController extends Controller
           $nextTopicId = $topicIds[$key - 1];
           $this->data['next_topic_id'] = $nextTopicId;
         }
+      }
+    }
+
+    return $this->twig->render($response, $this->path, $this->data);
+  }
+
+  public function courseQuizPage(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
+  {
+    $courses = $this->model->getActiveVisibility() ?? [];
+
+    $courseId = (int) ($args['course_id'] ?? '');
+    $quizId = (int) ($args['quiz_id'] ?? '');
+
+    $this->path .= 'course_quiz_page.html.twig';
+    $this->data['page_title'] = 'NetLearnHub | Aprenda de graça TI';
+    $this->data[GlobalValues::USER_IS_CONNECTED] = $_SESSION[GlobalValues::USER_IS_CONNECTED];
+    $this->data['courses'] = $courses;
+    $this->data['course_id'] = $courseId;
+    $this->data['topic_id'] = $quizId;
+
+    $quizModel = new QuizModel();
+
+    $courseById = $this->model->getById($courseId);
+    $quizByIdAndCourseId = $quizModel->getByIdAndCourseId($quizId, $courseId);
+
+    if (!isValidId($courseId) || empty($courseById) || !isValidId($quizId) || empty($quizByIdAndCourseId)) {
+      return $response->withHeader('Location', '/home')->withHeader('Allow', 'GET')->withStatus(302);
+    } elseif ($quizByIdAndCourseId->visibility == 0) {
+      return $response->withHeader('Location', '/home')->withHeader('Allow', 'GET')->withStatus(302);
+    } else {
+      $this->data['course'] = $courseById;
+      $this->data['quiz'] = $quizByIdAndCourseId;
+
+      $questionModel = new QuestionModel();
+      $alternativeModel = new AlternativeModel();
+
+      // get questions
+      $questionsByQuizId = $questionModel->getByQuizId($quizId);
+      if (empty($questionsByQuizId)) {
+        return $response->withHeader('Location', '/home')->withHeader('Allow', 'GET')->withStatus(302);
+      } else {
+        // get alternatives
+        $alternativesByCourseId = $alternativeModel->getByCourseId($courseId);
+      }
+
+      if (empty($alternativesByCourseId)) {
+        return $response->withHeader('Location', '/home')->withHeader('Allow', 'GET')->withStatus(302);
+      } else {
+        $this->data['questions'] = $questionsByQuizId;
+        $this->data['alternatives'] = $alternativesByCourseId;
       }
     }
 

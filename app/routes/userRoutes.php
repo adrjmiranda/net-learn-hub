@@ -30,6 +30,10 @@ $app->group('/user', function (RouteCollectorProxy $group) use ($userController,
   $group->get('/course/topic/{course_id}/{topic_id}', function ($request, $response, $args) use ($courseController) {
     return $courseController->courseTopicPage($request, $response, $args);
   });
+
+  $group->get('/course/quiz/{course_id}/{quiz_id}', function ($request, $response, $args) use ($courseController) {
+    return $courseController->courseQuizPage($request, $response, $args);
+  });
 })->add(function ($request, $handler) {
   return checkUserTokenMiddleware($request, $handler);
 });

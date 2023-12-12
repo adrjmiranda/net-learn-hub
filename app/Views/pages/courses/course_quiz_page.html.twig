@@ -1,0 +1,33 @@
+{% extends '/components/users/base.html.twig' %}
+{% block content %}
+<div id="course-quiz" class="container">
+  <div class="content">
+    <h1>{{ quiz.title }}</h1>
+    {% if questions %}
+    <form class="questions" method="post">
+      {% for question in questions %}
+      <div class="question">
+        <strong><span><i class="bi bi-patch-question-fill"></i> Questão {{ loop.index }}</span> {{ question.question
+          }}</strong>
+        {% if alternatives %}
+        <div class="alternatives">
+          {% for alternative in alternatives %}
+          {% if alternative.question_id == question.id %}
+          <div class="alternative-field">
+            <input type="radio" name="alternative_{{ question.id }}" id="alternative_{{ alternative.id ~ question.id }}"
+              value="{{
+          alternative.alternative_number ~ question.correct }}">
+            <label for="alternative_{{ alternative.id ~ question.id }}">{{ alternative.alternative }}</label>
+          </div>
+          {% endif %}
+          {% endfor %}
+        </div>
+        {% endif %}
+      </div>
+      {% endfor %}
+      <button type="submit" class="btn btn-color">Submeter</button>
+    </form>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
