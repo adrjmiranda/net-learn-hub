@@ -13,9 +13,10 @@ $responseFactory = $dependencies['response_factory'];
 $twig = $dependencies['twig'];
 $baseURL = $dependencies['base_url'];
 $gCsrfToken = $dependencies[GlobalValues::G_CSRF_TOKEN];
+$csrfToken = $dependencies[GlobalValues::CSRF_TOKEN];
 
 $userController = new UserController($responseFactory, $twig, $baseURL, $gCsrfToken, $googleClientId);
-$courseController = new CourseController($responseFactory, $twig, $baseURL, $csrfToken);
+$courseController = new CourseController($responseFactory, $twig, $baseURL, $csrfToken, $gCsrfToken);
 
 $app->group('/', function (RouteCollectorProxy $group) use ($twig, $courseController) {
   $group->get('terms-and-conditions', function ($request, $response, $args) use ($twig) {

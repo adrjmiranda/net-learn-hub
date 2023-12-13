@@ -25,7 +25,7 @@ class CourseController extends Controller
   private array $data;
   private string $path;
 
-  public function __construct(ResponseFactoryInterface $responseFactory, Twig $twig, string $baseURL, string $csrfToken)
+  public function __construct(ResponseFactoryInterface $responseFactory, Twig $twig, string $baseURL, string $csrfToken, string $gCsrfToken)
   {
     $this->responseFactory = $responseFactory;
     $this->twig = $twig;
@@ -36,7 +36,8 @@ class CourseController extends Controller
 
     $this->data = [];
     $this->data['base_url'] = $baseURL;
-    $this->data['csrf_token'] = $csrfToken;
+    $this->data[GlobalValues::CSRF_TOKEN] = $csrfToken;
+    $this->data[GlobalValues::G_CSRF_TOKEN] = $gCsrfToken;
   }
 
   public function index(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
@@ -1328,6 +1329,8 @@ class CourseController extends Controller
 
     if (!isValidId($courseId) || empty($courseById)) {
       return $response->withHeader('Location', '/home')->withHeader('Allow', 'GET')->withStatus(302);
+    } elseif ($courseById->visibility == 0) {
+      return $response->withHeader('Location', '/home')->withHeader('Allow', 'GET')->withStatus(302);
     } else {
       $topicsByCourseId = $topicModel->getByCourseId($courseId) ?? [];
       $quizzesByCourseId = $quizModel->getByCourseId($courseId) ?? [];
@@ -1371,6 +1374,8 @@ class CourseController extends Controller
     $topicByIdAndCourseId = $topicModel->getByIdAndCourseId($topicId, $courseId);
 
     if (!isValidId($courseId) || empty($courseById) || !isValidId($topicId) || empty($topicByIdAndCourseId)) {
+      return $response->withHeader('Location', '/home')->withHeader('Allow', 'GET')->withStatus(302);
+    } elseif ($courseById->visibility == 0) {
       return $response->withHeader('Location', '/home')->withHeader('Allow', 'GET')->withStatus(302);
     } else {
       $this->data['course'] = $courseById;
@@ -1416,7 +1421,10 @@ class CourseController extends Controller
     $this->data[GlobalValues::USER_IS_CONNECTED] = $_SESSION[GlobalValues::USER_IS_CONNECTED];
     $this->data['courses'] = $courses;
     $this->data['course_id'] = $courseId;
-    $this->data['topic_id'] = $quizId;
+    $this->data['quiz_id'] = $quizId;
+    $this->data['marked_values'] = [];
+    $this->data[GlobalValues::SESSION_MESSAGE] = '';
+    $this->data[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_ERROR;
 
     $quizModel = new QuizModel();
 
@@ -1425,7 +1433,7 @@ class CourseController extends Controller
 
     if (!isValidId($courseId) || empty($courseById) || !isValidId($quizId) || empty($quizByIdAndCourseId)) {
       return $response->withHeader('Location', '/home')->withHeader('Allow', 'GET')->withStatus(302);
-    } elseif ($quizByIdAndCourseId->visibility == 0) {
+    } elseif ($quizByIdAndCourseId->visibility == 0 || $courseById->visibility == 0) {
       return $response->withHeader('Location', '/home')->withHeader('Allow', 'GET')->withStatus(302);
     } else {
       $this->data['course'] = $courseById;
@@ -1435,7 +1443,7 @@ class CourseController extends Controller
       $alternativeModel = new AlternativeModel();
 
       // get questions
-      $questionsByQuizId = $questionModel->getByQuizId($quizId);
+      $questionsByQuizId = $questionModel->getByQuizId($quizId) ?? [];
       if (empty($questionsByQuizId)) {
         return $response->withHeader('Location', '/home')->withHeader('Allow', 'GET')->withStatus(302);
       } else {
@@ -1450,6 +1458,105 @@ class CourseController extends Controller
         $this->data['alternatives'] = $alternativesByCourseId;
       }
     }
+
+    return $this->twig->render($response, $this->path, $this->data);
+  }
+
+  public function processQuizRequest(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
+  {
+    $courses = $this->model->getActiveVisibility() ?? [];
+
+    $params = $request->getParsedBody();
+    $courseId = (int) ($params['course_id'] ?? '');
+    $quizId = (int) ($params['quiz_id'] ?? '');
+
+    $this->path .= 'course_quiz_page.html.twig';
+    $this->data['page_title'] = 'NetLearnHub | Aprenda de graça TI';
+    $this->data[GlobalValues::USER_IS_CONNECTED] = $_SESSION[GlobalValues::USER_IS_CONNECTED];
+    $this->data['courses'] = $courses;
+    $this->data['course_id'] = $courseId;
+    $this->data['quiz_id'] = $quizId;
+    $this->data['marked_values'] = [];
+    $this->data[GlobalValues::SESSION_MESSAGE] = '';
+    $this->data[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_ERROR;
+
+    $quizModel = new QuizModel();
+
+    $courseById = $this->model->getById($courseId);
+    $quizByIdAndCourseId = $quizModel->getByIdAndCourseId($quizId, $courseId);
+
+    $message = '';
+
+    if (!isValidId($courseId) || empty($courseById) || !isValidId($quizId) || empty($quizByIdAndCourseId)) {
+      return $response->withHeader('Location', '/home')->withHeader('Allow', 'GET')->withStatus(302);
+    } elseif ($quizByIdAndCourseId->visibility == 0 || $courseById->visibility == 0) {
+      return $response->withHeader('Location', '/home')->withHeader('Allow', 'GET')->withStatus(302);
+    } else {
+      $this->data['course'] = $courseById;
+      $this->data['quiz'] = $quizByIdAndCourseId;
+
+      $questionModel = new QuestionModel();
+      $alternativeModel = new AlternativeModel();
+
+      // get questions
+      $questionsByQuizId = $questionModel->getByQuizId($quizId) ?? [];
+      if (empty($questionsByQuizId)) {
+        return $response->withHeader('Location', '/home')->withHeader('Allow', 'GET')->withStatus(302);
+      } else {
+        // get alternatives
+        $alternativesByCourseId = $alternativeModel->getByCourseId($courseId);
+      }
+
+      if (empty($alternativesByCourseId)) {
+        return $response->withHeader('Location', '/home')->withHeader('Allow', 'GET')->withStatus(302);
+      } else {
+        $this->data['questions'] = $questionsByQuizId;
+        $this->data['alternatives'] = $alternativesByCourseId;
+      }
+
+      $alternativesReceived = [];
+      $markedValues = [];
+
+      foreach ($questionsByQuizId as $question) {
+        $alternativesReceived[] = (int) ($params['alternative_' . $question->id] ?? '');
+        $markedValues[] = [$question->id, (int) ($params['alternative_' . $question->id] ?? '')];
+      }
+
+      $this->data['marked_values'] = $markedValues;
+
+      $noShipping = 0;
+
+      foreach ($alternativesReceived as $number) {
+        if ($number === 0) {
+          $noShipping++;
+        }
+      }
+
+      if ($noShipping > 0) {
+        $message = UserMessage::ERR_ALL_ALTERNATIVES_MUST_BE_SENT;
+      } else {
+        // process submitted alternatives
+        $numberOfHits = 0;
+        $testScore = 0;
+
+        foreach ($alternativesReceived as $alternative) {
+          if (is_int($alternative) && $alternative > 0) {
+            $alternativeStr = (string) $alternative;
+
+            if (strlen($alternativeStr) === 2) {
+              if ($alternativeStr[0] === $alternativeStr[1]) {
+                $numberOfHits++;
+              }
+            }
+          }
+        }
+
+        $score = (int) floor((100 / count($questionsByQuizId)) * $numberOfHits);
+        $testScore = max(0, min(100, $score));
+      }
+    }
+
+    $this->data[GlobalValues::SESSION_MESSAGE] = $message;
 
     return $this->twig->render($response, $this->path, $this->data);
   }

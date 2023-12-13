@@ -10,10 +10,11 @@ use app\Controllers\AdministratorController;
 $responseFactory = $dependencies['response_factory'];
 $twig = $dependencies['twig'];
 $baseURL = $dependencies['base_url'];
+$gCsrfToken = $dependencies[GlobalValues::G_CSRF_TOKEN];
 $csrfToken = $dependencies[GlobalValues::CSRF_TOKEN];
 
 $administratorController = new AdministratorController($responseFactory, $twig, $baseURL, $csrfToken);
-$courseController = new CourseController($responseFactory, $twig, $baseURL, $csrfToken);
+$courseController = new CourseController($responseFactory, $twig, $baseURL, $csrfToken, $gCsrfToken);
 
 $app->group('/admin', function (RouteCollectorProxy $group) use ($administratorController, $courseController) {
   $group->get('/login', function ($request, $response, $args) use ($administratorController) {

@@ -33,6 +33,9 @@ class UserMessage
   const ERR_INVALID_IMAGE_TYPE = 'A imagem escolhida para o perfil não existe.';
   const ERR_INVALID_DESCRIPTION = 'Descrição inválida. Somente texto com no máximo ' . GlobalValues::MAXIMUM_SIZE_OF_THE_DESCRIPTION . ' caracteres.';
 
+
+  const ERR_ALL_ALTERNATIVES_MUST_BE_SENT = 'Todas as alternativas devem ser respondidas!';
+
   // Error message related to comment
   const ERR_INVALID_COMMENT = 'Comentário inválido. Somente texto com no máximo ' . GlobalValues::MAXIMUM_SIZE_OF_THE_COMMENT . ' caracteres.';
 

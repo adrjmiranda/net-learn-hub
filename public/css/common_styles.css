@@ -331,7 +331,7 @@ footer {
 /* messages */
 .session-message {
 	color: var(--quaternary-color);
-	text-align: center;
+	text-align: center !important;
 	padding: 0.5rem;
 	border-radius: 3px;
 	margin-bottom: 2rem;

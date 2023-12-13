@@ -4,7 +4,15 @@
   <div class="content">
     <h1>{{ quiz.title }}</h1>
     {% if questions %}
-    <form class="questions" method="post">
+    <form action="{{ base_url }}/user/course/quiz" method="post" class="questions">
+      {% if session_message %}
+      <p class="session-message {{ session_message_type }}">
+        {{ session_message }}
+      </p>
+      {% endif %}
+      <input type="hidden" name="g_csrf_token" value="{{ g_csrf_token }}">
+      <input type="hidden" name="course_id" value="{{ course.id }}">
+      <input type="hidden" name="quiz_id" value="{{ quiz.id }}">
       {% for question in questions %}
       <div class="question">
         <strong><span><i class="bi bi-patch-question-fill"></i> Questão {{ loop.index }}</span> {{ question.question
@@ -16,7 +24,9 @@
           <div class="alternative-field">
             <input type="radio" name="alternative_{{ question.id }}" id="alternative_{{ alternative.id ~ question.id }}"
               value="{{
-          alternative.alternative_number ~ question.correct }}">
+          alternative.alternative_number ~ question.correct }}" {% for marked_value in marked_values %} {{
+              marked_value[0]==question.id and marked_value[1]==alternative.alternative_number ~ question.correct
+              ? 'checked' : '' }} {% endfor %}>
             <label for="alternative_{{ alternative.id ~ question.id }}">{{ alternative.alternative }}</label>
           </div>
           {% endif %}
