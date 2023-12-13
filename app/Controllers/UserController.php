@@ -219,4 +219,28 @@ class UserController extends Controller
 
     return $this->twig->render($response, $this->path, $this->data);
   }
+
+  public function processUserDeleteRequest(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
+  {
+    $userId = (int) ($args['user_id'] ?? '');
+    $userById = $this->model->getById($userId);
+
+    if (!isValidId($userId) || empty($userById)) {
+      $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = UserMessage::ERR_NON_EXISTENT_USER;
+      $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_ERROR;
+      return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
+    } else {
+      $commentModel = new CommentModel();
+
+      if ($commentModel->delete($userId, 'user_id') && $this->model->delete($userId, 'id')) {
+        $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = UserMessage::SUCCESS_WHEN_REMOVE_USER;
+        $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_SUCCESS;
+      } else {
+        $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = UserMessage::ERR_WHEN_REMOVE_USER;
+        $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_ERROR;
+      }
+    }
+
+    return $response->withHeader('Location', '/admin/users/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
+  }
 }

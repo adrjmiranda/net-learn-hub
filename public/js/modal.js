@@ -49,6 +49,13 @@ if (
 					url = `/admin/course/topics/delete/${courseId}/${id}`;
 					break;
 
+				// users
+				case 'delete-user':
+					const userName = action.dataset.name;
+					modalQuestion.innerHTML = `Tem certeza que quer remover o usuário: <b>${userName}</b>?`;
+					url = `/admin/users/delete/${id}`;
+					break;
+
 				default:
 					break;
 			}

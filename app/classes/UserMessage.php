@@ -19,6 +19,8 @@ class UserMessage
   // Error messages related to email lookup
   const ERR_EMAIL_NOT_FOUND = 'Usuário não encontrado.';
   const ERR_LOGIN = 'Falha ao fazer login.';
+  const ERR_NON_EXISTENT_USER = 'Usuário não existe!';
+  const ERR_WHEN_REMOVE_USER = 'Aconteceu um erro ao tentar remover o usuário!';
 
   // Error messages related to email registration
   const ERR_EMAIL_ALREADY_REGISTERED = 'Este e-mail já está registrado.';
@@ -45,4 +47,5 @@ class UserMessage
   const SUCCESS_LOGIN = 'Login feito com sucesso!';
   const SUCCESS_REGISTER = 'Registro na plataforma feito com sucesso!';
   const SUCCESS_UPDATE = 'Atualização dos dados feita com sucesso!';
+  const SUCCESS_WHEN_REMOVE_USER = 'Usuário removido com sucesso!';
 }

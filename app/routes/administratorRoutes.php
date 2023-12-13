@@ -4,8 +4,11 @@ require_once __DIR__ . '/../functions/authentication.php';
 
 use app\classes\GlobalValues;
 use app\Controllers\CourseController;
+use app\Controllers\UserController;
 use Slim\Routing\RouteCollectorProxy;
 use app\Controllers\AdministratorController;
+
+$googleClientId = $_ENV['GOOGLE_CLIENT_ID'];
 
 $responseFactory = $dependencies['response_factory'];
 $twig = $dependencies['twig'];
@@ -14,9 +17,10 @@ $gCsrfToken = $dependencies[GlobalValues::G_CSRF_TOKEN];
 $csrfToken = $dependencies[GlobalValues::CSRF_TOKEN];
 
 $administratorController = new AdministratorController($responseFactory, $twig, $baseURL, $csrfToken);
+$userController = new UserController($responseFactory, $twig, $baseURL, $gCsrfToken, $googleClientId);
 $courseController = new CourseController($responseFactory, $twig, $baseURL, $csrfToken, $gCsrfToken);
 
-$app->group('/admin', function (RouteCollectorProxy $group) use ($administratorController, $courseController) {
+$app->group('/admin', function (RouteCollectorProxy $group) use ($administratorController, $userController, $courseController) {
   $group->get('/login', function ($request, $response, $args) use ($administratorController) {
     return $administratorController->index($request, $response, $args);
   });
@@ -157,6 +161,10 @@ $app->group('/admin', function (RouteCollectorProxy $group) use ($administratorC
 
   $group->get('/course/quizzes/questions/delete/{course_id}/{quiz_id}/{question_id}', function ($request, $response, $args) use ($courseController) {
     return $courseController->processQuestionDeleteRequest($request, $response, $args);
+  });
+
+  $group->get('/users/delete/{ user_id }', function ($request, $response, $args) use ($userController) {
+    return $userController->processUserDeleteRequest($request, $response, $args);
   });
 
   // activate/deactivate to courses and quizzes

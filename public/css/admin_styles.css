@@ -133,15 +133,22 @@ input:focus + ion-icon {
 	gap: 1.5rem;
 }
 
-#resources li .actions a {
+#resources li .actions a,
+#resources li .actions button {
 	width: 40px;
 	height: 40px;
 	position: relative;
 }
 
-#resources li .actions a ion-icon {
+#resources li .actions a ion-icon,
+#resources li .actions button ion-icon {
 	position: absolute;
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
+}
+
+#resources li em {
+	color: var(--secondary-color);
+	margin: 0 1rem;
 }
