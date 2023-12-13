@@ -1,0 +1,20 @@
+{% extends '/components/users/base.html.twig' %}
+{% block content %}
+<div id="course-quiz-completion" class="container">
+  <div class="content">
+    <h1>Teste Finalizado!</h1>
+    <h2>Você Pontuou: <span>{{ test_score }} de 100</span> Pontos!</h2>
+    <p>Parabéns por completar o teste <b>{{ quiz.title }}</b>! Sua dedicação e empenho são admiráveis. Esperamos que
+      tenha desfrutado desta
+      jornada de aprendizado e desafios. Continue buscando conhecimento e explorando novos horizontes. Seja qual for o
+      resultado, lembre-se de que cada questão foi uma oportunidade de aprendizado. Continue assim e aproveite cada
+      oportunidade para crescer e evoluir. Obrigado por participar!</p>
+    <div class="actions">
+      <a class="btn btn-color wauto" href="{{ base_url }}/user/course/quiz/template/{{ course.id }}/{{ quiz.id }}">Ver
+        Gabarito</a>
+      <a class="btn btn-color wauto" href="{{ base_url }}/user/course/{{ course.id }}">Voltar A
+        Página do Curso</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

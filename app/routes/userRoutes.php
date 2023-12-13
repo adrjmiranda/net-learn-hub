@@ -35,9 +35,15 @@ $app->group('/user', function (RouteCollectorProxy $group) use ($userController,
     return $courseController->courseQuizPage($request, $response, $args);
   });
 
+  $group->get('/course/quiz/template/{course_id}/{quiz_id}', function ($request, $response, $args) use ($courseController) {
+    return $courseController->courseQuizTemplatePage($request, $response, $args);
+  });
+
   // send form
   $group->post('/course/quiz', function ($request, $response, $args) use ($courseController) {
     return $courseController->processQuizRequest($request, $response, $args);
+  })->add(function ($request, $handler) {
+    return verifyGCSRFToken($request, $handler);
   });
 })->add(function ($request, $handler) {
   return checkUserTokenMiddleware($request, $handler);
