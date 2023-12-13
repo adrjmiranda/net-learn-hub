@@ -2,11 +2,6 @@
 {% block inner %}
 <div class="content">
   <div id="login" class="container">
-    {% if session_message %}
-    <p class="session-message {{ session_message_type }}">
-      {{ session_message }}
-    </p>
-    {% endif %}
     <script src="https://accounts.google.com/gsi/client" async></script>
     <form>
       <div class="animate-logo">

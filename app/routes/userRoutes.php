@@ -45,6 +45,12 @@ $app->group('/user', function (RouteCollectorProxy $group) use ($userController,
   })->add(function ($request, $handler) {
     return verifyGCSRFToken($request, $handler);
   });
+
+  $group->post('/comment', function ($request, $response, $args) use ($userController) {
+    return $userController->processCommentRequest($request, $response, $args);
+  })->add(function ($request, $handler) {
+    return verifyGCSRFToken($request, $handler);
+  });
 })->add(function ($request, $handler) {
   return checkUserTokenMiddleware($request, $handler);
 });

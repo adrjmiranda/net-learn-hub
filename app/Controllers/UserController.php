@@ -90,9 +90,6 @@ class UserController extends Controller
               $_SESSION[GlobalValues::USER_TOKEN] ??= $credential;
               $_SESSION[GlobalValues::USER_ID_IDENTIFIER] ??= $userCreatedByEmail->id;
 
-              $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = UserMessage::SUCCESS_LOGIN;
-              $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_SUCCESS;
-
               $_SESSION[GlobalValues::USER_IS_CONNECTED] = true;
 
               return $response->withHeader('Location', '/home')->withHeader('Allow', 'GET')->withStatus(302);
@@ -108,9 +105,6 @@ class UserController extends Controller
           if ($this->model->update($id, $firstName, $lastName, $image)) {
             $_SESSION[GlobalValues::USER_TOKEN] ??= $credential;
             $_SESSION[GlobalValues::USER_ID_IDENTIFIER] ??= $id;
-
-            $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = UserMessage::SUCCESS_LOGIN;
-            $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_SUCCESS;
 
             $_SESSION[GlobalValues::USER_IS_CONNECTED] = true;
 
@@ -153,39 +147,52 @@ class UserController extends Controller
 
   public function processCommentRequest(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
   {
-    $courses = $this->model->getActiveVisibility() ?? [];
+    $this->path = '/pages/courses/';
+    $courseModel = new CourseModel();
+
+    $courses = $courseModel->getActiveVisibility() ?? [];
 
     $params = $request->getParsedBody();
     $userId = (int) ($params['user_id'] ?? '');
-    $courseId = (int) ($params['course_id'] ?? '');
     $comment = $params['comment'];
 
     $userIdIdentifier = $_SESSION[GlobalValues::USER_ID_IDENTIFIER];
+
+    $commentModel = new CommentModel();
+
+    $users = $this->model->all() ?? [];
+
+    foreach ($users as $user) {
+      if (property_exists($user, 'image')) {
+        $user->image = base64_decode($user->image);
+      }
+    }
 
     $this->path .= 'home.html.twig';
     $this->data['page_title'] = 'NetLearnHub | Aprenda de graça TI';
     $this->data[GlobalValues::USER_IS_CONNECTED] = $_SESSION[GlobalValues::USER_IS_CONNECTED];
     $this->data['courses'] = $courses;
+    $this->data['users'] = $users;
     $this->data['user_id'] = $userId;
-    $this->data['course_id'] = $courseId;
     $this->data['comment'] = $comment;
     $this->data['err_comment'] = false;
+    $this->data['user_already_commented'] = false;
     $this->data[GlobalValues::SESSION_MESSAGE] = '';
     $this->data[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_ERROR;
 
-    $userModel = new UserModel();
     $commentModel = new CommentModel();
-    $userById = $userModel->getById($userId);
 
-    $courseById = $this->model->getById($courseId);
+    $userById = $this->model->getById($userId);
 
     if ($_SESSION[GlobalValues::G_CSRF_TOKEN_IS_INVALID]) {
       $message = UserMessage::INVALID_CSRF_TOKEN;
-    } elseif (!isValidId($userId) || empty($userById) || !isValidId($courseId) || empty($courseById)) {
+    } elseif (!isValidId($userId) || empty($userById)) {
+      echo 'here';
       return $response->withHeader('Location', '/home')->withHeader('Allow', 'GET')->withStatus(302);
     } elseif ($userIdIdentifier !== $userId) {
       return $response->withHeader('Location', '/home')->withHeader('Allow', 'GET')->withStatus(302);
     } elseif (!isValidText($comment, 'comment')) {
+
       $this->data['err_comment'] = true;
       $message = UserMessage::ERR_INVALID_COMMENT;
     } else {
@@ -194,15 +201,19 @@ class UserController extends Controller
       if ($commentModel->store($comment, $userId)) {
         $message = UserMessage::ERR_INVALID_COMMENT;
         $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_SUCCESS;
-
-        $commentByUserId = $commentModel->getByUserId($userId) ?? [];
-        if (count($commentByUserId) > 0) {
-          $this->data['user_already_commented'] = true;
-        }
       } else {
         $message = UserMessage::ERR_FAILED_TO_SAVE_COMMENT;
       }
     }
+
+    $commentByUserId = $commentModel->getByUserId($userId) ?? [];
+    if (count($commentByUserId) > 0) {
+      $this->data['user_already_commented'] = true;
+    }
+
+    $comments = $commentModel->all() ?? [];
+
+    $this->data['comments'] = $comments;
 
     $this->data[GlobalValues::SESSION_MESSAGE] = $message;
 

@@ -386,6 +386,49 @@ h2 span {
 	margin-top: 2rem;
 }
 
+/* comments */
+#comments p {
+	text-align: justify;
+	margin-bottom: 2rem;
+	font-size: 1.1rem;
+}
+
+#comments p::first-letter {
+	margin-left: 2rem;
+}
+
+#comments .comment {
+	border-radius: 3px;
+	box-shadow: 1px 1px 25px 5px rgba(0, 0, 0, 0.15);
+	padding: 0.5rem 0.8rem;
+}
+
+#comments .comment .user-comment {
+	margin-bottom: 2rem;
+}
+
+#comments .comment .user-info {
+	display: flex;
+	align-items: center;
+	gap: 1.2rem;
+	margin-bottom: 1rem;
+}
+
+#comments .comment .user-info img {
+	height: 50px;
+	border-radius: 50%;
+}
+
+#comments .comment .comment-text {
+	font-size: 1rem;
+}
+
+#comments .all-comments .comments {
+	display: flex;
+	flex-direction: column;
+	gap: 1.2rem;
+}
+
 /* media queries */
 @media screen and (max-width: 768px) {
 	#banner .container {

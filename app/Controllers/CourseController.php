@@ -43,21 +43,37 @@ class CourseController extends Controller
   {
     $courses = $this->model->getActiveVisibility() ?? [];
 
-    $userId = $_SESSION[GlobalValues::USER_ID_IDENTIFIER];
+    $userId = (int) ($_SESSION[GlobalValues::USER_ID_IDENTIFIER] ?? '');
+
+    $userModel = new UserModel();
+    $commentModel = new CommentModel();
+
+    $users = $userModel->all() ?? [];
+    $comments = $commentModel->all() ?? [];
+
+    foreach ($users as $user) {
+      if (property_exists($user, 'image')) {
+        $user->image = base64_decode($user->image);
+      }
+    }
 
     $this->path .= 'home.html.twig';
     $this->data['page_title'] = 'NetLearnHub | Aprenda de graça TI';
     $this->data[GlobalValues::USER_IS_CONNECTED] = $_SESSION[GlobalValues::USER_IS_CONNECTED];
     $this->data['courses'] = $courses;
+    $this->data['users'] = $users;
+    $this->data['comments'] = $comments;
     $this->data['user_id'] = $userId;
     $this->data['comment'] = '';
     $this->data['err_comment'] = false;
+    $this->data['user_already_commented'] = false;
     $this->data[GlobalValues::SESSION_MESSAGE] = $_SESSION[GlobalValues::SESSION_MESSAGE] ?? '';
     $this->data[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_ERROR;
 
     $commentModel = new CommentModel();
 
     $commentByUserId = $commentModel->getByUserId($userId) ?? [];
+
     if (count($commentByUserId) > 0) {
       $this->data['user_already_commented'] = true;
     }

@@ -40,7 +40,54 @@
       {% else %}
       <p>Ainda não há cursos ativos para exibir!</p>
       {% endif %}
-      <div id="comments"></div>
+      <div id="comments" class="section">
+        {% if not user_already_commented and user_is_connected %}
+        <div class="user-comment">
+          <h2>Seu Comentário Importa!</h2>
+          <p>Seu feedback é inestimável para nós! Gostaríamos muito de ouvir sua opinião sincera sobre a nossa
+            plataforma. Sua experiência é fundamental para continuarmos melhorando e oferecendo conteúdo de qualidade.
+            Por favor, dedique alguns momentos para compartilhar seus pensamentos, sugestões ou até mesmo críticas
+            construtivas. Seu feedback nos ajuda a aprimorar nossos serviços e a proporcionar uma experiência ainda
+            melhor para você e para nossa comunidade de aprendizado. Agradecemos antecipadamente por sua contribuição!
+          </p>
+          <form action="{{ base_url }}/user/comment" method="post">
+            {% if session_message %}
+            <p class="session-message {{ session_message_type }}">
+              {{ session_message }}
+            </p>
+            {% endif %}
+            <input type="hidden" name="g_csrf_token" value="{{ g_csrf_token }}">
+            <input type="hidden" name="user_id" value="{{ user_id }}">
+            <div class="input-field">
+              <label for="comment">Comente:</label>
+              <textarea name="comment" id="comment" rows="5" placeholder="Por favor, deixe seu comentário..."
+                class="{{ err_comment ? 'input-error' : '' }}">{{ comment }}</textarea>
+            </div>
+            <button type="submit" class="btn btn-color wauto">Comentar</button>
+          </form>
+        </div>
+        {% endif %}
+        <div class="all-comments">
+          <h2>Comentários dos Alunos:</h2>
+          <div class="comments row">
+            {% if users and comments %}
+            {% for user in users %}
+            {% for comment in comments %}
+            {% if comment.user_id == user.id %}
+            <div class="comment col">
+              <div class="user-info">
+                <img src="{{ user.image }}" alt="{{ user.first_name }}" class="user-image">
+                <h3 class="user-name">{{ user.first_name }}</h3>
+              </div>
+              <p class="comment-text">{{ comment.comment }}</p>
+            </div>
+            {% endif %}
+            {% endfor %}
+            {% endfor %}
+            {% endif %}
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
