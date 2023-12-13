@@ -540,8 +540,18 @@ textarea::placeholder {
 	text-align: justify;
 }
 
+#terms-and-conditions p::first-letter,
+#privacy-policy p::first-letter,
+#about p::first-letter,
+#terms-and-conditions li::first-letter,
+#privacy-policy li::first-letter,
+#about li::first-letter {
+	margin-left: 1.8rem;
+}
+
 #terms-and-conditions ul,
-#privacy-policy ul {
+#privacy-policy ul,
+#about ul {
 	list-style: none;
 	display: flex;
 	flex-direction: column;
@@ -549,7 +559,8 @@ textarea::placeholder {
 }
 
 #terms-and-conditions ul li,
-#privacy-policy ul li {
+#privacy-policy ul li,
+#about ul li {
 	font-weight: 300;
 }
 
@@ -558,7 +569,10 @@ textarea::placeholder {
 #terms-and-conditions h3,
 #privacy-policy h1,
 #privacy-policy h2,
-#privacy-policy h3 {
+#privacy-policy h3,
+#about h1,
+#about h2,
+#about h3 {
 	color: var(--secondary-color);
 	text-align: center;
 }
@@ -566,17 +580,21 @@ textarea::placeholder {
 #terms-and-conditions h2,
 #terms-and-conditions h3,
 #privacy-policy h2,
-#privacy-policy h3 {
+#privacy-policy h3,
+#about h2,
+#about h3 {
 	font-size: 1.3rem;
 }
 
 #terms-and-conditions h1,
-#privacy-policy h1 {
+#privacy-policy h1,
+#about h1 {
 	font-size: 1.5rem;
 }
 
 #terms-and-conditions span,
-#privacy-policy span {
+#privacy-policy span,
+#about span {
 	font-weight: bold;
 }
 

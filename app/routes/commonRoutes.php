@@ -36,7 +36,7 @@ $app->group('/', function (RouteCollectorProxy $group) use ($twig, $courseContro
   });
 
   $group->get('about', function ($request, $response, $args) use ($twig, $courses) {
-    return $twig->render($response, '/pages/others/privacy_policy.html.twig', [
+    return $twig->render($response, '/pages/others/about.html.twig', [
       'courses' => $courses
     ]);
   });
