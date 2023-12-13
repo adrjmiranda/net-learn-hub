@@ -529,6 +529,57 @@ textarea::placeholder {
 	transform: scale(1.2);
 }
 
+/* terms-and-conditions and  privacy-policy */
+#terms-and-conditions,
+#privacy-policy,
+#about {
+	display: flex;
+	flex-direction: column;
+	gap: 1.2rem;
+	font-size: 1.1rem;
+	text-align: justify;
+}
+
+#terms-and-conditions ul,
+#privacy-policy ul {
+	list-style: none;
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+
+#terms-and-conditions ul li,
+#privacy-policy ul li {
+	font-weight: 300;
+}
+
+#terms-and-conditions h1,
+#terms-and-conditions h2,
+#terms-and-conditions h3,
+#privacy-policy h1,
+#privacy-policy h2,
+#privacy-policy h3 {
+	color: var(--secondary-color);
+	text-align: center;
+}
+
+#terms-and-conditions h2,
+#terms-and-conditions h3,
+#privacy-policy h2,
+#privacy-policy h3 {
+	font-size: 1.3rem;
+}
+
+#terms-and-conditions h1,
+#privacy-policy h1 {
+	font-size: 1.5rem;
+}
+
+#terms-and-conditions span,
+#privacy-policy span {
+	font-weight: bold;
+}
+
 /* media queries */
 @media screen and (min-width: 768px) {
 	/* footer */
