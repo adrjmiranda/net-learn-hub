@@ -11,6 +11,7 @@ use app\Models\CourseModel;
 use app\Models\QuestionModel;
 use app\Models\QuizModel;
 use app\Models\TopicModel;
+use app\Models\UserModel;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -42,12 +43,24 @@ class CourseController extends Controller
   {
     $courses = $this->model->getActiveVisibility() ?? [];
 
+    $userId = $_SESSION[GlobalValues::USER_ID_IDENTIFIER];
+
     $this->path .= 'home.html.twig';
     $this->data['page_title'] = 'NetLearnHub | Aprenda de graça TI';
     $this->data[GlobalValues::USER_IS_CONNECTED] = $_SESSION[GlobalValues::USER_IS_CONNECTED];
     $this->data['courses'] = $courses;
+    $this->data['user_id'] = $userId;
+    $this->data['comment'] = '';
+    $this->data['err_comment'] = false;
     $this->data[GlobalValues::SESSION_MESSAGE] = $_SESSION[GlobalValues::SESSION_MESSAGE] ?? '';
-    $this->data[GlobalValues::SESSION_MESSAGE_TYPE] = $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] ?? '';
+    $this->data[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_ERROR;
+
+    $commentModel = new CommentModel();
+
+    $commentByUserId = $commentModel->getByUserId($userId) ?? [];
+    if (count($commentByUserId) > 0) {
+      $this->data['user_already_commented'] = true;
+    }
 
     return $this->twig->render($response, $this->path, $this->data);
   }
@@ -1462,9 +1475,9 @@ class CourseController extends Controller
     $courses = $this->model->getActiveVisibility() ?? [];
 
     $params = $request->getParsedBody();
+    $userId = (int) ($params['user_id'] ?? '');
     $courseId = (int) ($params['course_id'] ?? '');
     $quizId = (int) ($params['quiz_id'] ?? '');
-    $userId = (int) ($params['user_id'] ?? '');
 
     $userIdIdentifier = $_SESSION[GlobalValues::USER_ID_IDENTIFIER];
 
@@ -1478,6 +1491,9 @@ class CourseController extends Controller
     $this->data[GlobalValues::SESSION_MESSAGE] = '';
     $this->data[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_ERROR;
 
+    $userModel = new UserModel();
+    $userById = $userModel->getById($userId);
+
     $quizModel = new QuizModel();
 
     $courseById = $this->model->getById($courseId);
@@ -1485,7 +1501,7 @@ class CourseController extends Controller
 
     $message = '';
 
-    if (!isValidId($courseId) || empty($courseById) || !isValidId($quizId) || empty($quizByIdAndCourseId)) {
+    if (!isValidId($userId) || empty($userById) || !isValidId($courseId) || empty($courseById) || !isValidId($quizId) || empty($quizByIdAndCourseId)) {
       return $response->withHeader('Location', '/home')->withHeader('Allow', 'GET')->withStatus(302);
     } elseif ($quizByIdAndCourseId->visibility == 0 || $courseById->visibility == 0) {
       return $response->withHeader('Location', '/home')->withHeader('Allow', 'GET')->withStatus(302);

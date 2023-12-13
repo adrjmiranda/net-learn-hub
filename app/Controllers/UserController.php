@@ -4,6 +4,7 @@ namespace app\Controllers;
 
 use app\classes\GlobalValues;
 use app\classes\UserMessage;
+use app\Models\CommentModel;
 use app\Models\CourseModel;
 use app\Models\UserModel;
 use Psr\Http\Message\ResponseFactoryInterface;
@@ -148,5 +149,63 @@ class UserController extends Controller
     session_destroy();
 
     return $response->withHeader('Location', '/home')->withHeader('Allow', 'GET')->withStatus(302);
+  }
+
+  public function processCommentRequest(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
+  {
+    $courses = $this->model->getActiveVisibility() ?? [];
+
+    $params = $request->getParsedBody();
+    $userId = (int) ($params['user_id'] ?? '');
+    $courseId = (int) ($params['course_id'] ?? '');
+    $comment = $params['comment'];
+
+    $userIdIdentifier = $_SESSION[GlobalValues::USER_ID_IDENTIFIER];
+
+    $this->path .= 'home.html.twig';
+    $this->data['page_title'] = 'NetLearnHub | Aprenda de graça TI';
+    $this->data[GlobalValues::USER_IS_CONNECTED] = $_SESSION[GlobalValues::USER_IS_CONNECTED];
+    $this->data['courses'] = $courses;
+    $this->data['user_id'] = $userId;
+    $this->data['course_id'] = $courseId;
+    $this->data['comment'] = $comment;
+    $this->data['err_comment'] = false;
+    $this->data[GlobalValues::SESSION_MESSAGE] = '';
+    $this->data[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_ERROR;
+
+    $userModel = new UserModel();
+    $commentModel = new CommentModel();
+    $userById = $userModel->getById($userId);
+
+    $courseById = $this->model->getById($courseId);
+
+    if ($_SESSION[GlobalValues::G_CSRF_TOKEN_IS_INVALID]) {
+      $message = UserMessage::INVALID_CSRF_TOKEN;
+    } elseif (!isValidId($userId) || empty($userById) || !isValidId($courseId) || empty($courseById)) {
+      return $response->withHeader('Location', '/home')->withHeader('Allow', 'GET')->withStatus(302);
+    } elseif ($userIdIdentifier !== $userId) {
+      return $response->withHeader('Location', '/home')->withHeader('Allow', 'GET')->withStatus(302);
+    } elseif (!isValidText($comment, 'comment')) {
+      $this->data['err_comment'] = true;
+      $message = UserMessage::ERR_INVALID_COMMENT;
+    } else {
+      $this->data['err_comment'] = false;
+
+      if ($commentModel->store($comment, $userId)) {
+        $message = UserMessage::ERR_INVALID_COMMENT;
+        $_SESSION[GlobalValues::SESSION_MESSAGE_TYPE] = GlobalValues::TYPE_MSG_SUCCESS;
+
+        $commentByUserId = $commentModel->getByUserId($userId) ?? [];
+        if (count($commentByUserId) > 0) {
+          $this->data['user_already_commented'] = true;
+        }
+      } else {
+        $message = UserMessage::ERR_FAILED_TO_SAVE_COMMENT;
+      }
+    }
+
+    $this->data[GlobalValues::SESSION_MESSAGE] = $message;
+
+    return $this->twig->render($response, $this->path, $this->data);
   }
 }

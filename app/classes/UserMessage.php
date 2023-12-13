@@ -38,6 +38,8 @@ class UserMessage
 
   // Error message related to comment
   const ERR_INVALID_COMMENT = 'Comentário inválido. Somente texto com no máximo ' . GlobalValues::MAXIMUM_SIZE_OF_THE_COMMENT . ' caracteres.';
+  const ERR_FAILED_TO_SAVE_COMMENT = 'Falha ao salvar comentário!';
+  const SUCCESS_TO_SAVE_COMMENT = 'Comentário feito com suceso!';
 
   // successes messages to users
   const SUCCESS_LOGIN = 'Login feito com sucesso!';
