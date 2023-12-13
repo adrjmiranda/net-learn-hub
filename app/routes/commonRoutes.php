@@ -31,12 +31,14 @@ $app->group('/', function (RouteCollectorProxy $group) use ($twig, $courseContro
 
   $group->get('privacy-policy', function ($request, $response, $args) use ($twig, $courses) {
     return $twig->render($response, '/pages/others/privacy_policy.html.twig', [
+      'user_is_connected' => $_SESSION[GlobalValues::USER_IS_CONNECTED],
       'courses' => $courses
     ]);
   });
 
   $group->get('about', function ($request, $response, $args) use ($twig, $courses) {
     return $twig->render($response, '/pages/others/about.html.twig', [
+      'user_is_connected' => $_SESSION[GlobalValues::USER_IS_CONNECTED],
       'courses' => $courses
     ]);
   });
