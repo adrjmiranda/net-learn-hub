@@ -50,16 +50,6 @@ class GlobalValues
    */
   const ALTERNATIVES_TABLE = 'alternatives';
 
-  /**
-   * Name of the users-courses relation table.
-   */
-  const USERS_COURSES_RELATION_TABLE = 'users_courses_relation';
-
-  /**
-   * Name of the users-quizzes relation table.
-   */
-  const USERS_QUIZZES_RELATION_TABLE = 'users_quizzes_relation';
-
   // Token names
 
   /**

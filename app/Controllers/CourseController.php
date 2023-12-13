@@ -11,8 +11,6 @@ use app\Models\CourseModel;
 use app\Models\QuestionModel;
 use app\Models\QuizModel;
 use app\Models\TopicModel;
-use app\Models\UserCourseRelationModel;
-use app\Models\UserQuizRelationModel;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -262,20 +260,16 @@ class CourseController extends Controller
     } else {
       $alternativeModel = new AlternativeModel();
       $questionModel = new QuestionModel();
-      $userQuizRelationModel = new UserQuizRelationModel();
       $quizModel = new QuizModel();
       $commentModel = new CommentModel();
       $topicModel = new TopicModel();
-      $userCourseRelationModel = new UserCourseRelationModel();
 
       if (
         $alternativeModel->delete($courseId, 'course_id') &&
         $questionModel->delete($courseId, 'course_id') &&
-        $userQuizRelationModel->delete($courseId, 'course_id') &&
         $quizModel->delete($courseId, 'course_id') &&
         $commentModel->delete($courseId, 'course_id') &&
-        $topicModel->delete($courseId, 'course_id') &&
-        $userCourseRelationModel->delete($courseId, 'course_id')
+        $topicModel->delete($courseId, 'course_id')
       ) {
         if ($this->model->delete($courseId, 'id')) {
           $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::SUCCESS_DELETE_COURSE;
@@ -759,11 +753,9 @@ class CourseController extends Controller
         return $response->withHeader('Location', '/admin/dashboard')->withHeader('Allow', 'GET')->withStatus(302);
       } else {
         $questionModel = new QuestionModel();
-        $userQuizRelationModel = new UserQuizRelationModel();
 
         if (
-          $questionModel->delete($courseId, 'course_id') &&
-          $userQuizRelationModel->delete($courseId, 'course_id')
+          $questionModel->delete($courseId, 'course_id')
         ) {
           if ($quizModel->delete($quizId, 'id')) {
             $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] = CourseMessage::SUCCESS_DELETE_QUIZ;
@@ -1413,6 +1405,8 @@ class CourseController extends Controller
   {
     $courses = $this->model->getActiveVisibility() ?? [];
 
+    $userId = $_SESSION[GlobalValues::USER_ID_IDENTIFIER];
+
     $courseId = (int) ($args['course_id'] ?? '');
     $quizId = (int) ($args['quiz_id'] ?? '');
 
@@ -1420,6 +1414,7 @@ class CourseController extends Controller
     $this->data['page_title'] = 'NetLearnHub | Aprenda de graça TI';
     $this->data[GlobalValues::USER_IS_CONNECTED] = $_SESSION[GlobalValues::USER_IS_CONNECTED];
     $this->data['courses'] = $courses;
+    $this->data['user_id'] = $userId;
     $this->data['course_id'] = $courseId;
     $this->data['quiz_id'] = $quizId;
     $this->data['marked_values'] = [];
@@ -1469,10 +1464,14 @@ class CourseController extends Controller
     $params = $request->getParsedBody();
     $courseId = (int) ($params['course_id'] ?? '');
     $quizId = (int) ($params['quiz_id'] ?? '');
+    $userId = (int) ($params['user_id'] ?? '');
+
+    $userIdIdentifier = $_SESSION[GlobalValues::USER_ID_IDENTIFIER];
 
     $this->data['page_title'] = 'NetLearnHub | Aprenda de graça TI';
     $this->data[GlobalValues::USER_IS_CONNECTED] = $_SESSION[GlobalValues::USER_IS_CONNECTED];
     $this->data['courses'] = $courses;
+    $this->data['user_id'] = $userId;
     $this->data['course_id'] = $courseId;
     $this->data['quiz_id'] = $quizId;
     $this->data['marked_values'] = [];
@@ -1534,6 +1533,8 @@ class CourseController extends Controller
       if ($_SESSION[GlobalValues::G_CSRF_TOKEN_IS_INVALID]) {
         $this->path .= 'course_quiz_page.html.twig';
         $message = UserMessage::INVALID_CSRF_TOKEN;
+      } elseif ($userIdIdentifier !== $userId) {
+        return $response->withHeader('Location', '/home')->withHeader('Allow', 'GET')->withStatus(302);
       } elseif ($noShipping > 0) {
         $this->path .= 'course_quiz_page.html.twig';
         $message = UserMessage::ERR_ALL_ALTERNATIVES_MUST_BE_SENT;

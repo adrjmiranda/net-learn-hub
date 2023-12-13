@@ -11,6 +11,7 @@
       </p>
       {% endif %}
       <input type="hidden" name="g_csrf_token" value="{{ g_csrf_token }}">
+      <input type="hidden" name="user_id" value="{{ user_id }}">
       <input type="hidden" name="course_id" value="{{ course.id }}">
       <input type="hidden" name="quiz_id" value="{{ quiz.id }}">
       {% for question in questions %}
