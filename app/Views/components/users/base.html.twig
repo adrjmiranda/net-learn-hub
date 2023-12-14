@@ -1,6 +1,12 @@
 {% extends '/components/users/header.html.twig' %}
 {% block inner %}
 {% include '/components/users/navbar.html.twig' %}
+<div class="toggle-theme">
+  <div class="container">
+    <i class="bi bi-sun-fill hide" id="light"></i>
+    <i class="bi bi-moon-fill" id="dark"></i>
+  </div>
+</div>
 <div>
   {% block content %}
   {% endblock %}

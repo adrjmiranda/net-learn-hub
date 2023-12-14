@@ -22,6 +22,7 @@
 	font-family: 'Poppins', sans-serif;
 }
 
+/* dark theme */
 * .dark {
 	background-color: var(--bg-dark-color);
 	color: var(--bg-light-color);
@@ -33,6 +34,16 @@
 	color: var(--bg-light-color);
 }
 
+* .dark nav,
+* .dark footer {
+	background-color: var(--primary-color);
+}
+
+* .dark .course-card {
+	box-shadow: 2px 2px 20px 3px rgba(255, 255, 255, 0.1);
+}
+
+/* light theme */
 * .light {
 	background-color: var(--bg-light-color);
 	color: var(--bg-dark-color);
@@ -44,6 +55,20 @@
 	color: var(--bg-dark-color);
 }
 
+/* dark and light */
+.toggle-theme .container {
+	display: flex;
+	justify-content: flex-end;
+	padding: 1rem 0 0;
+}
+
+#dark,
+#light {
+	font-size: 1.5rem;
+	cursor: pointer;
+}
+
+/* more */
 body {
 	overflow-x: hidden;
 	position: relative;
