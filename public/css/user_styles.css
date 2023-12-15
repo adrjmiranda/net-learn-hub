@@ -13,6 +13,10 @@
 	gap: 7rem;
 }
 
+* .dark #course-home .user-steps .col {
+	box-shadow: 1px 1px 25px 5px rgba(255, 255, 255, 0.1);
+}
+
 #navbar #navbar-drop {
 	right: 0.2rem;
 	font-size: 3.5rem;
