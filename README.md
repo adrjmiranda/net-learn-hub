@@ -36,7 +36,7 @@ To run this project locally:
 
 ## How to Run
 
-You can run the project locally using a PHP server. For example, by using the command `php -S localhost:8000` and accessing `http://localhost:8000` in your browser.
+You can run the project locally using a PHP server. For example, by using the command `php -S localhost:8000` and accessing `http://localhost:8000` in your browser. Alternatively, you can access the live version of NetLearnHub [here](https://netlearnhub.wuaze.com).
 
 ## Contributors
 
