@@ -16,7 +16,7 @@ class Model
 
   public function __construct()
   {
-    $this->connect = Connection::connect();
+    $this->connect = Connection::getInstance();
   }
 
   public function getTable(): string

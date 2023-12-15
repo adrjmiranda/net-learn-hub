@@ -2,7 +2,6 @@
 
 namespace app\Models;
 
-use stdClass;
 use PDO;
 use PDOException;
 use app\traits\User;

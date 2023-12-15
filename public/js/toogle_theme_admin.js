@@ -12,7 +12,7 @@ const setDarkTheme = () => {
 	darkButton.classList.toggle('hide');
 	lightButton.classList.toggle('hide');
 
-	localStorage.setItem('theme', 'dark');
+	localStorage.setItem('admin_theme', 'dark');
 };
 
 const setLightTheme = () => {
@@ -22,11 +22,11 @@ const setLightTheme = () => {
 	darkButton.classList.toggle('hide');
 	lightButton.classList.toggle('hide');
 
-	localStorage.setItem('theme', 'light');
+	localStorage.setItem('admin_theme', 'light');
 };
 
 if (bodyContent && darkButton && lightButton && toggleTheme) {
-	const theme = localStorage.getItem('theme');
+	const theme = localStorage.getItem('admin_theme');
 
 	if (theme) {
 		switch (theme) {

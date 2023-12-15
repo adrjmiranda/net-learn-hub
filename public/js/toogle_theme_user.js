@@ -28,7 +28,7 @@ const setDarkTheme = () => {
 		);
 	}
 
-	localStorage.setItem('theme', 'dark');
+	localStorage.setItem('user_theme', 'dark');
 };
 
 const setLightTheme = () => {
@@ -51,11 +51,11 @@ const setLightTheme = () => {
 		);
 	}
 
-	localStorage.setItem('theme', 'light');
+	localStorage.setItem('user_theme', 'light');
 };
 
 if (bodyContent && darkButton && lightButton && toggleTheme) {
-	const theme = localStorage.getItem('theme');
+	const theme = localStorage.getItem('user_theme');
 
 	if (theme) {
 		switch (theme) {

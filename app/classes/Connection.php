@@ -14,22 +14,28 @@ class Connection
    *
    * @return PDO A PDO object representing the database connection.
    */
-  public static function connect(): PDO
+  // 
+
+  private static ?PDO $pdoInstance = null;
+
+  private function __construct()
   {
-    $pdo = new PDO(
-      'mysql:host=' . $_ENV['HOST_NAME'] . ';dbname=' . $_ENV['DB_NAME'],
-      $_ENV['DB_USER'],
-      $_ENV['DB_PASS']
-    );
+    // Bloqueia a criação de instâncias desta classe fora da própria classe
+  }
 
-    // TODO: Define the environment
-    // In development environment
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    // In production environment
-    // $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
+  public static function getInstance(): PDO
+  {
+    if (self::$pdoInstance === null) {
+      self::$pdoInstance = new PDO(
+        'mysql:host=' . $_ENV['HOST_NAME'] . ';dbname=' . $_ENV['DB_NAME'],
+        $_ENV['DB_USER'],
+        $_ENV['DB_PASS']
+      );
 
-    $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
+      self::$pdoInstance->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
+      self::$pdoInstance->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
+    }
 
-    return $pdo;
+    return self::$pdoInstance;
   }
 }

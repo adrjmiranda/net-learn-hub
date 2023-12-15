@@ -22,6 +22,14 @@ $csrfToken = $dependencies[GlobalValues::CSRF_TOKEN];
 $userController = new UserController($responseFactory, $twig, $baseURL, $gCsrfToken, $googleClientId);
 $courseController = new CourseController($responseFactory, $twig, $baseURL, $csrfToken, $gCsrfToken);
 
+$app->get('/', function ($request, $response, $args) use ($courseController) {
+  return $courseController->index($request, $response, $args);
+});
+
+$app->get('', function ($request, $response, $args) use ($courseController) {
+  return $courseController->index($request, $response, $args);
+});
+
 $app->group('/', function (RouteCollectorProxy $group) use ($twig, $courseController, $courses) {
   $group->get('terms-and-conditions', function ($request, $response, $args) use ($twig, $courses) {
     return $twig->render($response, '/pages/others/terms_and_conditions.html.twig', [
