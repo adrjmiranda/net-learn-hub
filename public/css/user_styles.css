@@ -1,12 +1,4 @@
 /* general */
-* .dark .toggle-theme {
-	background-color: var(--primary-color) !important;
-}
-
-* .light .toggle-theme {
-	background-color: var(--quinary-color);
-}
-
 #course-home .content {
 	display: flex;
 	flex-direction: column;

@@ -8,6 +8,8 @@ const lightButton = document.querySelector('#light');
 const banner = document.querySelector('#banner');
 const bannerImage = document.querySelector('#banner-image');
 
+const courseHome = document.querySelector('#course-home');
+
 const setDarkTheme = () => {
 	bodyContent.classList.remove('light');
 	bodyContent.classList.add('dark');
@@ -15,10 +17,9 @@ const setDarkTheme = () => {
 	darkButton.classList.toggle('hide');
 	lightButton.classList.toggle('hide');
 
-	toggleTheme.style.backgroundColor = '#040404';
-
 	if (banner) {
 		banner.style.backgroundColor = '#040404';
+		toggleTheme.style.backgroundColor = '#040404';
 	}
 
 	if (bannerImage) {
@@ -38,10 +39,9 @@ const setLightTheme = () => {
 	darkButton.classList.toggle('hide');
 	lightButton.classList.toggle('hide');
 
-	toggleTheme.style.backgroundColor = '#f3f6f9';
-
 	if (banner) {
 		banner.style.backgroundColor = '#f3f6f9';
+		toggleTheme.style.backgroundColor = '#f3f6f9';
 	}
 
 	if (bannerImage) {
