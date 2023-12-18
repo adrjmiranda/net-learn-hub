@@ -34,9 +34,6 @@ $_SESSION[GlobalValues::G_CSRF_TOKEN] ??= bin2hex(random_bytes(32));
 //  user is connected
 $_SESSION[GlobalValues::USER_IS_CONNECTED] ??= false;
 
-// user token
-// $_SESSION[GlobalValues::USER_TOKEN] ??= '';
-
 // message config
 $_SESSION[GlobalValues::SESSION_MESSAGE_CONTENT] ??= '';
 $_SESSION[GlobalValues::SESSION_MESSAGE] ??= '';
