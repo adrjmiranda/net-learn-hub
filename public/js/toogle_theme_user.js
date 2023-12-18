@@ -8,7 +8,22 @@ const lightButton = document.querySelector('#light');
 const banner = document.querySelector('#banner');
 const bannerImage = document.querySelector('#banner-image');
 
-const courseHome = document.querySelector('#course-home');
+if (banner) {
+	const theme = localStorage.getItem('user_theme');
+
+	toggleTheme.style.backgroundColor = '#f3f6f9';
+
+	if (theme) {
+		switch (theme) {
+			case 'dark':
+				toggleTheme.style.backgroundColor = '#040404';
+				break;
+			case 'light':
+				toggleTheme.style.backgroundColor = '#f3f6f9';
+				break;
+		}
+	}
+}
 
 const setDarkTheme = () => {
 	bodyContent.classList.remove('light');
