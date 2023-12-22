@@ -497,7 +497,6 @@ class CourseController extends Controller
       $topicModel = new TopicModel();
 
       $topicByIdAndCourseId = $topicModel->getByIdAndCourseId($topicId, $courseId);
-      $topicByTitleAndCourseId = $topicModel->getByTitleAndCourseId($title, $courseId);
 
       if (empty($courseById) || empty($topicByIdAndCourseId)) {
         $message = CourseMessage::ERR_TOPIC_INEXISTENT;
@@ -506,9 +505,6 @@ class CourseController extends Controller
 
         $this->data['err_title'] = true;
         $message = CourseMessage::ERR_INVALID_TITLE;
-      } elseif ($topicByTitleAndCourseId) {
-        $this->data['err_title'] = true;
-        $message = CourseMessage::ERR_TITLE_ALREADY_EXISTS;
       } elseif (!isValidBlob($content, 'document')) {
         $this->data['err_content'] = true;
         $message = CourseMessage::ERR_INVALID_TOPIC_CONTENT;
