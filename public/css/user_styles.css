@@ -438,12 +438,6 @@ h2 span {
 	font-size: 1rem;
 }
 
-#comments .all-comments .comments {
-	display: flex;
-	flex-direction: column;
-	gap: 1.2rem;
-}
-
 /* media queries */
 @media screen and (max-width: 768px) {
 	#banner .container {
