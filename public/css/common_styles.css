@@ -337,7 +337,9 @@ footer {
 	margin-left: 1.5rem;
 }
 
-#footer .bar {
+#footer .bar,
+#footer .courses-bar {
+	display: flex;
 	flex-direction: column;
 }
 
