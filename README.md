@@ -1,6 +1,6 @@
 # NetLearnHub
 
-Welcome to [NetLearnHub](https://netlearnhub.wuaze.com), a free education platform dedicated to learning about computer networks.
+Welcome to <a href="https://netlearnhub.wuaze.com" target="_blank">NetLearnHub</a>, a free education platform dedicated to learning about computer networks.
 
 ## About the Project
 
